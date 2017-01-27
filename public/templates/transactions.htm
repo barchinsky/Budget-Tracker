@@ -1,0 +1,61 @@
+<div class="dynamic-page">
+	<ion-content ng-init="initTransactions()">
+		<ion-refresher
+			pulling-text="Pull to refresh..."
+			on-refresh="doRefresh('t')">
+		</ion-refresher>
+		<div class="list">
+			<label class="item item-input item-select">
+				<span class="input-label">
+					Budget
+				</span>
+				<select ng-change="getTransactions(budgetName)" ng-model="budgetName">
+					<option ng-repeat="b in budgets" ng-value="b.name">{{b.name}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="card" ng-if="!transactions.length">
+			<div class="card-title">No records found!</div>
+			<p class="card-note">Please, select the budget!</p>
+			<a href="#/app/addTransaction" class="button button-positive">Add first one</a>
+		</div>
+		<ion-list 
+			can-swipe="true">
+				<ion-item class="list-container"
+					ng-repeat="tran in transactions" 
+					ng-click="openTransaction(tran)">
+						<div class="list-logo-container" style="background-color:{{tran.category.style}}">
+							<div class="list-logo-box white">
+								<span class="fl centered"> {{tran.category.name[0]}}</span>
+								<span class="sl centered"> {{tran.category.name[1]}}</span>
+							</div>
+						</div>
+						<div class="list-item-name white">{{tran.name}}</div>
+						<div class="list-item-info white">{{tran.date | date: 'yyyy-MM-dd HH:mm'}}</div>
+						<div class="list-item-description white">{{tran.comment}}</div>
+						<div class="transaction-cost white">{{tran.cost}}</div>
+	    				<ion-option-button class="button button-assertive"
+							ng-click="deleteTransaction(tran.id)">
+								Delete
+						</ion-option-button>
+						<ion-option-button class="button-positive"
+							ng-click="edit(item)">
+								Edit
+						</ion-option-button>
+				</ion-item>
+		</ion-list>
+		<!--
+		<div class="list-container" ng-repeat="tran in transactions" ng-click="openTransaction(tran)">
+			<div class="list-logo-container" style="background-color:{{tran.category.style}}">
+				<div class="list-logo-box white">
+					<span class="fl centered"> {{tran.category.name[0]}}</span>
+					<span class="sl centered"> {{tran.category.name[1]}}</span>
+				</div>
+			</div>
+			<div class="list-item-name white">{{tran.name}}</div>
+			<div class="list-item-info white">{{tran.date | date: 'yyyy-MM-dd HH:mm'}}</div>
+			<div class="list-item-description white">{{tran.comment}}</div>
+			<div class="transaction-cost white">{{tran.cost}}</div>
+		</div>-->
+	</ion-content>
+</div>

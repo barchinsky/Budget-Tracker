@@ -1,0 +1,5 @@
+node_modules/**
+public/lib/bootstrap-datetimepicker/**
+public/lib/ionic/**
+public/lib/bootstrap-select/**
+public/lib/angular/**

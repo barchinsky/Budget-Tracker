@@ -1,0 +1,17 @@
+<ion-content>
+	<div class="card" ng-if="!transactions.length">
+		<h4 class="card-title centered">No records found!</h4>
+	</div>
+	<div class="list-container" ng-repeat="tran in transactions" ng-click="openTransaction(tran)">
+		<div class="list-logo-container" style="background-color:{{tran.category.style}}">
+			<div class="list-logo-box white">
+				<span class="fl centered"> {{tran.category.name[0]}}</span>
+				<span class="sl centered"> {{tran.category.name[1]}}</span>
+			</div>
+		</div>
+		<div class="list-item-name white">{{tran.name}}</div>
+		<div class="list-item-info white">{{tran.date | date: 'yyyy-MM-dd HH:mm'}}</div>
+		<div class="list-item-description white">{{tran.comment}}</div>
+		<div class="transaction-cost text20 white">{{tran.cost}}</div>
+	</div>
+</ion-content>

@@ -1,0 +1,38 @@
+.card-container{
+	margin-bottom: 5px;
+}
+
+.card{
+	width:90%;
+	padding: 10px;
+	margin-left: 5%;
+	color:black;
+	background:transparent;
+	margin-bottom: 8px;
+	border-radius: 3px;
+	box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.5);
+}
+
+.card-md{
+	height: 100px;
+}
+
+.card-lg{
+	height: 150px;
+}
+
+.card-title{
+	position: relative;
+	font-size: 18px;
+	margin-bottom: 3px;
+	width:100%;
+	text-align: center;
+	border-bottom: 1px solid;
+	color:black;
+}
+
+.card-note{
+	font-size: 10px;
+	position: relative;
+	color:black;
+}

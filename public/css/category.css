@@ -1,0 +1,41 @@
+.category-progress{
+	width:70%;
+	float:left;
+	padding-left: 10px;
+	padding-top: 2px;
+}
+
+/*
+.category-info{
+	float:left;
+	padding-left: 10px;
+	width: 70%;
+	color:white;
+}
+*/
+
+.category-option{
+	padding-top: 10px;
+	min-height: 35px;
+	font-size: 18px;
+}
+
+.category-delete{
+	float:right;
+	margin-right: 10px;
+	margin-top-top: -5px;
+}
+
+.category-delete img{
+	height: 22px;
+	width: 22px;
+}
+
+.category-cost{
+	width: 10%;
+	float:right;
+	text-align: left;
+	margin-top: -5px;
+	margin-right: 26px;
+	color:black;
+}

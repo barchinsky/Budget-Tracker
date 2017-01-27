@@ -1,0 +1,98 @@
+<div class="dynamic-page">
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">Category Details</h1>
+		<div class="buttons">
+			<button class="button button-light" ng-click="closeCategoryDetailsModal()">Close</button>
+		</div>
+	</ion-header-bar>
+<ion-content>
+	<form ng-submit="updateCategory()">
+		<ion-list>
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Name</span>
+				<input type="text" class="form-control styled-input" required
+					ng-model="category.name"
+					disabled=""/>
+			</label>
+			<label class="item item-input item-stacked-label">
+				<span class="item-label">Style</span>
+				<select class="form-control styled-input white" id="color-type" style="background-color:{{category.style}}" 
+					ng-model="category.style"
+					disabled="">
+					<option class="category-option" style="background-color:{{c.value}}" 
+						ng-repeat="c in colors track by $index" 
+						ng-value="c.value">
+							{{c.name}}
+					</option>
+				</select>
+			</label>
+			<div class="item item-toogle">
+				Expense
+				<label class="toggle toggle-assertive">
+					<input type="checkbox"
+						ng-model="category.type" 
+						ng-true-value="1" 
+						ng-false-value="0"
+						disabled=""/>
+					<div class="track">
+						<div class="handle"></div>
+					</div>
+				</label>
+			</div>
+		</ion-list>
+		<!--
+		<div class="form-container">
+			<div class="form-group">
+				<label class="text15 white">Name</label>
+				<input type="text" class="form-control styled-input" required
+					ng-model="category.name"/>
+			</div>
+			<div class="form-group">
+				<label class="text15 white" for="color-type">Category style</label>
+				<select class="form-control styled-input white" id="color-type" style="background-color:{{category.style}}" 
+					ng-model="category.style">
+					<option class="category-option" style="background-color:{{c.value}}" 
+						ng-repeat="c in colors track by $index" 
+						ng-value="c.value">
+							{{c.name}}
+					</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="text15 white"> Expense </label>
+				<input type="checkbox" 
+					ng-model="category.type"
+					ng-true-value="1" 
+					ng-false-value="0"/>
+			</div>
+			<div class="form-group">	
+				<input type="submit" class="btn btn-primary btn-block bkgr-light-blue" value="Save"/>
+			</div>
+			<div class="form-group">
+				<input type="button" class="btn btn-danger btn-block" value="Delete"
+					ng-click="deleteCategoryConfirm()"/>
+				</input>
+			</div>
+			<div class="modal fade text-black" style="padding-top:10%" id="deleteCategoryModal" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myModalLabel">Delete category {{category.name}}?</h4>
+						</div>
+						<div class="modal-body text15">
+							<span>Category won't be deleted if it is used in other items( Budgets, Transactions and etc.)</span>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="button" ng-click="deleteCategory(category.name)" class="btn btn-primary white">Delete</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+	</form>
+</ion-content>
+</ion-modal-view>
+</div>

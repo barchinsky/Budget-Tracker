@@ -1,0 +1,60 @@
+<div class="dynamic-page" ng-if="!authorized">
+	<div class="card">
+		<div class="card-title">Authorization required</div>
+		<p class="card-note">Sorry, you have to authorize first</p>
+		<input type="button" class="button button-block button-positive button-sm" ng-click="showLoginModal()" value="Login"/>
+	</div>
+</div>
+<div class="dynamic-page" ng-if="authorized">
+	<ion-content ng-init="getBudgets()">
+		<ion-refresher
+			pulling-text="Pull to refresh..."
+			on-refresh="doRefresh('b')">
+		</ion-refresher>
+		<div class="list pt50">
+			<label class="item item-input item-select">
+				<div class="input-label">
+					Budget
+				</div>
+				<select ng-change="drawCanvas(b)" ng-model="b">
+					<option 
+						ng-repeat="b in budgets" 
+						ng-value="b.name">
+							{{b.name}}
+					</option>
+				</select>
+			</label>
+
+		</div>
+
+		<div class="card-container">
+			<div class="card card-lg">
+				<div class="card-title">Balance</div>
+				<div>Booked:</div> <div class="content-right">{{budget.totalCosts?budget.totalCosts:0}}</div>
+				<div>Income:</div> <div class="content-right">{{budget.incomeCosts ? budget.incomeCosts : 0}}</div>
+				<div>Spent:</div> <div class="content-right">{{budget.spentCosts ? budget.spentCosts : 0}}</div>
+				<div>Balance:</div> <div class="content-right">{{budget.incomeCosts-budget.spentCosts}}</div>
+			</div>
+		</div>
+		<div class="card" ng-show="b==null">
+			<div class="card-title">Please, select the budget </div>
+			<p class="card-note">Sorry, there is no records found. Please, select the budget to see agregated info.</p>
+		</div>
+		<div class="card-container" ng-show="b!=null">
+			<div class="card">
+				<div class="card-title"> Incomes and outcomes</div>
+				<div class="canvas-container">
+					<canvas id="incomeOutcomeChart" max-width="480" max-height="720"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="card-container" ng-show="b!=null">
+			<div class="card">
+				<div class="card-title"> Expences distribution</div>
+				<div class="canvas-container">
+					<canvas id="expensesPieChart" max-width="480" max-height="720"></canvas>
+				</div>
+			</div>
+		</div>
+	</ion-content>
+</div>

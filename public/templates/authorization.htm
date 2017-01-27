@@ -1,0 +1,37 @@
+<div class="dynamic-page">
+	<div class="account-wall">
+		<h1 class="text-center login-title">Budget Tracker</h1>
+		<img class="profile-img" src="media/bt.png"/>
+		<h1 class="text-center login-title">Please, sign in</h1>
+		<form class="form-signin" ng-submit="authorize(user, pass)">
+			<input type="text" class="form-control" placeholder="User/Email" ng-model="user" required autofocus>
+			<input type="password" class="form-control" placeholder="Password" ng-model="pass" required>
+			<button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
+			<a href="#" class="text-center new-account light-blue" ng-click="route(regPage)">Create an account </a>
+		</form>
+	</div>
+</div> 
+
+<!--
+<div class="dynamic-page">
+	<div class="auth-form white">
+		<div class="row">
+			<div class="col-sm-6 col-md-5 col-md-offset-3">
+				<div class="account-wall">
+					<h1 class="text-center login-title">Budget Tracker</h1>
+					<img class="profile-img" src="media/bt.png"/>
+					<form class="form-signin" ng-submit="authorize(login, pass)">
+						<input type="text" class="form-control styled-input" placeholder="Login" ng-model="login" required autofocus>
+						<input type="password" class="form-control styled-input" placeholder="Password" ng-model="pass" required>
+						<button class="btn btn-lg btn-default btn-block bkgr-light-blue white" type="submit">Sign in</button><br>
+						<a href="#" class="text-center new-account light-blue" ng-click="route(regPage)">Create an account </a>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="app-info">
+			<div class="version white"> ver. {{version}} 	&copy;barchinsky</div>
+		</div>
+	</div>
+</div>
+-->

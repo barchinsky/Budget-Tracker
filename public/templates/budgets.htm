@@ -1,0 +1,54 @@
+<div class="dynamic-page" ng-init="getBudgets()">
+	<ion-content>
+		<ion-refresher
+			pulling-text="Pull to refresh..."
+			on-refresh="doRefresh('b')">
+		</ion-refresher>
+		<div class="card" ng-show="!budgets.length">
+			<h4 class="card-title">No results found!</h4>
+			<p class="card-note">Sorry, there is no records found. Please, select another period of add the first one!</p>
+			<a href="#app/addBudget" class="button button-positive" ng-click="route(addItems[2], false)">Add first one</a>
+		</div>
+		<ion-list
+			can-swipe="true">
+				<ion-item class="list-container"
+					ng-repeat="budget in budgets track by $index" ng-click="showBudgetDetailsModal(budget)">
+						<div class="list-logo-container-with-progress">
+							<div class="list-logo-box">
+								<span class="fl centered"> {{budget.name[0]}}</span>
+								<span class="sl centered"> {{budget.name[1]}}</span>
+							</div>
+						</div>
+						<div class="list-item-name">{{ budget.name }}</div>
+						<div class="list-item-description">{{ budget.startDate }} - {{ budget.endDate }}</div>
+						<div class="budget-cost text15 white">{{ budget.spentCosts?budget.spentCosts : 0 }}/{{budget.totalCosts }}</div>
+						<ion-option-button class="button button-assertive"
+							ng-click="deleteBudget(budget.name)">
+								Delete
+						</ion-option-button>
+						<ion-option-button class="button button-positive"
+							ng-click="edit(item)">
+								Edit
+						</ion-option-button>
+				</ion-item>
+		</ion-list>
+		<!--<div class="list-container" 
+			ng-repeat="budget in budgets track by $index" ng-click="showBudgetDetailsModal(budget)">
+				<div class="progress no-bottom-margin" style="height: 15px;">
+					<div class="progress-bar progress-bar-{{ getProgressType(budget.spentPerc) }} progress-bar-striped centered"  role="progressbar" aria-valuenow="{{ budget.spentPerc }}" aria-valuemin="0" aria-valuemax="100" 
+						ng-style="{width : ( (budget.spentPerc > 100 ? 100 : budget.spentPerc) + '%' ) }"> 
+							{{( budget.spentPerc + '%' )}}
+					</div>
+				</div>
+				<div class="list-logo-container-with-progress">
+					<div class="list-logo-box">
+						<span class="fl centered"> {{budget.name[0]}}</span>
+						<span class="sl centered"> {{budget.name[1]}}</span>
+					</div>
+				</div>
+				<div class="list-item-name">{{ budget.name }}</div>
+				<div class="list-item-description">{{ budget.startDate }} - {{ budget.endDate }}</div>
+				<div class="budget-cost text15 white">{{ budget.spentCosts?budget.spentCosts : 0 }}/{{budget.totalCosts }}</div>
+		</div>-->
+	</ion-content>
+</div>

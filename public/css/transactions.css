@@ -1,0 +1,8 @@
+.transaction-cost{
+	width:5%;
+	float:right;
+	text-align: left;
+	margin-top: -25px;
+	margin-right: 20px;
+	color:black;
+}

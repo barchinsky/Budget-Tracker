@@ -1,0 +1,121 @@
+.list-container{
+	max-width: 100%;
+	min-width: 300px;
+	height: 80px;
+	display: block;
+	margin-top:10px;
+	margin-bottom: 8px;
+	margin-left:10px;
+	margin-right: 10px;
+	border-radius: 3px;
+	box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.5);
+}
+
+.list-logo-container{
+	width: 30%;
+	height: 80px;
+	float:left;
+	text-align: center;
+	/*margin-top:-16px;*/
+	/*margin-left:-16px;*/
+}
+
+.list-logo-container-with-progress{
+	width: 15%;
+	height: 80%;
+	float:left;
+	text-align: center;
+	color:black;
+}
+
+.list-logo-container:before{
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	height: 100%;
+}
+
+.list-logo-box{
+	display: inline-block;
+	vertical-align: middle;
+	height: 30%;
+	border-radius: 3px;
+	font-size: 26px;
+	margin-top:10px;
+}
+
+.list-item-name{
+	width:60%;
+	padding-left: 10px;
+	padding-top: 6px;
+	float: left;
+	font-size: 20px;
+	color:black;
+	/*margin-top:-5px;*/
+}
+
+.list-item-info{
+	float:left;
+	padding-left: 10px;
+	width: 60%;
+	font-size: 10px;
+	color:black;
+}
+
+.list-item-description{
+	height: 10%;
+	min-height: 18px;
+	width:60%;
+	float:left;
+	margin-left: 10px;
+	font-size: 10px;
+	color:black;
+}
+
+.list-item-progress{
+	width:70%;
+	float:left;
+	padding-left: 10px;
+}
+
+/* COMPLEX LIST ITEMS */
+
+.list-logo-container-complex{
+	width: 30%;
+	height: 80px;
+	float:left;
+	text-align: center;
+	margin-top:-16px;
+	margin-left:-16px;
+}
+
+.list-logo-box-complex{
+	display: inline-block;
+	vertical-align: middle;
+	height: 30%;
+	border-radius: 3px;
+	font-size: 26px;
+	margin-top:30px;
+}
+
+.list-item-name-complex{
+	width:60%;
+	padding-left: 10px;
+	padding-top: 6px;
+	float: left;
+	font-size: 20px;
+	color:black;
+	margin-top:-15px;
+}
+
+
+@media screen and (min-width: 750px){
+	.list-logo-container{
+		width: 15%;
+		height: 80px;
+		float:left;
+		text-align: center;
+		margin-top:-16px;
+		margin-left:-16px;
+	}
+}

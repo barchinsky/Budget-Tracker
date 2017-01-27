@@ -1,0 +1,15 @@
+<div class="dynamic-page">
+	<!--
+	<div class="form-container">
+		<input type="button" class="btn btn-default btn-lg btn-block bkgr-light-blue white" ng-value="item.title" ng-repeat="item in addItems track by $index" ng-click='route(item, false)'/>
+	</div>
+	-->
+	<div class="list card">
+			<a href="{{item.path}}" class="item item-icon-left"
+				ng-value="item.title" 
+				ng-repeat="item in addItems track by $index">
+					<i class="icon ion-home"></i>
+					{{item.title}} 
+			</a>
+	</div>
+</div>

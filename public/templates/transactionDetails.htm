@@ -1,0 +1,47 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">Transaction Details</h1>
+		<div class="buttons">
+			<button class="button button-light" ng-click="closeTransactionModal()">Close</button>
+		</div>
+	</ion-header-bar>
+	<ion-content>
+		<form ng-submit="updateTransaction()">
+		<ion-list>
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Name</span>
+				<input type="text" class="styled-input" maxlength="{{transaction.nameLen}}"
+					ng-model="transaction.name"
+					ng-disabled="readOnly" required/>
+			</label>
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Category</span>
+				<input type="text" class="styled-input" style="background-color:{{transaction.category.style}}"
+					ng-model="transaction.category.name" 
+					ng-disabled="readOnly" required/>
+			</label>
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Date</span>
+				<input type="date" placeholder="MM/dd/yyyy" class="styled-input"
+					ng-model="transaction.date" 
+					ng-disabled="readOnly" required/>
+			</label>
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Cost</span>
+				<input type="number" step="any" min="0" class="styled-input"
+					ng-value="0" 
+					ng-model="transaction.cost"
+					ng-disabled="readOnly" required/>
+			</label>
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Comment</span>
+				<textarea class="styled-input" maxlength="{{transaction.commentLen}}" rows="2" id="comment" 
+					ng-model="transaction.comment"
+					ng-disabled="readOnly"></textarea>
+			</label>
+			<input type="button" class="button button-positive button-block" ng-click="allowToEditTransaction()" ng-disabled="!readOnly" value="Edit"/>
+			<input type="submit" class="button button-balanced button-block" value="Update"/>
+		</ion-list>
+		</form>
+	</ion-content>
+</ion-modal-view>
