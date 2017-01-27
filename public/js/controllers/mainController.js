@@ -41,6 +41,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.tDate = null;
 
 	local.loginData = {};
+	local.regData = {passConf:{value:"", valid:true}};
 
 	local.initApp = function(){
 		console.log("initApp()");
@@ -89,6 +90,12 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			scope: local
 		}).then(function(modal) {
 			local.categoryDetailsModal = modal;
+		});
+
+		$ionicModal.fromTemplateUrl('templates/registration.htm', {
+			scope: local
+		}).then(function(modal) {
+			local.registrationModal = modal;
 		});
 
 	}
@@ -483,12 +490,12 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 	local.notify = function(text,id){
 		console.log("controller::notify()");
+		console.log(text);
+
 		local.notification.text = text;
 		var nType = local.alerts[id]; // notification type
 
 		local.alertType = nType;
-		//$("#notification").fadeIn(1000);
-		//$("#notification").fadeOut(3000);
 
 		$("#notification").slideDown(800);
 		$("#notification").slideUp(1200);
@@ -535,23 +542,40 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		local.categoryDetailsModal.hide();
 	}
 
-	local.register = function(n, l, p, pc){
+	local.showRegistrationModal = function(){
+		local.registrationModal.show();
+	}
+
+	local.closeRegistrationModal = function(){
+		local.registrationModal.hide();
+	}
+
+	local.register = function(){
 		//console.log("register()");
 
-		if( p !== pc.value){
+		/*if( local.regData.pass !== local.regData.passConf){
 			local.notify("Password confirmation missmatch!",2);
-			pc.invalid=true;
+			local.regData.passConf.invalid=true;
 			return;
-		}
+		}*/
+		local.showLoading();
 
-		ds.register(n,l,p).then(function(r){
+		ds.register(local.regData).then(function(r){
 			if( +r.status )	local.notify("Registration is successfull",0);
 			else local.notify(r.msg, 3);
+			local.hideLoading();
+			local.closeRegistrationModal();
 		}, local.errorHandler);
 
-		local.initApp();
-
 		//console.log("~register()");
+	}
+
+	local.validatePass = function(){
+		console.log(local.regData);
+		if( local.regData.pass !== local.regData.passConf.value){
+			local.notify("Password confirmation missmatch!",2);
+			local.regData.passConf.valid=false;
+		}else{ local.regData.passConf.valid = true; }
 	}
 
 	local.authorize = function(){
@@ -670,7 +694,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.showLoading = function() {
 	    $ionicLoading.show({
 			template: 'Loading...',
-			duration: 3000,
+			duration: 5000,
 			scope: local
 		}).then(function(){
 			console.log("The loading indicator is now displayed");

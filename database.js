@@ -413,7 +413,7 @@ var deleteBudget = function(u, b, response, callback){
 
 var register = function(n, l , p , response, callback){
 	var d = new Date();
-	d = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
+	d = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 
 	logger.info("toIso:"+d);
 	logger.info("User does not exist...")

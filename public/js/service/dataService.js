@@ -106,8 +106,8 @@ function DataService($http){
 			then(end);
 	}
 
-	function reg(n,l,p){
-		return $http.post(host+"/register", {name:n, login:l, pass:p}).
+	function reg(regData){
+		return $http.post(host+"/register", {name:regData.name, login:regData.login, pass:regData.pass}).
 			then(end);
 	}
 

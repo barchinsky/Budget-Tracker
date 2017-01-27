@@ -173,11 +173,11 @@
 	/*background-color: #545556;
 	border:1px solid #a0a0a0;
 	color:white;*/
-	padding-left:16px;
+	padding-left:10px !important;
 }
 
 .invalid{
-	border: 1px solid #f4424e;
+	border: 1px solid #f4424e !important;
 }
 
 .form-group .ng-invalid-required, .form-group .ng-invalid{
