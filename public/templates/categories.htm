@@ -1,40 +1,51 @@
-<div class="dynamic-page">
-<ion-content ng-init="getCategories()">
-	<ion-refresher
-		pulling-text="Pull to refresh..."
-		on-refresh="doRefresh('c')">
-	</ion-refresher>
-	<div class="card" ng-show="!categories.length">
-		<h4 class="card-title">No results found!</h4>
-		<p class="card-note">Sorry, there is no records found. Please, select another period or add the first one!</p>
-		<a href="#app/addCategory" class="btn btn-primary">Add first one</a>
+<div class="dynamic-page" ng-if="!authorized">
+	<div class="card">
+		<div class="card-title">Authorization required {{authorized}}</div>
+		<p class="card-note">Sorry, you have to authorize first</p>
+		<input type="button" class="button button-block button-positive button-sm" ng-click="showLoginModal()" value="Login"/>
 	</div>
-	<ion-list
-		can-swipe="true">
-			<ion-item class="list-container no-left-padding"
-				ng-repeat="cat in categories track by $index" 
-				ng-click="showCategoryDetailsModal(cat)">
-					<div class="list-logo-container-complex" style="background-color:{{cat.style}}">
-						<div class="list-logo-box-complex white">
-							<span class="fl"> {{cat.name[0]}}</span>
-							<span class="sl"> {{cat.name[1]}}</span>
-						</div>
-					</div>
-					<div class="list-item-name-complex white">{{cat.name}}</div>
-					<div class="list-item-info">
-						<p>
-							{{cat.type ? "Expense": "Income"}}
-						</p>
-					</div>
-					<ion-option-button class="button button-assertive"
-						ng-click="deleteCategory(cat)">
-							Delete
-					</ion-option-button>
-					<ion-option-button class="button button-positive"
-						ng-click="edit(item)">
-							Edit
-					</ion-option-button>
-			</ion-item>
-	</ion-list>
-</ion-content>
+</div>
+
+<div class="dynamic-page"
+	ng-if="authorized">
+	<ion-content ng-init="getCategories()">
+		<ion-refresher
+			pulling-text="Pull to refresh..."
+			on-refresh="doRefresh('c')">
+		</ion-refresher>
+		<div class="card" ng-show="!categories.length">
+			<h4 class="card-title">No results found!</h4>
+			<p class="card-note">Sorry, there is no records found. Please, select another period or add the first one!</p>
+			<a href="#app/addCategory" class="btn btn-primary">Add first one</a>
+		</div>
+		<div class="pt50">
+			<ion-list
+				can-swipe="true">
+					<ion-item class="list-container no-left-padding"
+						ng-repeat="cat in categories track by $index" 
+						ng-click="showCategoryDetailsModal(cat)">
+							<div class="list-logo-container-complex" style="background-color:{{cat.style}}">
+								<div class="list-logo-box-complex white">
+									<span class="fl"> {{cat.name[0]}}</span>
+									<span class="sl"> {{cat.name[1]}}</span>
+								</div>
+							</div>
+							<div class="list-item-name-complex white">{{cat.name}}</div>
+							<div class="list-item-info">
+								<p>
+									{{cat.type ? "Expense": "Income"}} {{cat.id}}
+								</p>
+							</div>
+							<ion-option-button class="button button-assertive"
+								ng-click="deleteCategory(cat)">
+									Delete
+							</ion-option-button>
+							<ion-option-button class="button button-positive"
+								ng-click="edit(item)">
+									Edit
+							</ion-option-button>
+					</ion-item>
+			</ion-list>
+		</div>
+	</ion-content>
 </div>

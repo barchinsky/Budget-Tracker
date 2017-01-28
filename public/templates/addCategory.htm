@@ -1,32 +1,5 @@
 <div class="dynamic-page" ng-init="initCategory()">
 	<form ng-submit="saveCategory()">
-	<!--<div class="form-container">
-		<div class="form-group">
-			<label class="text15 white">Enter category</label>
-			<input type="text" class="form-control styled-input" 
-				ng-model="category.name" 
-				ng-model-options="{updateOn: 'blur'}" 
-				ng-class="{'invalid':category.invalid}"
-				ng-change="validateCategoryName(category.name)"
-				required="" />
-		</div>
-		<div class="form-group">
-			<label class="text15 white" for="color-type">Select category style</label>
-			<select class="form-control styled-input white" id="color-type" style="background-color:{{category.style}}" ng-model="category.style">
-				<option class="category-option" ng-repeat="c in colors track by $index" ng-value="c.value" style="background-color:{{c.value}}">{{c.name}}</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<label class="text15 white"> Expense </label>
-			<input type="checkbox" 
-				ng-model="category.type" 
-				ng-true-value="1" 
-				ng-false-value="0"/>
-		</div>
-		<div class="form-group">	
-			<input type="submit" class="btn btn-primary btn-block bkgr-light-blue" value="Save"/>
-		</div>
-	</div> -->
 		<div class="list">
 			<label class="item item-input item-stacked-label">
 				<span class="input-label">Name</span>

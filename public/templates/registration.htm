@@ -1,25 +1,3 @@
-<!--<div class="dynamic-page">
-	<div class="auth-form white">
-		<div class="row">
-			<div class="col-sm-6 col-md-4 col-md-offset-3">
-				<div class="account-wall">
-					<h1 class="text-center login-title white">New BTrack account</h1>
-					<img class="profile-img" src="media/bt.png"	alt="">
-					<form class="form-signin" ng-submit="register(email, login, pass, pass_conf)">
-						<input type="text" class="form-control styled-input" placeholder="Name"  ng-model="email" required autofocus>
-						<input type="text" class="form-control styled-input" placeholder="Login"  ng-model="login" required autofocus>
-						<input type="password" class="form-control styled-input" placeholder="Password" ng-model="pass" required>
-						<input type="password" class="form-control styled-input" placeholder="Password one more time" 
-							ng-model="pass_conf.value"
-							ng-class="{'invalid':pass_conf.invalid}" required>
-						<button class="btn btn-lg btn-success btn-block white" type="submit">Register</button><br>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
--->
 <ion-modal-view>
     <ion-header-bar>
         <h1 class="title">Signing up</h1>
@@ -27,35 +5,35 @@
             <button class="button button-light" ng-click="closeRegistrationModal()">Close</button>
         </div>
     </ion-header-bar>
-<ion-content>
-    <form ng-submit="register()">
-        <div class="list">
-            <label class="item item-input">
-                <span class="input-label">Name</span>
-                <input type="text" class="styled-input" ng-model="regData.name" placeholder="Your name" />
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Login</span>
-                <input type="text" class="styled-input" ng-model="regData.login" placeholder="Login, used for authorization"/>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Password</span>
-                <input type="password" class="styled-input" ng-model="regData.pass" placeholder="Put your password"
-                	ng-mouseleave = "validatePass()"/>
-            </label>
-            <label class="item item-input">
-            	<span class="input-label">Password again</span>
-                <input type="password" class="styled-input" placeholder="Password one more time" 
-                	ng-mouseleave = "validatePass()"
-					ng-model="regData.passConf.value"
-					ng-class="{'invalid': !regData.passConf.valid}" required>
-					<!--ng-class="{'invalid':regData.passConf.invalid}" required>-->
-            </label>
-            <label class="item">
-                <button class="button button-block button-positive" type="submit"
-                	ng-disabled="!regData.passConf.valid">Sign up!</button>
-            </label>
-        </div>
-    </form>
-</ion-content>
+    <ion-content>
+        <form ng-submit="register()">
+            <div class="list">
+                <label class="item item-input">
+                    <span class="input-label">Name</span>
+                    <input type="text" class="styled-input" ng-model="regData.name" placeholder="Your name" />
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Login</span>
+                    <input type="text" class="styled-input" ng-model="regData.login" placeholder="Login, used for authorization"/>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Password</span>
+                    <input type="password" class="styled-input" ng-model="regData.pass" placeholder="Put your password"
+                    	ng-mouseleave = "validatePass()"/>
+                </label>
+                <label class="item item-input">
+                	<span class="input-label">Password again</span>
+                    <input type="password" class="styled-input" placeholder="Password one more time" 
+                    	ng-mouseleave = "validatePass()"
+    					ng-model="regData.passConf.value"
+    					ng-class="{'invalid': !regData.passConf.valid}" required>
+    					<!--ng-class="{'invalid':regData.passConf.invalid}" required>-->
+                </label>
+                <label class="item">
+                    <button class="button button-block button-positive" type="submit"
+                    	ng-disabled="!regData.passConf.valid">Sign up!</button>
+                </label>
+            </div>
+        </form>
+    </ion-content>
 </ion-modal-view>

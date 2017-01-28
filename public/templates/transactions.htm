@@ -1,10 +1,19 @@
-<div class="dynamic-page">
+<div class="dynamic-page pt50" 
+	ng-if="!authorized">
+		<div class="card">
+			<div class="card-title">Authorization required {{authorized}}</div>
+			<p class="card-note">Sorry, you have to authorize first</p>
+			<input type="button" class="button button-block button-positive button-sm" ng-click="showLoginModal()" value="Login"/>
+		</div>
+</div>
+<div class="dynamic-page pt50"
+	ng-if="authorized">
 	<ion-content ng-init="initTransactions()">
 		<ion-refresher
 			pulling-text="Pull to refresh..."
 			on-refresh="doRefresh('t')">
 		</ion-refresher>
-		<div class="list">
+		<div class="list pt50">
 			<label class="item item-input item-select">
 				<span class="input-label">
 					Budget
@@ -21,10 +30,10 @@
 		</div>
 		<ion-list 
 			can-swipe="true">
-				<ion-item class="list-container"
+				<ion-item class="list-container no-ledf-padding"
 					ng-repeat="tran in transactions" 
 					ng-click="openTransaction(tran)">
-						<div class="list-logo-container" style="background-color:{{tran.category.style}}">
+						<div class="list-logo-container-complex" style="background-color:{{tran.category.style}}">
 							<div class="list-logo-box white">
 								<span class="fl centered"> {{tran.category.name[0]}}</span>
 								<span class="sl centered"> {{tran.category.name[1]}}</span>

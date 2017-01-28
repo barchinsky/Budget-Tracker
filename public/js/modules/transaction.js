@@ -7,12 +7,15 @@ class Transaction {
 				this.name = obj.name;
 				this.date = new Date(obj.date);
 				this.cost = +obj.cost;
-				this.category = {name:obj.category, style:obj.catStyle};
+				this.category = {name:obj.catName, style:obj.catStyle};
 				this.comment = obj.comment;
 				this.catStyle = obj.catStyle;
+				this.rawDate = obj.rawDate;
 			}
+			this.date = new Date();
 			this.nameLen = 30;
 			this.commentLen = 100;
+			this.rawDate = new Date();
 	}
 
 	static parseArray(arr){

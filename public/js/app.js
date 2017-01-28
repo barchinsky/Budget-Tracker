@@ -28,7 +28,7 @@ angular.module('budgetTrackerApp', ['ionic'])
 		url: '/app',
 		abstract: true,
 		templateUrl: 'templates/menu.html',
-		controller: 'mainController'
+		controller: 'menuController'
 	})
 
 	.state("app.home",{

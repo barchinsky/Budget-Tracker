@@ -4,10 +4,10 @@ angular.
 	factory("ds", DataService). // dataService manages all comunications with server
 	factory("canvas", CanvasService);
 
-mainController.$inject = ["$scope", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading"]; 
+mainController.$inject = ["$scope", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope"]; 
 DataService.$inject = ["$http"];
 
-function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter, $ionicLoading){
+function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter, $ionicLoading, $rootScope){
 	//console.log("mainController controller loaded.");
 
 	////////////// App init //////////////////
@@ -28,7 +28,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	
 	local.bodyHeaderTitle = null;
 	local.userImageIcon = "media/incognito.jpg";
-	local.menuItems = [config.homePage, config.addPage, config.transactionsPage, config.categoriesPage, config.budgetsPage, config.settingsPage]; // keep page titles with path
+	//local.menuItems = [config.homePage, config.addPage, config.transactionsPage, config.categoriesPage, config.budgetsPage, config.settingsPage]; // keep page titles with path
 	local.addItems = [config.addTransactionPage, config.addCategoryPage, config.addBudgetPage];
 	local.currentView = config.authPage;
 	local.regPage = config.regPage;
@@ -38,23 +38,35 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.notification = {};
 	local.canv={name:'', note:''};
 	local.budgetName = '';
-	local.tDate = null;
+	local.tDate = new Date(2015, 0, 01);
 
 	local.loginData = {};
-	local.regData = {passConf:{value:"", valid:true}};
+	local.regData = {passConf:{value:"", valid:true}}; // registration data
+	//local.authorized = false;
+
+	local.$on("change.auth.event", function(event, value){
+		console.log("auth event handled", value);
+		local.authorized = ds.getAuthorization();
+		console.log("local.authorized:", local.authorized);
+	});
+
+	local.$watch("authorized", function(newValue, oldValue){
+		console.log("mainController.authorized:", newValue, oldValue);
+	});
+
 
 	local.initApp = function(){
 		console.log("initApp()");
 
 		local.history = [];
-		local.category = {};
+		local.category = new Category();
 		local.transaction = new Transaction();
 		local.budget = new Budget();//{categories:[]};
 		local.budgets = [];
 		local.budgetCategories = [];
 		local.categoryStyle = null; // used for styling category on add
 		local.selectedItem = null;
-		local.authorized = false;
+		//local.authorized = false;
 		local.categories = [];
 		local.budgets = null;
 		local.transactions = null;
@@ -62,17 +74,18 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		local.pass_conf={invalid:false, value:null};
 
 		local.prepareModals();
+		//local.isauth();
 
 		console.log("~initApp()");
 	}
 
 	local.prepareModals = function(){
 		// Create the login modal
-		$ionicModal.fromTemplateUrl('templates/login.html', {
+		/*$ionicModal.fromTemplateUrl('templates/login.html', {
 			scope: local
 		}).then(function(modal) {
 			local.loginModal = modal;
-		});
+		});*/
 
 		$ionicModal.fromTemplateUrl('templates/transactionDetails.htm', {
 			scope: local
@@ -92,11 +105,11 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			local.categoryDetailsModal = modal;
 		});
 
-		$ionicModal.fromTemplateUrl('templates/registration.htm', {
+		/*$ionicModal.fromTemplateUrl('templates/registration.htm', {
 			scope: local
 		}).then(function(modal) {
 			local.registrationModal = modal;
-		});
+		});*/
 
 	}
 
@@ -105,14 +118,14 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.saveTransaction = function(){
 		console.log("saveTransaction()");
 		//console.log(local.transaction);
-
+		
 		// set time to current time
 		local.transaction.rawDate.setHours( new Date().getHours() );
 		local.transaction.rawDate.setMinutes( new Date().getMinutes() );
 
 		// format date
 		local.transaction.date = $filter("date")(local.transaction.rawDate, "yyyy-MM-dd HH:mm");
-		local.transaction.category.name = local.transaction.category.name.trim(); // remove white spaces from the string
+		console.log("local.category", local.transaction.category);
 		console.log("transaction to add:", local.transaction);
 
 		//return;
@@ -144,7 +157,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			//local.transactions = r.data;
 			//console.log("r.data:",r.data)
 			local.transactions = Transaction.parseArray(r.data);
-			//console.log("local.transactions:", local.transactions);
+			console.log("local.transactions:", local.transactions);
 		}, local.errorHandler);
 
 		local.hideLoading();
@@ -172,12 +185,13 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	}
 
 	local.initAddTransaction = function(){
-		//console.log("initAddTransaction()");
+		console.log("initAddTransaction()");
 		//local.initDatePicker();
 		local.transaction = new Transaction();
-		local.category = new Category();
+		local.transaction.rawDate = new Date();
+		//local.category = new Category();
 		local.getCategories();
-		//console.log("~initAddTransaction()");
+		console.log("~initAddTransaction()");
 	}
 
 	local.deleteTransaction = function(id){
@@ -273,9 +287,13 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		console.log("loadBudgetCategories()");
 
 		ds.loadBudgetCategories(b).then(function(r){
-			if( +r.status ) local.budgetCategories = r.data;
+			if( +r.status ) {
+				local.budgetCategories = r.data;
+				console.log("local.budgetCategories:", local.budgetCategories);
+			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
+
 		console.log("~loadBudgetCategories()");
 	}
 
@@ -357,7 +375,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	//////////////////////// Category ////////////////////////////
 
 	local.getCategories = function(){
-		//console.log("getCategories()");
+		console.log("getCategories()");
 		// code to load data from server
 
 		local.categories = [];
@@ -369,6 +387,8 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 					var c = new Category(r.data[i]);
 					local.categories.push(c);
 				}
+
+				console.log("categories:", local.categories);
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -450,11 +470,6 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 	//////////////////////// Utils ///////////////////////////////////
 
-	local.test = function(){
-		console.log("test");
-		local.notify("Test",1);
-	}
-
 	local.route = function(page, isGoBack){
 		//console.log("route()");
 
@@ -465,6 +480,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		//console.log("~route()");
 	}
 
+	/*
 	local.toogleMenu = function(){
 		if( !local.authorized ) return; // menu does not available for not authorized users
 
@@ -477,6 +493,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		
 		//$("#currentView").css("z-index", currentViewState); // set z-index
 	}
+	*/
 
 	local.updateAllData = function(){
 		//console.log("updateAllData()");
@@ -512,6 +529,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		local.transactionDetailsModal.hide();
 	}
 
+	/*
 	local.showLoginModal = function(){
 		console.log("showLoginModal");
 		local.loginModal.show();
@@ -520,7 +538,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.closeLoginModal = function(){
 		local.loginModal.hide();
 		console.log("closeLoginModal");
-	}
+	}*/
 
 	local.showBudgetDetailsModal = function(b){
 		local.budget = b;
@@ -542,7 +560,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		local.categoryDetailsModal.hide();
 	}
 
-	local.showRegistrationModal = function(){
+	/*local.showRegistrationModal = function(){
 		local.registrationModal.show();
 	}
 
@@ -558,6 +576,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			local.regData.passConf.invalid=true;
 			return;
 		}*/
+		/*
 		local.showLoading();
 
 		ds.register(local.regData).then(function(r){
@@ -577,21 +596,24 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			local.regData.passConf.valid=false;
 		}else{ local.regData.passConf.valid = true; }
 	}
+	*/
 
+	/*
 	local.authorize = function(){
 		console.log("authorize()");
 		local.closeLoginModal();
 		local.showLoading();
 
-		ds.auth(local.loginData.username, local.loginData.password).then(function(r){
+		ds.authorize(local.loginData).then(function(r){
+			console.log("r.status:"+r.status);
 			if(+r.status){
-				local.authorized = true;
+				ds.setAuthorization(true);
 				local.currentUserName = r.user;
-				local.route(config.homePage, false);
 				local.notify(r.msg, 0);
 				local.hideLoading();
 			}
 			else {
+				local.hideLoading();
 				local.notify(r.msg, 2);
 			}
 		}, local.errorHandler);
@@ -602,27 +624,50 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		ds.logout().then(function(r){
 			if(+r.status){
 				local.notify(r.msg, 0);	
-				console.log("Logged out.");
-
-				//local.toogleMenu();
-				//local.route(config.authPage);
 				local.initApp();
+				//ds.setAuthorization(false);
+
+				console.log("Logged out.");
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
-	}
+	}*/
 
-	local.isauth = function(){
+	/*local.isauth = function(){
 		// check if user is athorized
+		console.log("isauth()");
+		local.showLoading();
 
 		ds.isAuthorized().then(function(r){
 			if(+r.status){
-				local.route(config.homePage, false);
-				local.authorized = true;
+				local.notify("authorized");
+				ds.setAuthorization(true);
 				local.currentUserName = r.user;
+				local.hideLoading();
 			}
-			//else local.notify(r.msg, 3);
+			else{
+				console.log('not authorized');
+				local.loginData = local.getLoginData();
+				local.authorize();
+				local.loginData = {};
+			}
 		}, local.errorHandler);
+
+		console.log("~isauth()");
+	}
+
+	local.getLoginData = function(){
+		// TODO: define method for retrieving stored login data
+
+		// mock implementation
+		var loginData = {login:"max", pass:"asd"};
+
+		return loginData;
+	}
+	*/
+
+	local.saveLoginData = function(){
+		// TODO: define mothod to store login data
 	}
 
 	local.errorHandler = function(e){
@@ -631,6 +676,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			local.notify("Something went wrong."+e, 3);
 	}
 
+	/*
 	local.initDatePicker = function(){
 		//console.log("initDatePicker()");
 		$('#datetimepicker1').datetimepicker({format:"YYYY-MM-DD HH:mm", defaultDate:new Date()});
@@ -653,7 +699,6 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		console.log("~goBack()");
 	}
 
-/*
 	local.reset = function(){
 		//console.log("reset()");
 
@@ -699,7 +744,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		}).then(function(){
 			console.log("The loading indicator is now displayed");
 		});
-  }
+	  }
 
 	local.hideLoading = function(){
 		$ionicLoading.hide().then(function(){
@@ -724,5 +769,6 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	}
 
 	local.initApp();
-	local.isauth();
+	//local.isauth();
+	
 }

@@ -6,6 +6,9 @@ function DataService($http){
 
 	//var isDev = true;
 	var host = config.isDev?config.devHost:config.host;
+	var appData = {};
+	appData.authorized = false;
+	appData.currentUser = {};
 
 	var services = {
 		getTransactions: getTransactions,
@@ -16,7 +19,7 @@ function DataService($http){
 		deleteBudget: deleteBudget,
 		getCategories: getCategories,
 		register: reg,
-		auth: auth,
+		authorize: authorize,
 		logout: logout,
 		isAuthorized: isAuth,
 		saveTransaction: saveTransaction,
@@ -28,6 +31,11 @@ function DataService($http){
 		budgetExists: budgetExists,
 		categoryExists: catExists,
 		getTransactionsByCategory: getTranByCat,
+		setAuthorization: setAuthorization,
+		getAuthorization: getAuthorization,
+		setCurrentUser: setCurrentUser,
+		getCurrentUser: getCurrentUser,
+		getLoginData: getLoginData,
 	};
 
 	return services;
@@ -111,8 +119,8 @@ function DataService($http){
 			then(end);
 	}
 
-	function auth(l,p){
-		return $http.post(host+"/authorize", {login:l, pass:p}).
+	function authorize(loginData){
+		return $http.post(host+"/authorize", {login:loginData.login, pass:loginData.pass}).
 			then(end);
 	}
 
@@ -140,6 +148,33 @@ function DataService($http){
 	function catExists(c){
 		return $http.post(host+"/categoryExists", {category:c}).
 			then(end);
+	}
+
+	function getAuthorization(){
+		console.log("getAuthorization:",appData.authorized);
+		return appData.authorized;
+	}
+
+	function setAuthorization(authorized){
+		console.log("setAuthorization:",authorized);
+		appData.authorized = authorized;
+	}
+
+	function setCurrentUser(u){
+		appData.currentUser = u;
+	}
+
+	function getCurrentUser(){
+		return appData.currentUser;
+	}
+
+	function getLoginData(){
+		// TODO: define method for retrieving stored login data
+
+		// mock implementation
+		var loginData = {login:"max", pass:"asd"};
+
+		return loginData;
 	}
 
 	// local utilities

@@ -1,48 +1,6 @@
-<div class="dynamic-page" ng-init="initAddTransaction()">
-	<!--<div class="form-container">-->
+<div class="dynamic-page" 
+	ng-init="initAddTransaction()">
 		<form ng-submit="saveTransaction()">
-		<!--
-		<fieldset>
-			<div class="form-group">
-				<label class="text15 white" for="t-cat">Type</label>
-				<select class="form-control styled-input" id="t-cat" style="background-color:{{transaction.category.style}}"
-					ng-model="tCat"
-					ng-change="selectedCategory(tCat,true)" required>
-					<option class="category-option" ng-repeat="cat in categories" style="background-color:{{cat.style}}" 
-						ng-value="cat">
-							{{cat.name}}
-					</option>
-				</select>
-			</div>
-			<div class="form-group">
-				<label class="text15 white" for="t-name">
-					Name <div class="note"> {{transaction.nameLen - transaction.name.length}} left</div>
-				</label>
-				<input type="text" class="form-control styled-input" maxlength="{{transaction.nameLen}}" id="t-name" 
-					ng-model="transaction.name" required/>
-			</div>
-			<div class="form-group">
-				<label class="text15 white">Date</label>
-				<input type="date" placeholder="MM/dd/yyyy" class="form-control styled-input"
-					ng-model="transaction.rawDate" required/>
-			</div>
-			<div class="form-group">
-				<label class="text15 white" for="t-cost">Cost</label>
-				<input type="number" step="any" min="0" ng-value="0" class="form-control custom-number styled-input" id="t-cost" ng-model="transaction.cost" required/>
-			</div>
-			<div class="form-group">
-				<label class="text15 white" for="comment">
-					Comment <div class="note">{{transaction.commentLen - transaction.comment.length}} left</div>
-				</label>
-		  		<textarea class="form-control styled-input" maxlength="{{transaction.commentLen}}" rows="2" id="comment" ng-model="transaction.comment"></textarea>
-			</div>
-		</fieldset>
-		<fieldset>
-			<div class="form-group">
-				<button type="submit" class="btn btn-success btn-lg btn-block bkgr-light-blue">Save</button>
-			</div>
-		</fieldset>-->
-
 			<div class="list">
 				<label class="item item-input item-select">
 					<span class="input-label">
@@ -65,7 +23,7 @@
 				</label>
 				<label class="item item-input item-stacked-label">
 					<span class="input-label">Date</span>
-					<input type="date" placeholder="MM/dd/yyyy"
+					<input type="date" placeholder="yyyy-mm-dd"
 						ng-model="transaction.rawDate" required/>
 				</label>
 				<label class="item item-input item-stacked-label">
@@ -84,5 +42,4 @@
 				</button>
 			</div>
 		</form>
-	<!--</div>-->
 </div>

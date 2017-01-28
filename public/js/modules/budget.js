@@ -11,7 +11,6 @@ class Budget{
 			this.incomeCosts = obj.incomeCosts;
 		}
 		else{
-			console.log("Budget:else");
 				this.name = "";
 				this.startDate = null;
 				this.endDate = null;

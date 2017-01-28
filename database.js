@@ -127,12 +127,13 @@ var loadTransactions = function(u, b, response, callback){
 			t.comment, \
 			t.cost, \
 			t.category, \
+			c.name catName, \
 			c.style catStyle\
 		from Transaction t, Category c, Budget b \
 		where \
 			t.user=? and \
 			b.name=? and \
-			t.category=c.name and \
+			t.category=c.id and \
 			(t.t_date between b.start_date and b.end_date) \
 		order by t_date desc;";
 
@@ -148,7 +149,7 @@ var addTransaction = function(u, t, response, callback){
 	logger.info("transaction:",t);
 
 	var sql = "insert into Transaction (name, t_date, comment, cost, style, user, category) values(?,?,?,?,?,?,?);";
-	executeSql(sql, [t.name, t.date, t.comment, t.cost, t.category.style, u, t.category.name],response, callback);
+	executeSql(sql, [t.name, t.date, t.comment, t.cost, t.category.style, u, t.category.id],response, callback);
 
 	logger.info("~addTransaction()");
 }
@@ -207,7 +208,7 @@ var loadTransactionsByCat = function(c, b, u, response, callback){
 var loadCategories = function(u, response, callback){
 	logger.info("loadCategories()");
 
-	var sql = "select name,style,type from Category where user=?;";
+	var sql = "select id,name,style,type from Category where user=?;";
 	executeSql(sql, [u], response, callback);
 
 	logger.info("~loadCategories()");

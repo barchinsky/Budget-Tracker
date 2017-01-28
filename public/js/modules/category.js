@@ -8,6 +8,7 @@ class Category{
 			this.name = obj.name;
 			this.style = obj.style;
 			this.type = obj.type;
+			this.id = obj.id;
 		}
 		this.nameLen = 30;
 	}
