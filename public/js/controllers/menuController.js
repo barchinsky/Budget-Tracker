@@ -12,6 +12,8 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 	local.authorized = ds.getAuthorization();
 	local.menuItems = [config.homePage, config.addPage, config.transactionsPage, config.categoriesPage, config.budgetsPage, config.settingsPage]; // keep page titles with path
 	local.loginData = {};
+	local.alerts= config.alerts;
+	local.barHeaderTitle = config.homePage.title;
 
 
 	/*
@@ -63,6 +65,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 				// update app data
 				local.authorized = true;
 				ds.setCurrentUser(r.user);
+				local.notify("Authorizated!",1);
 				local.hideLoading();
 			}
 			else{ // else perform
@@ -70,6 +73,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 				console.log('not authorized');
 				local.loginData = ds.getLoginData();
 				local.authorize();
+				local.notify("Not authorized!", 2);
 			}
 		}, local.errorHandler);
 
@@ -90,12 +94,12 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 			if(+r.status){
 				local.authorized = true;
 				ds.setCurrentUser(r.user);
-				//local.notify(r.msg, 0);
+				local.notify(r.msg, 0);
 				local.hideLoading();
 			}
 			else {
 				local.hideLoading();
-				//local.notify(r.msg, 2);
+				local.notify(r.msg, 2);
 			}
 		}, local.errorHandler);
 		console.log("~authorize()");
@@ -166,6 +170,28 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 			//console.log("The loading indicator is now hidden");
 		});
 	}
+
+	local.notify = function(text,id){
+		console.log("controller::notify()");
+		console.log(text);
+
+		//local.notification.text = text;
+		//$("#notification").html(text);
+		//var nType = local.alerts[id]; // notification type
+
+		//local.alertType = nType;
+
+		//$("#notification").slideDown(800);
+		//$("#notification").slideUp(1200);
+		
+		console.log("~controller::notify()");
+	}
+
+	local.updateBarHeaderTitle = function(menuItem){
+		local.barHeaderTitle = menuItem.title;
+	}
+
+
 
 	local.prepareModals();
 	local.isauth();

@@ -31,12 +31,12 @@
 						ng-click="getTransactionsByCategory(cat, budget)">
 							<div class="list-logo-container" style="background-color: {{cat.style}}">
 								<div class="list-logo-box">
-									<span class="fl centered"> {{cat.catName[0]}}</span>
-									<span class="sl centered"> {{cat.catName[1]}}</span>
+									<span class="fl centered white"> {{cat.name[0]}}</span>
+									<span class="sl centered white"> {{cat.name[1]}}</span>
 								</div>
 							</div>
 							<div class="list-item-name">
-								<span class="centered">{{cat.catName}}</span>
+								<span class="centered">{{cat.name}}</span>
 							</div>
 							<div class="list-item-info">
 								<span> Booked:{{cat.booked}}</span>

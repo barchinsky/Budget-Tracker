@@ -300,44 +300,27 @@ var loadBudgetCategories = function(u, b, response, callback){
 	var sql = 
 		"select \
 			bc.budgetName, \
-			bc.catName, \
+			c.name, \
 			bc.catAmount booked, \
 			(select \
 				sum(t.cost) \
 			from Transaction t \
 			where \
-				( t.t_date between ? and ?) and t.category = bc.catName) spent, \
-			(select c.style from Category c where name=catName) style,	\
-			(select c.type from Category c where name=catName) type, \
+				( t.t_date between ? and ?) and t.category = bc.category) spent, \
+			(select c.style from Category c where id=category) style,	\
+			(select c.type from Category c where id=category) type, \
 			( (select spent)/(select booked)*100 ) spentPerc\
-		from BudgetCategories bc \
-		where budgetName=? and user=?;";
+		from \
+			BudgetCategories bc, \
+			Category c \
+		where \
+			bc.budgetName=? and \
+			bc.user=? and\
+			c.id = bc.category;";
 
 	executeSql(sql, [b.startDate, b.endDate, b.name, u], response, callback);
 
 	logger.info("~loadBudgetCategories()");
-}
-
-var addBudgetCategories = function(u, b, response, callback){
-	logger.info("addBudgetCategories()");
-
-	var res = null;
-
-	for( var c in b.categories ){
-		var sql = "insert into BudgetCategories( budgetName, catName, catAmount, user ) values(?,?,?,?);";
-
-		var cat = b.categories[c];
-		querySql(sql, [b.name, cat.name, cat.amount, u], function(r){
-			logger.info("Add budgetCat response status:%d",r.status);
-				if( !r.status ){
-					res=r; // if insertion failed
-				}
-			});
-	}
-
-	callback(response, {status:1});
-
-	logger.info("~addBudgetCategories()");
 }
 
 var addBudget = function(u, b, response, callback){
@@ -361,6 +344,29 @@ var addBudget = function(u, b, response, callback){
 	});
 
 	logger.info("~addBudget()")
+}
+
+var addBudgetCategories = function(u, b, response, callback){
+	logger.info("addBudgetCategories()");
+
+	var res = null;
+
+	for( var c in b.categories ){
+		var sql = "insert into BudgetCategories( budgetName, category, catAmount, user ) values(?,?,?,?);";
+
+		var cat = b.categories[c];
+		console.log("----------",cat.id, cat.amount);
+		querySql(sql, [b.name, cat.id, cat.amount, u], function(r){
+			logger.info("Add budgetCat response status:%d",r.status);
+				if( !r.status ){
+					res=r; // if insertion failed
+				}
+			});
+	}
+
+	callback(response, {status:1});
+
+	logger.info("~addBudgetCategories()");
 }
 
 var getBudgetSpentCosts = function(u, b, response, callback){

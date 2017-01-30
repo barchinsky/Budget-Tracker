@@ -336,7 +336,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		local.budget.endDate = $filter("date")(local.budget.endRawDate, "yyyy-MM-dd HH:mm");
 
 		console.log(local.budget);
-
+		//return;
 
 		ds.saveBudget(local.budget).then(function(r){
 			if(+r.status){
@@ -361,12 +361,13 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		});
 	}
 
-	local.initBudgetCategory = function(id,cat){
+	local.initBudgetCategory = function(id, cat){
 		console.log("initBudgetCategory()");
 		
 		local.budget.categories.push({});
 		local.budget.categories[id].name=cat.name;
 		local.budget.categories[id].type=cat.type;
+		local.budget.categories[id].id=cat.id;
 
 		console.log("~initBudgetCategory()");
 	}
@@ -509,13 +510,13 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		console.log("controller::notify()");
 		console.log(text);
 
-		local.notification.text = text;
-		var nType = local.alerts[id]; // notification type
+		//local.notification.text = text;
+		//var nType = local.alerts[id]; // notification type
 
-		local.alertType = nType;
+		//local.alertType = nType;
 
-		$("#notification").slideDown(800);
-		$("#notification").slideUp(1200);
+		//$("#notification").slideDown(800);
+		//$("#notification").slideUp(1200);
 		
 		console.log("~controller::notify()");
 	}
