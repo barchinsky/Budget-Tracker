@@ -24,10 +24,10 @@
           ng-click="updateBarHeaderTitle(item)">
           {{item.title}}
         </ion-item>
-        <ion-item menu-close ng-click="showLoginModal()" ng-show="!authorized">
+        <ion-item menu-close ng-click="showLoginModal()" ng-show="!authorized" class="dark">
           Login
         </ion-item>
-        <ion-item menu-close ng-click="logout()" ng-show="authorized">
+        <ion-item menu-close ng-click="logout()" ng-show="authorized" class="dark">
           Logout
         </ion-item>
       </ion-list>

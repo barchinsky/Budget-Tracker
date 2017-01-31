@@ -21,10 +21,10 @@
 		<div class="pt50">
 			<ion-list
 				can-swipe="true">
-					<ion-item class="list-container no-left-padding"
+					<ion-item class="list-container"
 						ng-repeat="cat in categories track by $index" 
 						ng-click="showCategoryDetailsModal(cat)">
-							<div class="list-logo-container-complex" style="background-color:{{cat.style}}">
+							<div class="list-logo-container-complex white" style="background-color:{{cat.style}}">
 								<div class="list-logo-box-complex white">
 									<span class="fl"> {{cat.name[0]}}</span>
 									<span class="sl"> {{cat.name[1]}}</span>

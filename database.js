@@ -257,8 +257,8 @@ var loadBudgets = function(u, response, callback){
 		DATE_FORMAT(b.start_date, '%Y-%m-%d') startDate, \
 		DATE_FORMAT(b.end_date, '%Y-%m-%d') endDate, \
 		total_costs totalCosts,\
-		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.name from Category c where c.type=0) ) incomeCosts,\
-		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.name from Category c where c.type=1) ) spentCosts, \
+		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.id from Category c where c.type=0) ) incomeCosts,\
+		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.id from Category c where c.type=1) ) spentCosts, \
 		( floor( (select spentCosts)/(select totalCosts) * 100 ) ) spentPerc\
 	from \
 		Budget b\
@@ -269,7 +269,7 @@ var loadBudgets = function(u, response, callback){
 	logger.info("~loadBudgets()");
 }
 
-var loadBudget = function(u, n, response, callback){
+var loadBudget = function(u, name, response, callback){
 	// load budget by user and budget name
 
 	logger.info("loadBudgets()");
@@ -280,13 +280,13 @@ var loadBudget = function(u, n, response, callback){
 		DATE_FORMAT(b.start_date, '%Y-%m-%d') startDate, \
 		DATE_FORMAT(b.end_date, '%Y-%m-%d') endDate, \
 		total_costs totalCosts,\
-		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.name from Category c where c.type=0) ) incomeCosts,\
-		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.name from Category c where c.type=1) ) spentCosts \
+		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.id from Category c where c.type=0) ) incomeCosts,\
+		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.id from Category c where c.type=1) ) spentCosts \
 	from \
 		Budget b\
 		where user=? and b.name = ?;";
 
-	executeSql(sql, [u, n], response, callback);
+	executeSql(sql, [u, name], response, callback);
 
 	logger.info("~loadBudgets()");
 }
@@ -371,16 +371,17 @@ var addBudgetCategories = function(u, b, response, callback){
 
 var getBudgetSpentCosts = function(u, b, response, callback){
 	logger.info("getBudgetSpentCosts()");
+	console.log(u,b);
 
 	var sql="select sum(t.cost) spentCosts, \
-				t.category \
+				(select name from Category where id=t.category) category \
 			from Transaction t \
 			inner join \
 				Budget b \
 			on \
 				b.name=? and b.user=?\
 			where \
-				t.category in (select c.name from Category c where c.type=1) and \
+				t.category in (select c.id from Category c where c.type=1) and \
 				t.t_date between b.start_date and b.end_date \
 			group by t.category;";
 	executeSql(sql, [b, u], response, callback);

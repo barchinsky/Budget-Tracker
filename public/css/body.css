@@ -155,8 +155,13 @@
 }
 
 .bkgr-dark{
-	background-color: #545556;
-	border:1px solid #a0a0a0;
+	background-color: #545556 !important; 
+	/*border:1px solid #a0a0a0;*/
+}
+
+.dark{
+	color:white;
+	background-color: #4f5051;
 }
 
 .light-blue{
@@ -189,9 +194,11 @@
 	margin-left: 1%;
 }
 
+/*
 .dark{
 	background-color: #4f5051 !important;
 }
+*/
 
 .content-right{
 	float:right;

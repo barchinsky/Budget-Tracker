@@ -378,6 +378,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.getCategories = function(){
 		console.log("getCategories()");
 		// code to load data from server
+		local.showLoading();
 
 		local.categories = [];
 
@@ -390,6 +391,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 				}
 
 				console.log("categories:", local.categories);
+				local.hideLoading();
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -721,17 +723,21 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	//////////////////// Canvas ////////////////////////
 
 	local.drawCanvas = function(bName){
-		var budget=null;
+		//local.budget=b;
 		ds.getBudget(bName).then(function(r){
-			if( +r.status ) local.budget = r.data[0];
+			if( r.status ) {
+				local.budget = r.data[0];
+				console.log('local.budget', local.budget);
+				canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts]);
+			}
 			else local.notify(r.msg, 3);
 			//console.log('local.Budget', local.budget);
-			canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts]);
+			//canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts]);
 		});
-
+		
 		// get budget expenses report
 		ds.getBudgetSpentCosts(bName).then(function(r){
-			//console.log("getSpentCosts:r.data",r.data);
+			console.log("getSpentCosts:r.data",r.data);
 			canvas.drawExpensesPie("expensesPieChart", r.data);
 
 		});
