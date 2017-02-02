@@ -1,7 +1,19 @@
 <div class="dynamic-page">
-	<div class="form-group">
-		<label>Host</label>
-		<input type="text" class="form-control styled-input"
-			ng-model="host" disabled/>
-	</div>
+	<ion-content>
+		<label class="item item-input item-stacked-label">
+			<span class="item-label">User</lable>
+			<input type="text" class="form-control styled-input"
+				ng-value="currentUser.name+' '+currentUser.surname" disabled/>
+		</label>
+		<label class="item item-input item-stacked-label">
+			<span class="item-label">Host</lable>
+			<input type="text" class="form-control styled-input"
+				ng-model="host" disabled/>
+		</label>
+		<label class="item item-input item-stacked-label">
+			<span class="item-label">Currency</lable>
+			<input type="text" class="form-control styled-input"
+				ng-value="currency" disabled/>
+		</label>
+	</ion-content>
 </div>

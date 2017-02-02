@@ -19,7 +19,7 @@
 				<select ng-change="drawCanvas(b)" ng-model="b">
 					<option 
 						ng-repeat="b in budgets" 
-						ng-value="b.name">
+						ng-value="b.id">
 							{{b.name}}
 					</option>
 				</select>
@@ -30,10 +30,10 @@
 		<div class="card-container">
 			<div class="card card-lg">
 				<div class="card-title">Balance</div>
-				<div>Booked:</div> <div class="content-right">{{budget.totalCosts?budget.totalCosts:0}}</div>
-				<div>Income:</div> <div class="content-right">{{budget.incomeCosts ? budget.incomeCosts : 0}}</div>
-				<div>Spent:</div> <div class="content-right">{{budget.spentCosts ? budget.spentCosts : 0}}</div>
-				<div>Balance:</div> <div class="content-right">{{budget.incomeCosts-budget.spentCosts}}</div>
+				<div>Booked:</div> <div class="content-right">{{budget.totalCosts?budget.totalCosts:0}} {{currency}}</div>
+				<div>Income:</div> <div class="content-right">{{budget.incomeCosts ? budget.incomeCosts : 0}} {{currency}}</div>
+				<div>Spent:</div> <div class="content-right">{{budget.spentCosts ? budget.spentCosts : 0}} {{currency}}</div>
+				<div>Balance:</div> <div class="content-right">{{budget.incomeCosts-budget.spentCosts}} {{currency}}</div>
 			</div>
 		</div>
 		<div class="card" ng-show="b==null">

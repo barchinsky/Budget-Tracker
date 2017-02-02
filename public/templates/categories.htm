@@ -6,7 +6,7 @@
 	</div>
 </div>
 
-<div class="dynamic-page"
+<div class="dynamic-page pt50"
 	ng-if="authorized">
 	<ion-content ng-init="getCategories()">
 		<ion-refresher
@@ -16,7 +16,7 @@
 		<div class="card" ng-show="!categories.length">
 			<h4 class="card-title">No results found!</h4>
 			<p class="card-note">Sorry, there is no records found. Please, select another period or add the first one!</p>
-			<a href="#app/addCategory" class="btn btn-primary">Add first one</a>
+			<a href="#app/addCategory" class="button button-positive">Add first one</a>
 		</div>
 		<div class="pt50">
 			<ion-list

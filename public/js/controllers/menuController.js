@@ -14,7 +14,8 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 	local.loginData = {};
 	local.alerts= config.alerts;
 	local.barHeaderTitle = config.homePage.title;
-
+	local.currentUser={name:"unknown", surname:"unknown"};
+	local.regData = {passConf:{value:"", valid:false}}; // registration data
 
 	/*
 	* Broadcast authorization status change event
@@ -54,7 +55,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 
 	/*
 	* Perform user authorization verification
-	* If user data stored, authorize in silend mode
+	* If user data stored, authorize in silent mode
 	*/
 	local.isauth = function(){
 		console.log("isauth()");
@@ -65,6 +66,8 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 				// update app data
 				local.authorized = true;
 				ds.setCurrentUser(r.user);
+				local.currentUser.name = r.user;
+				local.currentUser.surname = r.surname;
 				local.notify("Authorizated!",1);
 				local.hideLoading();
 			}
@@ -82,7 +85,6 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 
 	/* 
 	* Authorize user
-	* Used in UI
 	*/
 	local.authorize = function(){
 		console.log("authorize()");
@@ -94,6 +96,9 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 			if(+r.status){
 				local.authorized = true;
 				ds.setCurrentUser(r.user);
+				local.currentUser.name = r.user;
+				local.currentUser.surname = r.surname;
+
 				local.notify(r.msg, 0);
 				local.hideLoading();
 			}
@@ -111,7 +116,12 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 		local.showLoading();
 
 		ds.register(local.regData).then(function(r){
-			//if( +r.status )	local.notify("Registration is successfull",0);
+			if( r.status ){
+				local.notify("Registration is successfull",0);
+				var token = r.data.token;
+				console.log("token recieved:",token);
+				ds.setToken(token);
+			}
 			//else local.notify(r.msg, 3);
 			local.hideLoading();
 			local.closeRegistrationModal();
@@ -121,11 +131,17 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 	}
 
 	local.validatePass = function(){
+		console.log("validatePass()");
 		console.log(local.regData);
+
 		if( local.regData.pass !== local.regData.passConf.value){
-			//local.notify("Password confirmation missmatch!",2);
+			local.notify("Password confirmation missmatch!",2);
 			local.regData.passConf.valid=false;
-		}else{ local.regData.passConf.valid = true; }
+		}else
+			local.regData.passConf.valid = true;
+
+		console.log("validatePass()");
+
 	}
 
 	local.logout = function(){
@@ -190,8 +206,6 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 	local.updateBarHeaderTitle = function(menuItem){
 		local.barHeaderTitle = menuItem.title;
 	}
-
-
 
 	local.prepareModals();
 	local.isauth();

@@ -6,10 +6,11 @@
 var express = require("express");
 var path = require("path");
 var bodyParser = require("body-parser");
-var fs = require("fs");
-var cookieParser = require('cookie-parser')
-var session = require('express-session');
+//var fs = require("fs");
+//var cookieParser = require('cookie-parser')
+//var session = require('express-session');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
+var jwt = require("jsonwebtoken");
 
 var db = require("./database");
 
@@ -35,18 +36,28 @@ var options = {
 };
 */
 
+app.set("jwtsecret","btjwt102402022017");
+
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use( urlencodedParser ); // Parse request body into request.body.
-app.use( cookieParser() );
-app.use( session({ 
+//app.use( cookieParser() );
+
+/*app.use( session({ 
 	secret: 'fskljlsdkfkljsdf',
 	resave:false,
 	saveUninitialized:true,
 	maxAge:null,
 } ) );
-
+*/
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+var openUrls = [
+	{pattern:"^/register"},
+	{pattern:"^/authorize"}
+];
+
+app.use("/", isAuthorized(openUrls) );
 
 //******************* API *****************************\\
 
@@ -57,13 +68,14 @@ app.post("/transactions", function(request,response){
 
 	logger.info('budget:',typeof request.body.budget !== 'undefined');
 
-	if( isAuthorized(request, response)  &&  typeof request.body.budget !== 'undefined'){
+	//if( isAuthorized(request, response)  &&  typeof request.body.budget !== 'undefined'){
 		// logger.info("request.body",request.body.season, request.body);
-		db.loadTransactions(request.session.user, request.body.budget ,response, sendResponse);
-	}
-	else{
-		sendResponse(response, {status:1});
-	}
+	var user = request.body.user;
+	db.loadTransactions(user, request.body.budget ,response, sendResponse);
+	//}
+	//else{
+	//	sendResponse(response, {status:1});
+	//}
 
 	logger.info("~transactions()");
 });
@@ -71,11 +83,12 @@ app.post("/transactions", function(request,response){
 app.post("/addTransaction", function(request, response){
 	logger.info("addTransaction()");
 
-	if( isAuthorized(request, response) ){
+	////if( isAuthorized(request, response) ){
 
-		var transaction = request.body.transaction;
-		db.addTransaction(request.session.user, transaction, response, sendResponse);
-	}
+	var transaction = request.body.transaction;
+	var user = request.body.user;
+	db.addTransaction(user, transaction, response, sendResponse);
+	//}
 
 	logger.info("~addTransaction()");
 });
@@ -83,9 +96,10 @@ app.post("/addTransaction", function(request, response){
 app.post("/deleteTransaction", function(request, response){
 	logger.info("Delete transaction.");
 
-	if( isAuthorized(request, response) ){
-		db.deleteTransaction(request.session.user, request.body.transactionId, response, sendResponse);
-	}
+	////if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.deleteTransaction(user, request.body.transactionId, response, sendResponse);
+	//}
 
 	logger.info("Transaction deleted.")
 });
@@ -93,9 +107,10 @@ app.post("/deleteTransaction", function(request, response){
 app.post("/updateTransaction", function(request, response){
 	logger.info("updateTransaction()");
 
-	if( isAuthorized(request, response) ){
-		db.updateTransaction(request.session.user, request.body.transaction, response, sendResponse);
-	}
+	////if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.updateTransaction(user, request.body.transaction, response, sendResponse);
+	//}
 
 	logger.info("~updateTransaction()");
 });
@@ -103,9 +118,10 @@ app.post("/updateTransaction", function(request, response){
 app.post("/getTransactionsByCat", function(request, response){
 	logger.info("getTransactionsByCat()");
 
-	if( isAuthorized(request, response) ){
-		db.loadTransactionsByCat(request.body.category, request.body.budget, request.session.user, response, sendResponse);
-	}
+	//if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.loadTransactionsByCat(request.body.category, request.body.budget, user, response, sendResponse);
+	//}
 
 	logger.info("~getTransactionsByCat()");
 });
@@ -114,12 +130,13 @@ app.post("/getTransactionsByCat", function(request, response){
 
 /************************ Categories ********************************/
 
-app.get("/categories", function(request, response){
+app.post("/categories", function(request, response){
 	logger.info("transactions()");
 
-	if( isAuthorized(request, response) ){
-		db.loadCategories(request.session.user, response, sendResponse);
-	}
+	////if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.loadCategories(user, response, sendResponse);
+	//}
 
 	logger.info("~transactions()");
 });
@@ -127,10 +144,11 @@ app.get("/categories", function(request, response){
 app.post("/addCategory", function(request, response){
 	logger.info(".addCategory");
 
-	if( isAuthorized(request, response) ){
-		var cat = request.body.category;
-		db.addCategory(request.session.user, cat, response, sendResponse);
-	}
+	////if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	var cat = request.body.category;
+	db.addCategory(user, cat, response, sendResponse);
+	//}
 
 	logger.info("~addCategory()");
 });
@@ -138,39 +156,44 @@ app.post("/addCategory", function(request, response){
 app.post("/deleteCategory", function(request, response){
 	logger.info("/deleteCategory");
 
-	if( isAuthorized(request, response) ){
-		db.deleteCategory(request.session.user, request.body.category, response, sendResponse);
-	}
+	////if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	var category = request.body.category;
+	logger.info("category:%s", category);
+	db.deleteCategory(user, category, response, sendResponse);
+	//}
 });
 
 app.post("/categoryExists", function(request, response){
 	logger.info("/categoryExists");
 
-	if( isAuthorized(request, response) ){
-		db.categoryExists(request.session.user, request.body.category, response, sendResponse);
-	}
+	////if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.categoryExists(user, request.body.category, response, sendResponse);
+	//}
 });
 
-/***************************** END Categories **********************************/
 
 /**************************** Budgets ********************************************/
 
-app.get("/budgets", function(request, response){
-	//logger.info("budgets()");
+app.post("/budgets", function(request, response){
+	logger.info("budgets()");
 
-	if( isAuthorized(request, response) ){
-		db.loadBudgets(request.session.user, response, sendResponse);
-	}
+	////if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.loadBudgets(user, response, sendResponse);
+	//}
 
-	//logger.info("~budgets()");
+	logger.info("~budgets()");
 });
 
 app.post("/getBudget", function(request, response){
 	//logger.info("getBudget()");
 
-	if( isAuthorized(request,response) ){
-		db.loadBudget(request.session.user, request.body.budget, response, sendResponse);
-	}
+	//if( isAuthorized(request,response) ){
+	var user = request.body.user;
+	db.loadBudget(user, request.body.budget, response, sendResponse);
+	//}
 
 	//logger.info("~getBudget()");
 });
@@ -178,9 +201,10 @@ app.post("/getBudget", function(request, response){
 app.post("/addBudget", function(request, response){
 	logger.info("addBudget()");
 
-	if( isAuthorized(request, response) ){
-		db.addBudget(request.session.user, request.body.budget, response, sendResponse);
-	}
+	//if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.addBudget(user, request.body.budget, response, sendResponse);
+	//}
 
 	logger.info("~addBudget()");
 });
@@ -188,10 +212,11 @@ app.post("/addBudget", function(request, response){
 app.post("/getBudgetSpentCosts", function(request, response){
 	logger.info("server:getSpentCosts()");
 
-	if( isAuthorized(request, response) ){
-		var budget = request.body.budget;
-		db.getBudgetSpentCosts(request.session.user, request.body.budget, response, sendResponse);
-	}
+	//if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	var budget = request.body.budget;
+	db.getBudgetSpentCosts(user, request.body.budget, response, sendResponse);
+	//}
 
 	logger.info("~server:getSpentCosts()");
 });
@@ -199,9 +224,10 @@ app.post("/getBudgetSpentCosts", function(request, response){
 app.post("/getBudgetCategories", function(request, response){
 	logger.info("budgetCategories()");
 
-	if( isAuthorized(request, response) ){
-		db.loadBudgetCategories(request.session.user, request.body.budget, response, sendResponse);
-	}
+	//if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.loadBudgetCategories(user, request.body.budget, response, sendResponse);
+	//}
 
 	logger.info("~budgetCategories()");
 });
@@ -209,36 +235,38 @@ app.post("/getBudgetCategories", function(request, response){
 app.post("/deleteBudget", function(request, response){
 	logger.info("/deleteBudget");
 
-	if( isAuthorized(request, response) ){
-		db.deleteBudget(request.session.user, request.body.budget, response, sendResponse);
-	}
+	//if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.deleteBudget(user, request.body.budget, response, sendResponse);
+	//}
 
 });
 
 app.post("/budgetExists", function(request, response){
 
-	if( isAuthorized(request, response) ){
-		db.budgetExists(request.session.user, request.body.budget, response, sendResponse);
-	}
+	//if( isAuthorized(request, response) ){
+	var user = request.body.user;
+	db.budgetExists(user, request.body.budget, response, sendResponse);
+	//}
 
 });
-
-/************************* END Budgets **************************************************/
 
 
 /************************* Common API ***************************************************/
 
 app.post("/authorize", function(request, response){
-	//logger.info("authorize()");
+	logger.warn("authorize()\nNOT IMPLEMENTED!");
+
+	sendResponse( response, {status:1, user:request.body.user} );
 
 	//logger.info(request.body.login, request.body.pass);
 	//logger.info("session.authorized:"+request.session.authorized);
 
-	if( !session.authorized ){
+	/*if( !session.authorized ){
 		db.authorize(request.body.login, request.body.pass, response, function(r){
 			if(r.status){
 				request.session.authorized = true;
-				request.session.user=request.body.login;
+				user=request.body.login;
 				sendResponse( response, r );
 			}
 			else{
@@ -249,17 +277,17 @@ app.post("/authorize", function(request, response){
 	}
 	else{
 		logger.info("Already authorized.");
-	}
+	}*/
 
-	//logger.info("~authorize()");
+	logger.warn("~authorize()");
 });
 
-app.get("/logout", function(request, response){
+app.post("/logout", function(request, response){
 	logger.info("logout()");
 
 	// clear user information
-	delete request.session.authorized;
-	delete request.session.user;
+	//delete request.session.authorized;
+	//delete user;
 
 	// redirect to main page
 	sendResponse(response, {status:1, msg:"Good bye!"});
@@ -267,21 +295,34 @@ app.get("/logout", function(request, response){
 	logger.info("~logout()");
 });
 
-app.get("/isauth", function(request, response){
-	//logger.info("isauth()");
-	if( isAuthorized(request, response) ){
-		sendResponse(response, {status:1, user:request.session.user});
-	}
-	//logger.info("~isauth()");
+app.post("/isauth", function(request, response){
+	logger.info("isauth()");
+
+	//logger.info(request.body);
+	//if( isAuthorized(request, response) ){
+	sendResponse(response, {status:1, user:request.body.user});
+	//}
+	logger.info("~isauth()");
 });
 
 app.post("/register", function(request, response){
 	logger.info("register()");
-	db.register(request.body.name, request.body.login , request.body.pass , response, sendResponse);
+
+	var login = request.body.login;
+	if( !db.userExist(login) ){
+		var token = jwt.sign(login, app.get("jwtsecret"), {});
+		logger.info("token for user:%s generated: %s", login, token );
+
+		db.register(request.body.name, request.body.login , request.body.pass, token, response, sendResponse);
+	}
+	else
+		sendResponse(response, {status:0, data:{}, msg:"User already exists!"});
 	logger.info("register()");
 });
 
-/************************************ END Common API *****************************************/
+app.get("/api", function(request, response){
+	response.send({status:1, data:"empty"});
+});
 
 
 /*********************************** Utils ***************************************************/
@@ -298,19 +339,49 @@ sendResponse = function(response, data){
 }
 
 // check user authorization
-isAuthorized = function(request,response){
-	//logger.info("isAuthorized()");
+function isAuthorized(openUrls){
+	logger.info("isAuthorized()");
 
-	if( request.session.authorized ){
-		//logger.info("+");
-		return true;
+	function check(request, response, next){
+
+		var requestedUrl = request.url;
+		logger.info("requestedUrl:%s", requestedUrl);
+
+		for(var ui in openUrls){
+			 var pattern = openUrls[ui].pattern;
+			 if( requestedUrl.match(pattern) ){
+			 	logger.info("pattern matched.")
+			 	next();
+			 	return;
+			 }
+		}
+
+		var token = request.body.token;
+		//logger.info("token:%s,",token);
+
+		// if token found
+		if(token){
+			// check token
+			jwt.verify(request.body.token, app.get("jwtsecret"), {ignoreExpiration:true}, function(err, decoded){
+
+				//if some errors occured
+				if(err){
+					logger.err("isAuthorized()::%s", err.toString());
+					sendResponse(response, {status:0, msg:"Authorization failed!"})
+					return false;
+				}
+
+				logger.info("decoded:", decoded);
+
+				request.body.user = decoded;
+				next();
+			});
+		}else{ // if there is no token provided in request
+			sendResponse(response, {status:0, msg:"Auth failed. Code:1488."});
+		}
 	}
 
-	//response.writeHead(303,{Location:"/"});
-	response.send({status:0, msg:"Not authorized"});
-	response.end();
-	//logger.info("-");
-	return false;
+	return check;
 }
 
 /******************************** END Utils ******************************************************/

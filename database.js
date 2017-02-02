@@ -89,7 +89,7 @@ var executeSql = function(sql, params, response, callback){
 		if(!err){
 			conn.commit();
 			// send response
-			callback(response,{data:rows, status:1});
+			callback(response, {data:rows, status:1});
 		}
 		else{
 			//logger.info("database:executeSql():: Error occured. Message:"+err.toString()+" Sql:"+sql);
@@ -227,8 +227,8 @@ var deleteCategory = function(u, c, response, callback){
 	logger.info("deleteCategory()");
 	logger.info("u,c",u,c);
 
-	var sql = "delete from Category where name=? and user=?;";
-	deleteRequest(sql, [c,u], function(r){
+	var sql = "delete from Category where id=? and user=?;";
+	deleteRequest(sql, [c.id, u], function(r){
 		callback(response, r);
 	});
 
@@ -269,13 +269,14 @@ var loadBudgets = function(u, response, callback){
 	logger.info("~loadBudgets()");
 }
 
-var loadBudget = function(u, name, response, callback){
+var loadBudget = function(u, bId, response, callback){
 	// load budget by user and budget name
 
 	logger.info("loadBudgets()");
 
 	var sql = 
 	"select \
+		b.id id, \
 		b.name name,\
 		DATE_FORMAT(b.start_date, '%Y-%m-%d') startDate, \
 		DATE_FORMAT(b.end_date, '%Y-%m-%d') endDate, \
@@ -284,9 +285,9 @@ var loadBudget = function(u, name, response, callback){
 		(select sum(t.cost) from Transaction t where (t.t_date between b.start_date and b.end_date) and t.category in (select c.id from Category c where c.type=1) ) spentCosts \
 	from \
 		Budget b\
-		where user=? and b.name = ?;";
+		where user=? and b.id = ?;";
 
-	executeSql(sql, [u, name], response, callback);
+	executeSql(sql, [u, bId], response, callback);
 
 	logger.info("~loadBudgets()");
 }
@@ -299,6 +300,7 @@ var loadBudgetCategories = function(u, b, response, callback){
 
 	var sql = 
 		"select \
+			bc.budgetId,\
 			bc.budgetName, \
 			c.name, \
 			bc.catAmount booked, \
@@ -352,11 +354,11 @@ var addBudgetCategories = function(u, b, response, callback){
 	var res = null;
 
 	for( var c in b.categories ){
-		var sql = "insert into BudgetCategories( budgetName, category, catAmount, user ) values(?,?,?,?);";
+		var sql = "insert into BudgetCategories(budgetId, budgetName, category, catAmount, user ) values(?,?,?,?,?);";
 
 		var cat = b.categories[c];
-		console.log("----------",cat.id, cat.amount);
-		querySql(sql, [b.name, cat.id, cat.amount, u], function(r){
+		//console.log("----------",cat.id, cat.amount);
+		querySql(sql, [b.id ,b.name, cat.id, cat.amount, u], function(r){
 			logger.info("Add budgetCat response status:%d",r.status);
 				if( !r.status ){
 					res=r; // if insertion failed
@@ -371,7 +373,7 @@ var addBudgetCategories = function(u, b, response, callback){
 
 var getBudgetSpentCosts = function(u, b, response, callback){
 	logger.info("getBudgetSpentCosts()");
-	console.log(u,b);
+	//console.log(u,b);
 
 	var sql="select sum(t.cost) spentCosts, \
 				(select name from Category where id=t.category) category \
@@ -419,21 +421,28 @@ var deleteBudget = function(u, b, response, callback){
 	logger.info("~deleteBudget()");
 }
 
-var register = function(n, l , p , response, callback){
+var register = function(n, l, p, token, response, callback){
+	logger.info("register()");
+
+	// generate registration date
 	var d = new Date();
 	d = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 
-	logger.info("toIso:"+d);
-	logger.info("User does not exist...")
-
 	var sql = "insert into User(name, login, pass, reg_date) values(?,?,?,?);";
-	executeSql(sql, [n,l,p,d],response, callback);
+	executeSql(sql, [n,l,p,d], {}, function(res, data){
+		logger.info("User added:%s",l);
+		if( data.status ) // insertion success
+			callback(response, {status:1, data:{token:token}, msg:"Registration successfull!"});
+		else // insertion failed
+			callback(response, data);
+	});
+
+	logger.info("!register()");
 }
 
 var authorize = function(u,p, response, callback){
 	logger.info("authorize()");
 
-	//var sql = "select name from User where login='"+u+"' and pass='"+p+"';";
 	var sql = "select name from User where login=? and pass=?;";
 	querySql(sql, [u,p], function(r){
 		if(r.data.length){
@@ -482,5 +491,6 @@ exports.loadBudget = loadBudget;
 exports.deleteTransaction = deleteTransaction;
 exports.budgetExists = budgetExists;
 exports.categoryExists = categoryExists;
+exports.userExist = userExist;
 
 })();

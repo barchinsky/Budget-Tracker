@@ -10,14 +10,14 @@ function CanvasService(){
 		drawExpensesPie: drawEP,
 	};
 
-	function drawIO(cId, d){
+	function drawIO(cId, d, currency){
 			var ctx = document.getElementById(cId);
 			var myChart = new Chart(ctx, {
 				type: 'bar',
 				data: {
 					labels: ["Incomes", "Outcomes"],
 					datasets: [{
-							label: 'UAH',
+							label: currency,
 							data: d,
 							backgroundColor: [
 								'rgba(255, 99, 132, 0.2)',
@@ -50,7 +50,7 @@ function CanvasService(){
 			});
 	};
 
-	function drawEP(cId, d){
+	function drawEP(cId, d, currency){
 		// draw pie chart for expenses type
 		// And for a doughnut chart
 		var ctx=document.getElementById(cId);
@@ -60,7 +60,7 @@ function CanvasService(){
 				return obj.category;
 			}),
 			datasets: [{
-				label:'UAH',
+				label:currency,
 				data: d.map(function(obj){
 					return obj.spentCosts;
 				}),

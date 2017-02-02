@@ -2,49 +2,6 @@
 <ion-content ng-init="initAddBudget()">
 	<!--<div class="form-container">-->
 	<form ng-submit="saveBudget()">
-		<!--<div class="form-group">
-			<lable class="text15 white">Name</lable>
-			<input type="text" class="form-control styled-input" id="b-name" 
-				ng-model-options="{updateOn: 'blur'}" 
-				ng-class="{'invalid':budget.invalid}"
-				ng-change="validateBudgetName(budget)"
-				ng-model="budget.name" required/>
-		</div>
-		<div class="form-group">
-			<lable class="text15 white">Total</lable>
-			<input type="text" class="form-control styled-input" ng-model="budget.totalCosts" disabled/>
-		</div>
-		<div class="form-group">
-			<lable class="text15 white" for="bs-date">Start Date</lable>
-			<input type="date" placeholder="MM/dd/yyyy" class="form-control styled-input"
-					ng-model="budget.startRawDate" required/>
-
-		</div>
-		<div class="form-group">
-			<lable class="text15 white" for="be-date">End Date</lable>
-			<input type="date" placeholder="MM/dd/yyyy" class="form-control styled-input"
-					ng-model="budget.endRawDate" required/>
-		</div>
-		<div class="form-group pb5">
-			<div class="list-container" ng-repeat="cat in categories track by $index">
-				<div class="transaction-logo white" style="background-color:{{cat.style}}">
-					<span class="fl centered"> {{cat.name[0]}}</span>
-					<span class="fl centered"> {{cat.name[1]}}</span>
-				</div>
-				<div class="transaction-info text15 weight900 white" ng-init="initBudgetCategory($index,cat)">{{cat.name}}</div>
-				<div class="transaction-date text15 white">
-					<input type="number" min="0" class="form-control styled-input width150" 
-						ng-model-options="{updateOn: 'blur'}" 
-						ng-change="getBudgetSum()" 
-						ng-model="budget.categories[$index].amount"
-						ng-init="budget.categories[$index].amount=0"/>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<button type="submit" class="btn btn-primary btn-block bkgr-light-blue">Save</button>
-		</div>
-		-->
 		<div class="list">
 			<label class="item item-input item-stacked-label">
 				<span class="input-label">Name</span>
@@ -85,8 +42,9 @@
 						ng-init="budget.categories[$index].amount=0"/>
 				</div>
 			</div>
+			<input type="submit" class="button button-positive button-block" value="Add budget"/> 
 		</div>
-		<input type="submit" class="button button-positive button-block" value="Add budget"/> 
+		
 	</form>
 	<!--</div>-->
 </ion-content>

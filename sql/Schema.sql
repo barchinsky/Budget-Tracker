@@ -6,7 +6,7 @@ create table User(
 	name char(25) not null,
 	login char (100) not null,
 	pass char(20) not null,
-	reg_date DATE, 
+	reg_date DATE,
 	PRIMARY KEY(login)
 );
 
@@ -35,21 +35,23 @@ create table Transaction(
 );
 
 create table Budget(
+	id int NOT NULL AUTO_INCREMENT,
 	name char(100) not null,
 	start_date datetime,
 	end_date datetime,
 	total_costs decimal(7,2),
 	user char(100) not null,
 	CONSTRAINT FK_BUDGET_USER FOREIGN KEY (user) REFERENCES User (login),
-	PRIMARY KEY (name)
+	PRIMARY KEY (id)
 );
 
 create table BudgetCategories(
+	budgetId int,
 	budgetName char(100),
 	category int,
 	catAmount int,
 	user char(100),
 	CONSTRAINT FK_BCAT_CAT_NAME FOREIGN KEY (category) REFERENCES Category (id),
-	CONSTRAINT FK_BCAT_BUD_NAME FOREIGN KEY (budgetName) REFERENCES Budget (name),
+	CONSTRAINT FK_BCAT_BUD_ID FOREIGN KEY (budgetId) REFERENCES Budget (id),
 	CONSTRAINT FK_BK_USER FOREIGN KEY (user) REFERENCES User (login)
 );

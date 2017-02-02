@@ -1,0 +1,41 @@
+.user-info-container{
+	height: 150px;
+	width: 110%;
+	border-bottom: 1px solid grey;
+	margin-bottom: 1px;
+}
+
+.user-image{
+	width: 100%;
+	height: 150px;
+	margin-top: -15px;
+	position: relative;
+}
+
+.user-image img{
+	width: 100%;
+	height: 150px;
+
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-ms-filter: blur(5px);
+	-o-filter: blur(5px);
+	filter: blur(5px);
+}
+
+.user-name{
+	position: absolute;
+	top:110px;
+	left:0px;
+	width: 100%;
+	height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.user-name p{
+	color:white;
+	font-size: 18px;
+	padding-top: 10px;
+	padding-left: 15px;
+}
+

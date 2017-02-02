@@ -1,4 +1,4 @@
-<div class="dynamic-page pt50" 
+<div class="dynamic-page" 
 	ng-if="!authorized">
 		<div class="card">
 			<div class="card-title">Authorization required {{authorized}}</div>
@@ -25,7 +25,7 @@
 		</div>
 		<div class="card" ng-if="!transactions.length">
 			<div class="card-title">No records found!</div>
-			<p class="card-note">Please, select the budget!</p>
+			<p class="card-note">Probably you have not added it yet!</p>
 			<a href="#/app/addTransaction" class="button button-positive">Add first one</a>
 		</div>
 		<ion-list 

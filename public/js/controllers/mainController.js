@@ -4,8 +4,8 @@ angular.
 	factory("ds", DataService). // dataService manages all comunications with server
 	factory("canvas", CanvasService);
 
-mainController.$inject = ["$scope", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope"]; 
-DataService.$inject = ["$http"];
+mainController.$inject = ["$scope", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope", "$localStorage"]; 
+DataService.$inject = ["$http", "$localStorage"];
 
 function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter, $ionicLoading, $rootScope){
 	//console.log("mainController controller loaded.");
@@ -17,12 +17,10 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	
 	local.version = config.version;
 	local.host = config.isDev?config.devHost:config.host;
+	local.currency = config.currency;
 
 	local.tranCat = null;
 	
-	//var isDev = true;
-	//var host=isDev? config.devHost : config.host; 
-
 	local.colors = config.colors;
 	local.alerts= config.alerts;//["success","info","warning","danger"];
 	
@@ -40,14 +38,16 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.budgetName = '';
 	local.tDate = new Date(2015, 0, 01);
 
-	local.loginData = {};
-	local.regData = {passConf:{value:"", valid:true}}; // registration data
+	//local.loginData = {};
+	//local.regData = {passConf:{value:"", valid:true}}; // registration data
+	local.currentUser={name:"unknown", surname:"unknown"};
 	//local.authorized = false;
 
 	local.$on("change.auth.event", function(event, value){
-		console.log("auth event handled", value);
+		//console.log("auth event handled", value);
 		local.authorized = ds.getAuthorization();
-		console.log("local.authorized:", local.authorized);
+		console.log("change.auth.event:", local.authorized);
+		local.currentUser.name = ds.getCurrentUser();
 	});
 
 	local.$watch("authorized", function(newValue, oldValue){
@@ -74,6 +74,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		local.pass_conf={invalid:false, value:null};
 
 		local.prepareModals();
+		//ds.setToken("");
 		//local.isauth();
 
 		console.log("~initApp()");
@@ -202,7 +203,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			if(+r.status){
 				local.notify("Transaction deleted", 0);
 				local.getTransactions(local.budgetName);
-				local.goBack();
+				//local.goBack();
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -210,10 +211,10 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 	local.openTransaction = function(tran){
 		//console.log("openTransaction()");
+		
 		local.transaction = tran;
 		local.tCat = tran.category;
 		local.showTransactionModal();
-		//local.route(config.transactionDetailsPage);
 
 		//console.log("~openTransaction()");
 	}
@@ -257,10 +258,11 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 	local.getBudgets = function(){
 		console.log("getBudgets()");
-
+		local.showLoading();
 		ds.getBudgets().then(function(r){
 			local.budgets = r.data;
 			console.log("budgets:", local.budgets);
+			local.hideLoading();
 		}, local.errorHandler);
 
 		//console.log("~getBudgets()")
@@ -298,11 +300,14 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	}
 
 	local.deleteBudget = function(name){
+		local.showLoading();
 		ds.deleteBudget(name).then(function(r){
 			if( +r.status ){
 				//local.getBudgets();
 				local.route(config.budgetsPage);	
 				local.notify("Budget deleted", 0);
+				local.getBudgets();
+				local.hideLoading();
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -342,6 +347,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			if(+r.status){
 				local.notify("Budget saved", 0);
 				local.budget = {};
+				local.getBudgets();
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -416,6 +422,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			if(+r.status){
 				local.notify("Category added", 0);
 				local.initCategory();
+				local.getCategories();
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -426,11 +433,14 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.deleteCategory = function(c){
 		console.log("deleteCategory()");
 
+		local.showLoading();
+
 		ds.deleteCategory(c).then(function(r){
 			if(+r.status){
 				local.notify("Category deleted",0);
-				//local.getCategories();
-				local.route(config.categoriesPage);
+				local.getCategories();
+				local.hideLoading();
+				//local.route(config.categoriesPage);
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -554,7 +564,8 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		local.budgetDetailsModal.hide();
 	}
 
-	local.showCategoryDetailsModal = function(){
+	local.showCategoryDetailsModal = function(cat){
+		local.category = cat;
 		local.categoryDetailsModal.show();
 	}
 
@@ -722,24 +733,21 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 	//////////////////// Canvas ////////////////////////
 
-	local.drawCanvas = function(bName){
+	local.drawCanvas = function(bId){
 		//local.budget=b;
-		ds.getBudget(bName).then(function(r){
+		ds.getBudget(bId).then(function(r){
 			if( r.status ) {
 				local.budget = r.data[0];
-				console.log('local.budget', local.budget);
-				canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts]);
+				//console.log('local.budget', local.budget);
+				canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts], local.currency);
 			}
 			else local.notify(r.msg, 3);
-			//console.log('local.Budget', local.budget);
-			//canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts]);
 		});
 		
 		// get budget expenses report
 		ds.getBudgetSpentCosts(bName).then(function(r){
 			console.log("getSpentCosts:r.data",r.data);
-			canvas.drawExpensesPie("expensesPieChart", r.data);
-
+			canvas.drawExpensesPie("expensesPieChart", r.data, local.currency);
 		});
 	}
 
@@ -775,7 +783,5 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		console.log("Refresh done.");
 	}
 
-	local.initApp();
-	//local.isauth();
-	
+	local.initApp();	
 }

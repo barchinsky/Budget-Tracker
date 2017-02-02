@@ -17,7 +17,8 @@ var config = {
 	categoryDetailesPage: {title:"Category", path:"#app/categoryDetails"},
 	regPage: {title:"New account", path:"#app/registration"},
 	settingsPage: {title:"Settings", path:"#app/settings"},
-	devHost:"http://192.168.0.109:8080",
+	currency: "UAH",
+	devHost:"http://localhost:8080", //"http://192.168.0.109:8080"
 	host:"http://mybudget-mykolaiv.rhcloud.com",
-	version: "0.14.0",
+	version: "0.1.0",
 }
