@@ -211,7 +211,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 	local.openTransaction = function(tran){
 		//console.log("openTransaction()");
-		
+
 		local.transaction = tran;
 		local.tCat = tran.category;
 		local.showTransactionModal();
@@ -260,7 +260,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		console.log("getBudgets()");
 		local.showLoading();
 		ds.getBudgets().then(function(r){
-			local.budgets = r.data;
+			local.budgets = Budget.parseArray(r.data);
 			console.log("budgets:", local.budgets);
 			local.hideLoading();
 		}, local.errorHandler);
@@ -734,7 +734,8 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	//////////////////// Canvas ////////////////////////
 
 	local.drawCanvas = function(bId){
-		//local.budget=b;
+		console.log("drawCanvas()::bId:",bId);
+
 		ds.getBudget(bId).then(function(r){
 			if( r.status ) {
 				local.budget = r.data[0];
@@ -745,7 +746,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		});
 		
 		// get budget expenses report
-		ds.getBudgetSpentCosts(bName).then(function(r){
+		ds.getBudgetSpentCosts(bId).then(function(r){
 			console.log("getSpentCosts:r.data",r.data);
 			canvas.drawExpensesPie("expensesPieChart", r.data, local.currency);
 		});

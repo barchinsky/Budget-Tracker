@@ -253,6 +253,7 @@ var loadBudgets = function(u, response, callback){
 
 	var sql = 
 	"select \
+		b.id id, \
 		b.name name,\
 		DATE_FORMAT(b.start_date, '%Y-%m-%d') startDate, \
 		DATE_FORMAT(b.end_date, '%Y-%m-%d') endDate, \
@@ -270,7 +271,9 @@ var loadBudgets = function(u, response, callback){
 }
 
 var loadBudget = function(u, bId, response, callback){
-	// load budget by user and budget name
+	// load budget by user and budget id
+
+	logger.info("loadBudget()::bId:%s",bId);
 
 	logger.info("loadBudgets()");
 
@@ -316,11 +319,11 @@ var loadBudgetCategories = function(u, b, response, callback){
 			BudgetCategories bc, \
 			Category c \
 		where \
-			bc.budgetName=? and \
+			bc.budgetId=? and \
 			bc.user=? and\
 			c.id = bc.category;";
 
-	executeSql(sql, [b.startDate, b.endDate, b.name, u], response, callback);
+	executeSql(sql, [b.startDate, b.endDate, b.id, u], response, callback);
 
 	logger.info("~loadBudgetCategories()");
 }
@@ -381,7 +384,7 @@ var getBudgetSpentCosts = function(u, b, response, callback){
 			inner join \
 				Budget b \
 			on \
-				b.name=? and b.user=?\
+				b.id=? and b.user=?\
 			where \
 				t.category in (select c.id from Category c where c.type=1) and \
 				t.t_date between b.start_date and b.end_date \
@@ -420,6 +423,8 @@ var deleteBudget = function(u, b, response, callback){
 
 	logger.info("~deleteBudget()");
 }
+
+// ************* Auth ******************//
 
 var register = function(n, l, p, token, response, callback){
 	logger.info("register()");

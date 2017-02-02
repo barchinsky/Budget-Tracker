@@ -80,8 +80,8 @@ function DataService($http, $localStorage){
 
 	/***** Budget section ******/
 
-	function getBudgetSpentCosts(b){
-		return $http.post(host+"/getBudgetSpentCosts",{budget:b, token:getToken()}).
+	function getBudgetSpentCosts(bId){
+		return $http.post(host+"/getBudgetSpentCosts",{budget:bId, token:getToken()}).
 			then(end);
 	}
 
