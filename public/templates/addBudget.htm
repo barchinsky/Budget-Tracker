@@ -7,10 +7,11 @@
 				<span class="input-label">Name</span>
 				<input type="text" 
 					ng-model-options="{updateOn: 'blur'}" 
-					ng-class="{'invalid':budget.invalid}"
+					ng-class="{'warn': budget.suchNameAlreadyExists}"
 					ng-change="validateBudgetName(budget)"
 					ng-model="budget.name" required/>
 			</label>
+			<span class="hint" ng-show="budget.suchNameAlreadyExists"> Such name already exist. Nothing criminal, just warn:)</span>
 			<label class="item item-input item-stacked-label">
 				<span class="item-label">Booked</span>
 				<input type="number"
@@ -19,13 +20,20 @@
 			<label class="item item-input item-stacked-label">
 				<span class="item-label">Start Date</span>
 				<input type="date" placeholder="MM/dd/yyyy"
-					ng-model="budget.startRawDate" required/>
+					ng-class="{'invalid': !budget.datesValid}"
+					ng-model="budget.startRawDate" 
+					ng-model-options="{updateOn:'blur'}" 
+					ng-change="budget.isDatesValid()" required/>
 			</label>
 			<label class="item item-input item-stacked-label">
-				<span class="item-label">End Date</span>
+				<span class="item-label">End Date {{budget.valid}}</span>
 				<input type="date" placeholder="MM/dd/yyyy"
-					ng-model="budget.endRawDate" required/>
+					ng-class="{'invalid': !budget.datesValid}"
+					ng-model="budget.endRawDate" 
+					ng-model-options="{updateOn:'blur'}" 
+					ng-change="budget.isDatesValid()" required/>
 			</label>
+			<span class="hint" ng-show="!budget.datesValid"> Start date has to be earlier than End date</span>
 			<div class="list-container" ng-repeat="cat in categories track by $index">
 				<div class="list-logo-container" style="background-color:{{cat.style}}">
 					<div class="list-logo-box">

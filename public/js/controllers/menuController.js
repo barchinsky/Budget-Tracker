@@ -58,7 +58,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 	* If user data stored, authorize in silent mode
 	*/
 	local.isauth = function(){
-		console.log("isauth()");
+		//console.log("isauth()");
 		local.showLoading();
 
 		ds.isAuthorized().then(function(r){
@@ -73,14 +73,14 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 			}
 			else{ // else perform
 				// perform authorization using stored data
-				console.log('not authorized');
+				//console.log('not authorized');
 				local.loginData = ds.getLoginData();
 				local.authorize();
 				local.notify("Not authorized!", 2);
 			}
 		}, local.errorHandler);
 
-		console.log("~isauth()");
+		//console.log("~isauth()");
 	}
 
 	/* 
@@ -111,7 +111,8 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 	}
 
 	local.register = function(){
-		//console.log("register()");
+		console.log("register()");
+		return;
 
 		local.showLoading();
 
@@ -127,7 +128,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 			local.closeRegistrationModal();
 		}, local.errorHandler);
 
-		//console.log("~register()");
+		console.log("~register()");
 	}
 
 	local.validatePass = function(){
@@ -188,7 +189,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 	}
 
 	local.notify = function(text,id){
-		console.log("controller::notify()");
+		//console.log("controller::notify()");
 		console.log(text);
 
 		//local.notification.text = text;
@@ -200,7 +201,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope){
 		//$("#notification").slideDown(800);
 		//$("#notification").slideUp(1200);
 		
-		console.log("~controller::notify()");
+		//console.log("~controller::notify()");
 	}
 
 	local.updateBarHeaderTitle = function(menuItem){

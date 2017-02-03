@@ -44,8 +44,13 @@
 							</div>
 							<div class="list-item-progress">
 								<div class="progress " style="height: 15px">
-									<div class="progress-bar progress-bar-{{ getProgressType(cat.spentPerc) }} progress-bar-striped centered" role="progressbar" aria-valuenow="{{ cat.spentPerc }}" aria-valuemin="0" aria-valuemax="100" 
-										ng-style="{width : ( (cat.spentPerc > 100?100:cat.spentPerc) + '%' ) }"> {{cat.spentPerc}}%
+									<div class="progress-bar progress-bar-{{ getProgressType(cat.spentPerc) }} progress-bar-striped centered" 
+										role="progressbar" 
+										aria-valuenow="{{ cat.spentPerc }}" 
+										aria-valuemin="0" 
+										aria-valuemax="100" 
+										ng-style="{width : ( (cat.spentPerc > 100?100:cat.spentPerc) + '%' ) }"> 
+									{{cat.spentPerc?cat.spentPerc:0}}%
 									</div>
 								</div>
 							</div>

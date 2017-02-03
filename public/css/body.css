@@ -64,13 +64,12 @@
 	width: 25px;
 }
 
+/*
 .add-button-container{
 	position:absolute;
 	float: right;
 	bottom:20px;
 	right: 1190px;
-	/*z-index: -1;*/
-
 }
 
 .add-button-container img{
@@ -78,10 +77,12 @@
 	width: 50px;
 }
 
+/*
 .full-width{
 	width: 98%;
 	margin-left: 1%;
 }
+*/
 
 .text10{
 	font-size: 10px;
@@ -93,6 +94,10 @@
 
 .weight900{
 	font-weight: 900;
+}
+
+.width60{
+	width: 60px;
 }
 
 .text20{
@@ -119,13 +124,6 @@
 	padding-top: 50px;
 }
 
-.width150{
-	width: 150px;
-}
-
-.width60{
-	width: 60px;
-}
 .app-info{
 	position: fixed;
 	top:95%;
@@ -174,31 +172,26 @@
    border-radius: 5px;
 }
 
-.styled-input, .styled-input[disabled]{
-	/*background-color: #545556;
-	border:1px solid #a0a0a0;
-	color:white;*/
-	padding-left:10px !important;
-}
-
 .invalid{
 	border: 1px solid #f4424e !important;
+	background-color: #f4424e !important;
+	color:white !important;
 }
 
-.form-group .ng-invalid-required, .form-group .ng-invalid{
-	border: 1px solid #f4424e;
+.warn{
+	background-color: #ffcc00 !important;
+
+}
+
+.hint{
+	margin-left:9px;
+	color:#bfbfbf;
 }
 
 .label{
 	font-weight: normal;
 	margin-left: 1%;
 }
-
-/*
-.dark{
-	background-color: #4f5051 !important;
-}
-*/
 
 .content-right{
 	float:right;
@@ -226,3 +219,27 @@
 		height: 50px;
 	}
 }
+
+
+/*
+.dark{
+	background-color: #4f5051 !important;
+}
+*/
+/*
+.form-group .ng-invalid-required, .form-group .ng-invalid{
+	border: 1px solid #f4424e;
+}
+*/
+
+
+/*
+.styled-input, .styled-input[disabled]{
+	padding-left:10px !important;
+}
+
+.width150{
+	width: 150px;
+}
+
+*/

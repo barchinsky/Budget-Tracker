@@ -5,6 +5,7 @@ console.log("Category loading...");
 class Category{
 	constructor(obj=null){
 		if(obj != null){
+			this.id = obj.id;
 			this.name = obj.name;
 			this.style = obj.style;
 			this.type = obj.type;

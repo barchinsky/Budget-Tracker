@@ -1,6 +1,6 @@
 <ion-modal-view>
-    <ion-header-bar>
-        <h1 class="title">Signing up</h1>
+    <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">Sign up</h1>
         <div class="buttons">
             <button class="button button-light" ng-click="closeRegistrationModal()">Close</button>
         </div>
@@ -10,16 +10,16 @@
             <div class="list">
                 <label class="item item-input">
                     <span class="input-label">Name</span>
-                    <input type="text" class="styled-input" ng-model="regData.name" placeholder="Your name" />
+                    <input type="text" class="styled-input" ng-model="regData.name" placeholder="Your name" required/>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Login</span>
-                    <input type="text" class="styled-input" ng-model="regData.login" placeholder="Login, used for authorization"/>
+                    <input type="text" class="styled-input" ng-model="regData.login" placeholder="Login, used for authorization" required/>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Password</span>
                     <input type="password" class="styled-input" ng-model="regData.pass" placeholder="Put your password"
-                    	ng-mouseleave = "validatePass()"/>
+                    	ng-mouseleave = "validatePass()" required/>
                 </label>
                 <label class="item item-input">
                 	<span class="input-label">Password again</span>
@@ -30,8 +30,8 @@
     					<!--ng-class="{'invalid':regData.passConf.invalid}" required>-->
                 </label>
                 <label class="item">
-                    <button class="button button-block button-positive" type="submit"
-                    	ng-disabled="!regData.passConf.valid">Sign up!</button>
+                    <input class="button button-block button-positive" type="submit"
+                    	ng-disabled="!regData.passConf.valid" value="Sign up!"/>
                 </label>
             </div>
         </form>

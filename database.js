@@ -208,7 +208,7 @@ var loadTransactionsByCat = function(c, b, u, response, callback){
 var loadCategories = function(u, response, callback){
 	logger.info("loadCategories()");
 
-	var sql = "select id,name,style,type from Category where user=?;";
+	var sql = "select id, name, style, type from Category where user=?;";
 	executeSql(sql, [u], response, callback);
 
 	logger.info("~loadCategories()");
@@ -343,25 +343,28 @@ var addBudget = function(u, b, response, callback){
 	querySql(sql, [b.name, b.startDate, b.endDate, u, b.totalCosts], function(r){
 		logger.info("Add budget response status:%d",r.status);
 		// if budget insertion failed
+		//logger.info(r);
 		if( !r.status )	callback(response, r);
 		// if budget insertion was successfull
-		else addBudgetCategories(u, b, response, callback);
+		else addBudgetCategories(u, r.data.insertId, b, response, callback);
 	});
 
 	logger.info("~addBudget()")
 }
 
-var addBudgetCategories = function(u, b, response, callback){
+var addBudgetCategories = function(u, bId, b, response, callback){
 	logger.info("addBudgetCategories()");
+
+	logger.info(b.categories);
 
 	var res = null;
 
 	for( var c in b.categories ){
-		var sql = "insert into BudgetCategories(budgetId, budgetName, category, catAmount, user ) values(?,?,?,?,?);";
+		var sql = "insert into BudgetCategories(budgetId, budgetName, category, catAmount, user) values(?,?,?,?,?);";
 
 		var cat = b.categories[c];
 		//console.log("----------",cat.id, cat.amount);
-		querySql(sql, [b.id ,b.name, cat.id, cat.amount, u], function(r){
+		querySql(sql, [bId, b.name, cat.id, cat.amount, u], function(r){
 			logger.info("Add budgetCat response status:%d",r.status);
 				if( !r.status ){
 					res=r; // if insertion failed

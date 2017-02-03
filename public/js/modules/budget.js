@@ -14,18 +14,28 @@ class Budget{
 			this.spentPerc = obj.spentPerc===null?0:obj.spentPerc;
 		}
 		else{
-				this.id = null;
-				this.name = "";
-				this.startDate = null;
-				this.endDate = null;
-				this.startRawDate = null;
-				this.endRawDate = null;
-				this.categories = [];
-				this.totalCosts = 0;
-				this.incomeCosts = 0;
-				this.spentCosts = 0;
-				this.spentPerc = 0.0;
+			this.id = null;
+			this.name = "";
+			this.startDate = null;
+			this.endDate = null;
+			this.startRawDate = new Date();
+			this.endRawDate = new Date(this.startRawDate.getFullYear(), this.startRawDate.getMonth()+1, this.startRawDate.getDay());
+			this.categories = [];
+			this.totalCosts = 0;
+			this.incomeCosts = 0;
+			this.spentCosts = 0;
+			this.spentPerc = 0.0;
 		}
+
+		this.datesValid = true;
+		this.suchNameAlreadyExists = false;
+	}
+
+	isDatesValid(){
+		console.log("isDatesValid()");
+
+		if( this.startRawDate > this.endRawDate ) this.datesValid = false;
+		if( !this.startRawDate || ! this.endRawDate ) this.datesValid = false;
 	}
 
 	static parseArray(arr){

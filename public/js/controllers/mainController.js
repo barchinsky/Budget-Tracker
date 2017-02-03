@@ -46,17 +46,17 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.$on("change.auth.event", function(event, value){
 		//console.log("auth event handled", value);
 		local.authorized = ds.getAuthorization();
-		console.log("change.auth.event:", local.authorized);
+		//console.log("change.auth.event:", local.authorized);
 		local.currentUser.name = ds.getCurrentUser();
 	});
 
-	local.$watch("authorized", function(newValue, oldValue){
+	/*local.$watch("authorized", function(newValue, oldValue){
 		console.log("mainController.authorized:", newValue, oldValue);
-	});
+	});*/
 
 
 	local.initApp = function(){
-		console.log("initApp()");
+		//console.log("initApp()");
 
 		local.history = [];
 		local.category = new Category();
@@ -77,7 +77,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		//ds.setToken("");
 		//local.isauth();
 
-		console.log("~initApp()");
+		//console.log("~initApp()");
 	}
 
 	local.prepareModals = function(){
@@ -286,17 +286,17 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	}*/
 
 	local.loadBudgetCategories = function(b){
-		console.log("loadBudgetCategories()");
+		//console.log("loadBudgetCategories()");
 
 		ds.loadBudgetCategories(b).then(function(r){
 			if( +r.status ) {
 				local.budgetCategories = r.data;
-				console.log("local.budgetCategories:", local.budgetCategories);
+				//console.log("local.budgetCategories:", local.budgetCategories);
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
 
-		console.log("~loadBudgetCategories()");
+		//console.log("~loadBudgetCategories()");
 	}
 
 	local.deleteBudget = function(name){
@@ -346,7 +346,8 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 		ds.saveBudget(local.budget).then(function(r){
 			if(+r.status){
 				local.notify("Budget saved", 0);
-				local.budget = {};
+				//local.budget = {};
+				local.initAddBudget();
 				local.getBudgets();
 			}
 			else local.notify(r.msg, 3);
@@ -356,33 +357,34 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	}
 
 	local.validateBudgetName = function(b){
-		//console.log("validateBudgetName()");
+		console.log("validateBudgetName()");
 
 		ds.budgetExists(b.name).then(function(r){
 			if( +r.status && r.data[0].budgets ){
-				b.invalid=true;
+				b.suchNameAlreadyExists=true;
 				local.notify("Budget with this name already exists", 2);
 			}
-			else b.invalid = false;
+			else b.suchNameAlreadyExists = false;
 		});
 	}
 
 	local.initBudgetCategory = function(id, cat){
-		console.log("initBudgetCategory()");
+		//console.log("initBudgetCategory()");
 		
-		local.budget.categories.push({});
-		local.budget.categories[id].name=cat.name;
-		local.budget.categories[id].type=cat.type;
-		local.budget.categories[id].id=cat.id;
+		local.budget.categories.push(cat);
+		//console.log(local.budget.categories);
+		//local.budget.categories[id].name=cat.name;
+		//local.budget.categories[id].type=cat.type;
+		//local.budget.categories[id].id=cat.id;
 
-		console.log("~initBudgetCategory()");
+		//console.log("~initBudgetCategory()");
 	}
 
 
 	//////////////////////// Category ////////////////////////////
 
 	local.getCategories = function(){
-		console.log("getCategories()");
+		//console.log("getCategories()");
 		// code to load data from server
 		local.showLoading();
 
@@ -396,7 +398,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 					local.categories.push(c);
 				}
 
-				console.log("categories:", local.categories);
+				//console.log("categories:", local.categories);
 				local.hideLoading();
 			}
 			else local.notify(r.msg, 3);
@@ -758,13 +760,13 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			duration: 5000,
 			scope: local
 		}).then(function(){
-			console.log("The loading indicator is now displayed");
+			//console.log("The loading indicator is now displayed");
 		});
 	  }
 
 	local.hideLoading = function(){
 		$ionicLoading.hide().then(function(){
-			console.log("The loading indicator is now hidden");
+			//console.log("The loading indicator is now hidden");
 		});
 	}
 

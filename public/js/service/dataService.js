@@ -162,12 +162,12 @@ function DataService($http, $localStorage){
 	}
 
 	function getAuthorization(){
-		console.log("getAuthorization:",appData.authorized);
+		//console.log("getAuthorization:",appData.authorized);
 		return appData.authorized;
 	}
 
 	function setAuthorization(authorized){
-		console.log("setAuthorization:",authorized);
+		//console.log("setAuthorization:",authorized);
 		appData.authorized = authorized;
 	}
 
@@ -176,7 +176,7 @@ function DataService($http, $localStorage){
 	}
 
 	function getCurrentUser(){
-		console.log("getCurrentUser");
+		//console.log("getCurrentUser");
 		return appData.currentUser;
 	}
 
@@ -194,7 +194,7 @@ function DataService($http, $localStorage){
 	}
 
 	function getToken(){
-		console.log("$storage.token:", $storage.token);
+		//console.log("$storage.token:", $storage.token);
 		return $storage.token;
 	}
 
