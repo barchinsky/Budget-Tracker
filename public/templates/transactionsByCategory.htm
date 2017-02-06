@@ -1,17 +1,32 @@
-<ion-content>
-	<div class="card" ng-if="!transactions.length">
-		<h4 class="card-title centered">No records found!</h4>
-	</div>
-	<div class="list-container" ng-repeat="tran in transactions" ng-click="openTransaction(tran)">
-		<div class="list-logo-container" style="background-color:{{tran.category.style}}">
-			<div class="list-logo-box white">
-				<span class="fl centered"> {{tran.category.name[0]}}</span>
-				<span class="sl centered"> {{tran.category.name[1]}}</span>
+<div class="dynamic-page">
+	<ion-modal-view>
+		<ion-header-bar class="bar bar-header bar-energized">
+			<h1 class="title">Transactions by Category</h1>
+			<div class="buttons">
+				<button class="button button-light" ng-click="closeTransactionsByCategoryModal()">Close</button>
 			</div>
-		</div>
-		<div class="list-item-name white">{{tran.name}}</div>
-		<div class="list-item-info white">{{tran.date | date: 'yyyy-MM-dd HH:mm'}}</div>
-		<div class="list-item-description white">{{tran.comment}}</div>
-		<div class="transaction-cost text20 white">{{tran.cost}}</div>
-	</div>
-</ion-content>
+		</ion-header-bar>
+		<ion-content>
+			<div class="card" ng-if="!transactions.length">
+				<h4 class="card-title centered">No records found!</h4>
+			</div>
+			<ion-list>
+				<ion-item class="list-container no-ledf-padding" 
+					ng-repeat="tran in transactions" 
+					ng-click="openTransaction(tran)">
+						<div class="list-logo-container-complex" 
+							style="background-color:{{tran.category.style}}">
+							<div class="list-logo-box-complex white">
+								<span class="fl centered"> {{tran.categoryName[0]}}</span>
+								<span class="sl centered"> {{tran.categoryName[1]}}</span>
+							</div>
+						</div>
+						<div class="list-item-name white">{{tran.name}}</div>
+						<div class="list-item-info white">{{tran.date | date: 'yyyy-MM-dd HH:mm'}}</div>
+						<div class="list-item-description white">{{tran.comment}}</div>
+						<div class="transaction-cost white">{{tran.cost}}</div>
+				</ion-item>
+			</ion-list>
+		</ion-content>
+	</ion-modal-view>
+</div>

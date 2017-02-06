@@ -19,7 +19,7 @@
 }
 
 .list-logo-container-with-progress{
-	width: 15%;
+	width: 85px;
 	height: 80%;
 	float:left;
 	text-align: center;
@@ -45,7 +45,7 @@
 .list-item-name{
 	width:60%;
 	padding-left: 10px;
-	padding-top: 15px;
+	/*padding-top: 15px;*/
 	float: left;
 	font-size: 20px;
 	color:white;
@@ -95,7 +95,7 @@
 	display: inline-block;
 	vertical-align: middle;
 	height: 30%;
-	border-radius: 3px;
+	/*border-radius: 3px;*/
 	font-size: 26px;
 	margin-top:30px;
 }

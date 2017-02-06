@@ -2,7 +2,7 @@
 	<div class="card">
 		<div class="card-title">Authorization required {{authorized}}</div>
 		<p class="card-note">Sorry, you have to authorize first</p>
-		<input type="button" class="button button-block button-positive button-sm" ng-click="showLoginModal()" value="Login"/>
+		<a class="button button-block button-positive button-sm" href="#app/login">Log in</a>
 	</div>
 </div>
 <div class="dynamic-page" ng-if="authorized">
@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		<div class="card" ng-show="b==null">
-			<div class="card-title">Please, select the budget </div>
+			<div class="card-title">Please, select the budget for detailed info </div>
 			<p class="card-note">Sorry, there is no records found. Please, select the budget to see agregated info.</p>
 		</div>
 		<div class="card-container" ng-show="b!=null">

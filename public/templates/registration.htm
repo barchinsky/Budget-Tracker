@@ -10,22 +10,39 @@
             <div class="list">
                 <label class="item item-input">
                     <span class="input-label">Name</span>
-                    <input type="text" class="styled-input" ng-model="regData.name" placeholder="Your name" required/>
+                    <input type="text" class="styled-input" placeholder="Your name"
+                        ng-model="regData.name" 
+                        ng-blur="formatRegData('n')"
+                        required/>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Surname</span>
+                    <input type="text" class="styled-input" placeholder="Your surname"
+                        ng-model="regData.surname" 
+                        ng-blur="formatRegData('sn')" 
+                        required/>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Login</span>
-                    <input type="text" class="styled-input" ng-model="regData.login" placeholder="Login, used for authorization" required/>
+                    <input type="text" class="styled-input" placeholder="Login, used for authorization" 
+                        ng-model="regData.login" 
+                        ng-blur="formatRegData('l')"
+                        required/>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Email</span>
+                    <input type="email" class="styled-input" ng-model="regData.email" placeholder="Email" required/>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Password</span>
                     <input type="password" class="styled-input" ng-model="regData.pass" placeholder="Put your password"
-                    	ng-mouseleave = "validatePass()" required/>
+                    	ng-blur = "validatePass()" required/>
                 </label>
                 <label class="item item-input">
                 	<span class="input-label">Password again</span>
                     <input type="password" class="styled-input" placeholder="Password one more time" 
-                    	ng-mouseleave = "validatePass()"
-    					ng-model="regData.passConf.value"
+                    	ng-model="regData.passConf.value"
+                        ng-blur = "validatePass()"
     					ng-class="{'invalid': !regData.passConf.valid}" required>
     					<!--ng-class="{'invalid':regData.passConf.invalid}" required>-->
                 </label>

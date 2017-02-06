@@ -11,6 +11,8 @@ class Transaction {
 				this.comment = obj.comment;
 				this.catStyle = obj.catStyle;
 				this.rawDate = obj.rawDate;
+				this.categoryName = obj.categoryName;
+				this.categoryId = obj.categoryId;
 			}
 			this.date = new Date();
 			this.nameLen = 30;

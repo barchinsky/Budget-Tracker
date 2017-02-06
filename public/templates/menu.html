@@ -24,7 +24,9 @@
               <img src="media/incognito.jpg"/>
             </div>
             <div class="user-name">
-              <p>{{currentUser.name}} {{currentUser.surname}}</p>
+              <!--<p>{{currentUser.name}} {{currentUser.surname}}</p>-->
+              <p ng-bind="currentUser.name"/>
+              <p ng-bind="currentUser.surname"/>
             </div>
         </ion-item>
         <ion-item menu-close href="{{item.path}}"
@@ -32,7 +34,7 @@
           ng-click="updateBarHeaderTitle(item)">
           {{item.title}}
         </ion-item>
-        <ion-item menu-close ng-click="showLoginModal()" ng-show="!authorized" class="dark">
+        <ion-item menu-close href="#app/login" ng-show="!authorized" class="dark">
           Login
         </ion-item>
         <ion-item menu-close ng-click="logout()" ng-show="authorized" class="dark">

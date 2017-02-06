@@ -99,14 +99,16 @@
 .width60{
 	width: 60px;
 }
-
+/*
 .text20{
 	font-size: 20px;
 }
-
+*/
+/*
 .text36{
 	font-size: 36px;
 }
+*/
 
 .white{
 	color:white;
@@ -169,7 +171,7 @@
 .semi-square {
    -webkit-border-radius: 5px;
    -moz-border-radius: 5px;
-   border-radius: 5px;
+   border-radius: 5px !important;
 }
 
 .invalid{

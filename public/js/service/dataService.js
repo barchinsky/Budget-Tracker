@@ -13,6 +13,7 @@ function DataService($http, $localStorage){
 	var $storage = $localStorage.$default({
 		tranCounter:0,
 		token:null,
+		loginData:{login:null, pass:null},
 	});
 
 	var services = {
@@ -42,7 +43,8 @@ function DataService($http, $localStorage){
 		getCurrentUser: getCurrentUser,
 		getLoginData: getLoginData,
 		setToken: setToken,
-		getToken: getToken
+		getToken: getToken,
+		setLoginData: setLoginData,
 	};
 
 	return services;
@@ -72,8 +74,8 @@ function DataService($http, $localStorage){
 			then(end);
 	}
 
-	function getTranByCat(c, b){
-		return $http.post(host+"/getTransactionsByCat", {category:c, budget:b, token:getToken()}).
+	function getTranByCat(cId, bId){
+		return $http.post(host+"/getTransactionsByCat", {categoryId:cId, budgetId:bId, token:getToken()}).
 			then(end);
 	}
 
@@ -142,7 +144,7 @@ function DataService($http, $localStorage){
 	// *********** Auth ***************** //
 
 	function reg(regData){
-		return $http.post(host+"/register", {name:regData.name, login:regData.login, pass:regData.pass, token:getToken()}).
+		return $http.post(host+"/register", {name:regData.name, surname:regData.surname, login:regData.login, pass:regData.pass, email:regData.email, token:getToken()}).
 			then(end);
 	}
 
@@ -162,21 +164,22 @@ function DataService($http, $localStorage){
 	}
 
 	function getAuthorization(){
-		//console.log("getAuthorization:",appData.authorized);
+		console.log("getAuthorization:",appData.authorized);
 		return appData.authorized;
 	}
 
 	function setAuthorization(authorized){
-		//console.log("setAuthorization:",authorized);
+		console.log("setAuthorization:", authorized);
 		appData.authorized = authorized;
 	}
 
 	function setCurrentUser(u){
+		console.log("setCurrentUser:", u);
 		appData.currentUser = u;
 	}
 
 	function getCurrentUser(){
-		//console.log("getCurrentUser");
+		console.log("getCurrentUser", appData.currentUser);
 		return appData.currentUser;
 	}
 
@@ -184,9 +187,14 @@ function DataService($http, $localStorage){
 		// TODO: define method for retrieving stored login data
 
 		// mock implementation
-		var loginData = {login:"max", pass:"asd"};
+		//var loginData = {login:"max", pass:"asd"};
 
-		return loginData;
+		return $storage.loginData;
+	}
+
+	function setLoginData(loginData){
+		console.log("setLoginData:", loginData);
+		$storage.loginData = loginData;
 	}
 
 	function setToken(token){
@@ -194,7 +202,7 @@ function DataService($http, $localStorage){
 	}
 
 	function getToken(){
-		//console.log("$storage.token:", $storage.token);
+		console.log("$storage.token:", $storage.token);
 		return $storage.token;
 	}
 

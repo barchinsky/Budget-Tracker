@@ -44,7 +44,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	//local.authorized = false;
 
 	local.$on("change.auth.event", function(event, value){
-		//console.log("auth event handled", value);
+		console.log("auth event handled", value);
 		local.authorized = ds.getAuthorization();
 		//console.log("change.auth.event:", local.authorized);
 		local.currentUser.name = ds.getCurrentUser();
@@ -75,6 +75,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 		local.prepareModals();
 		//ds.setToken("");
+		//ds.setLoginData({login:null, pass:null});
 		//local.isauth();
 
 		//console.log("~initApp()");
@@ -104,6 +105,12 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			scope: local
 		}).then(function(modal) {
 			local.categoryDetailsModal = modal;
+		});
+
+		$ionicModal.fromTemplateUrl('templates/transactionsByCategory.htm',{
+			scope:local
+		}).then(function(modal){
+			local.transactionsByCategoryModal = modal;
 		});
 
 		/*$ionicModal.fromTemplateUrl('templates/registration.htm', {
@@ -169,11 +176,12 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.getTransactionsByCategory = function(c,b){
 		console.log("getTransactionsByCategory()");
 
-		//console.log(c.catName, b.name);
-		ds.getTransactionsByCategory(c.catName, b.name).then(function(r){
+		console.log(c, b);
+		//return;
+		ds.getTransactionsByCategory(c.id, b.id).then(function(r){
 			if( +r.status ) {
 				local.transactions = Transaction.parseArray(r.data);
-				local.route(config.transactionsByCategoryPage);
+				console.log("local.transactions:",local.transactions);
 			}
 		}, local.errorHandler);
 
@@ -259,9 +267,13 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.getBudgets = function(){
 		console.log("getBudgets()");
 		local.showLoading();
+		
 		ds.getBudgets().then(function(r){
-			local.budgets = Budget.parseArray(r.data);
-			console.log("budgets:", local.budgets);
+			console.log(r.data.length);
+			if( r.data.length ){
+				local.budgets = Budget.parseArray(r.data);
+				console.log("budgets:", local.budgets);
+			}
 			local.hideLoading();
 		}, local.errorHandler);
 
@@ -290,8 +302,8 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 		ds.loadBudgetCategories(b).then(function(r){
 			if( +r.status ) {
-				local.budgetCategories = r.data;
-				//console.log("local.budgetCategories:", local.budgetCategories);
+				local.budgetCategories = Category.parseArray(r.data);
+				console.log("local.budgetCategories:", local.budgetCategories);
 			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
@@ -574,6 +586,15 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 	local.closeCategoryDetailsModal = function(c){
 		local.loadCategory(c);
 		local.categoryDetailsModal.hide();
+	}
+
+	local.showTransactionsByCategoryModal = function(cat, budget){
+		local.getTransactionsByCategory(cat, budget);
+		local.transactionsByCategoryModal.show();
+	}
+
+	local.closeTransactionsByCategoryModal = function(){
+		local.transactionsByCategoryModal.hide();
 	}
 
 	/*local.showRegistrationModal = function(){

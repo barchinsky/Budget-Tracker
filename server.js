@@ -119,8 +119,13 @@ app.post("/getTransactionsByCat", function(request, response){
 	logger.info("getTransactionsByCat()");
 
 	//if( isAuthorized(request, response) ){
+	logger.info(request.body);
+
 	var user = request.body.user;
-	db.loadTransactionsByCat(request.body.category, request.body.budget, user, response, sendResponse);
+	var cId = request.body.categoryId;
+	var bId = request.body.budgetId;
+
+	db.loadTransactionsByCat(cId, bId, user, response, sendResponse);
 	//}
 
 	logger.info("~getTransactionsByCat()");
@@ -255,9 +260,35 @@ app.post("/budgetExists", function(request, response){
 /************************* Common API ***************************************************/
 
 app.post("/authorize", function(request, response){
-	logger.warn("authorize()\nNOT IMPLEMENTED!");
+	logger.info("authorize()");
 
-	sendResponse( response, {status:1, user:request.body.user} );
+	var user = request.body.login;
+	var pass = request.body.pass;
+
+	if( user && pass){ // if credentials exists
+		logger.info("credentials found in request.");
+		db.authorize(user, pass, function(r){
+			if( r.status ){ // user found and pass confirmed
+				logger.info("user found and confirmed");
+				var token = generateUserToken(user);
+				
+				var userInfo = db.getUserInfo(user, function(user){
+					sendResponse(response, {status:1, token:token, user:user});
+				});
+			}
+			else{
+				logger.warn("Authorization failed. User or pass is invalid.")
+				sendResponse(response, {status:0, data:{}, msg:"User or pass is invalid."});
+			}
+		});
+	}
+	else{
+		logger.warn("User credentials not in request.");
+		sendResponse(response, {status:0, msg:"User credentials not found!"});
+	}
+
+	
+	//sendResponse( response, {status:1, user:request.body.user} );
 
 	//logger.info(request.body.login, request.body.pass);
 	//logger.info("session.authorized:"+request.session.authorized);
@@ -279,7 +310,7 @@ app.post("/authorize", function(request, response){
 		logger.info("Already authorized.");
 	}*/
 
-	logger.warn("~authorize()");
+	logger.info("~authorize()");
 });
 
 app.post("/logout", function(request, response){
@@ -300,7 +331,9 @@ app.post("/isauth", function(request, response){
 
 	//logger.info(request.body);
 	//if( isAuthorized(request, response) ){
-	sendResponse(response, {status:1, user:request.body.user});
+	db.getUserInfo(request.body.user, function(r){
+		sendResponse(response, {status:1, user:r});
+	});
 	//}
 	logger.info("~isauth()");
 });
@@ -309,14 +342,18 @@ app.post("/register", function(request, response){
 	logger.info("register()");
 
 	var login = request.body.login;
-	if( !db.userExist(login) ){
-		var token = jwt.sign(login, app.get("jwtsecret"), {});
-		logger.info("token for user:%s generated: %s", login, token );
-
-		db.register(request.body.name, request.body.login , request.body.pass, token, response, sendResponse);
-	}
-	else
-		sendResponse(response, {status:0, data:{}, msg:"User already exists!"});
+	//logger.info("request:", request.body);
+	//logger.info("login:", login);
+	db.userExist(login, function(r){
+		if( !r ){
+			var token = generateUserToken(login);
+			logger.info("token for user:%s generated: %s", login, token );
+			db.register(request.body.name, request.body.surname, request.body.login , request.body.pass, request.body.email, token, response, sendResponse);
+		}
+		else
+			sendResponse(response, {status:0, data:{}, msg:"User already exists! Try another login."});
+	});
+	
 	logger.info("register()");
 });
 
@@ -326,6 +363,10 @@ app.get("/api", function(request, response){
 
 
 /*********************************** Utils ***************************************************/
+
+generateUserToken = function(login){
+	return jwt.sign(login, app.get("jwtsecret"), {});
+}
 
 sendResponse = function(response, data){
 	//logger.info("sendResponse()");
@@ -372,9 +413,17 @@ function isAuthorized(openUrls){
 				}
 
 				logger.info("decoded:", decoded);
-
-				request.body.user = decoded;
-				next();
+				 // if such user exists in db
+				db.userExist(decoded, function(r){
+					if (r){
+						request.body.user = decoded;
+						next();
+					}
+					else{
+						logger.warn("Suspicious activity detected. User log in attempt with unknow login.");
+						sendResponse(response, {status:0, msg:"Auth failed. Code:1488."});
+					}
+				});
 			});
 		}else{ // if there is no token provided in request
 			sendResponse(response, {status:0, msg:"Auth failed. Code:1488."});

@@ -5,6 +5,7 @@
 create table User(
 	name char(25) not null,
 	surname char(50) not null,
+	email char(150) not null,
 	login char (100) not null,
 	pass char(20) not null,
 	reg_date DATE,

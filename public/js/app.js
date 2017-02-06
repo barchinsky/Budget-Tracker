@@ -111,6 +111,16 @@ angular.module('budgetTrackerApp', ['ionic', 'ngStorage'])
 		}
 	})
 
+	.state("app.login", {
+		url:"/login",
+		views:{
+			'menuContent':{
+				templateUrl: 'templates/login.htm',
+				controller: "menuController"
+			}
+		}
+	})
+
 	.state("app.settings", {
 		url:"/settings",
 		views:{

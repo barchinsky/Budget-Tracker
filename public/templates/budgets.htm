@@ -25,10 +25,20 @@
 					</div>
 					<ion-item class="list-container"
 						ng-repeat="budget in budgets track by $index" ng-click="showBudgetDetailsModal(budget)">
+							<div class="progress-top">
+								<div class="progress-bar progress-bar-{{ getProgressType(budget.spentPerc) }} centered semi-square"
+									role="progressbar" 
+									aria-valuenow="{{ cat.spentPerc }}" 
+									aria-valuemin="0" 
+									aria-valuemax="100" 
+									ng-style="{width : ( (budget.spentPerc > 100?100:budget.spentPerc) + '%' ) }">
+									{{budget.spentPerc}}%
+								</div>
+							</div>
 							<div class="list-logo-container-with-progress">
 								<div class="list-logo-box">
-									<span class="fl centered"> {{budget.name[0]}}</span>
-									<span class="sl centered"> {{budget.name[1]}}</span>
+									<span class="fl centered white"> {{budget.name[0]}}</span>
+									<span class="sl centered white"> {{budget.name[1]}}</span>
 								</div>
 							</div>
 							<div class="list-item-name">{{ budget.name }}</div>
