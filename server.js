@@ -401,13 +401,13 @@ function isAuthorized(openUrls){
 		//logger.info("token:%s,",token);
 
 		// if token found
-		if(token){
+		if(token !== undefined && token !== null && token.length){
 			// check token
 			jwt.verify(request.body.token, app.get("jwtsecret"), {ignoreExpiration:true}, function(err, decoded){
 
 				//if some errors occured
 				if(err){
-					logger.err("isAuthorized()::%s", err.toString());
+					logger.warn("isAuthorized()::%s", err.toString());
 					sendResponse(response, {status:0, msg:"Authorization failed!"})
 					return false;
 				}

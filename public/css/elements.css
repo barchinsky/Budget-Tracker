@@ -11,13 +11,15 @@
 
 .notification{
 	position: fixed;
-	top:0px;
+	bottom:0px;
 	width: 100%;
 	height: 50px;
 	float:left;
 	font-size: 15px;
 	padding-top: 16px;
 	display: none;
+	color:white;
+	background-color: black;
 	text-align: center;
 	z-index: 1080;
 }

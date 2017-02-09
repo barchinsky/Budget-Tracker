@@ -4,10 +4,10 @@ angular.
 	factory("ds", DataService). // dataService manages all comunications with server
 	factory("canvas", CanvasService);
 
-mainController.$inject = ["$scope", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope", "$localStorage"]; 
+mainController.$inject = ["$scope", "$timeout", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope", "$localStorage"]; 
 DataService.$inject = ["$http", "$localStorage"];
 
-function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter, $ionicLoading, $rootScope){
+function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $window, $filter, $ionicLoading, $rootScope){
 	//console.log("mainController controller loaded.");
 
 	////////////// App init //////////////////
@@ -166,6 +166,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			//console.log("r.data:",r.data)
 			local.transactions = Transaction.parseArray(r.data);
 			console.log("local.transactions:", local.transactions);
+			local.notify("Transactions updated!");
 		}, local.errorHandler);
 
 		local.hideLoading();
@@ -273,6 +274,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 			if( r.data.length ){
 				local.budgets = Budget.parseArray(r.data);
 				console.log("budgets:", local.budgets);
+				local.notify("Budgets updated!");
 			}
 			local.hideLoading();
 		}, local.errorHandler);
@@ -411,6 +413,7 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 				}
 
 				//console.log("categories:", local.categories);
+				local.notify("Categories updated!");
 				local.hideLoading();
 			}
 			else local.notify(r.msg, 3);
@@ -531,20 +534,21 @@ function mainController($scope, $ionicModal, $http, ds, canvas, $window, $filter
 
 		//console.log("~updateAllData()");
 	}
-
-	local.notify = function(text,id){
-		console.log("controller::notify()");
+	
+	local.notify = function(text){
+		//console.log("controller::notify()");
 		console.log(text);
 
-		//local.notification.text = text;
-		//var nType = local.alerts[id]; // notification type
+		$("#notification").html(text);
 
-		//local.alertType = nType;
+		$("#notification").slideDown(600);
 
-		//$("#notification").slideDown(800);
-		//$("#notification").slideUp(1200);
+		$timeout(function(){
+			$("#notification").slideUp(600);
+		},1500);
 		
-		console.log("~controller::notify()");
+
+		//console.log("~controller::notify()");
 	}
 
 	local.showTransactionModal = function(){

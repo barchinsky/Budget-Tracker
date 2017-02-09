@@ -3,9 +3,9 @@ module("budgetTrackerApp").
 controller("menuController", menuController).
 factory("ds", DataService);
 
-menuController.$inject = ["$scope", "$ionicModal", "ds", "$ionicLoading", "$rootScope", "$filter", "$state"];
+menuController.$inject = ["$scope", "$timeout","$ionicModal", "ds", "$ionicLoading", "$rootScope", "$filter", "$state"];
 
-function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope, $filter, $state){
+function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootScope, $filter, $state){
 	local = $scope;
 	vm = this;
 
@@ -69,7 +69,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope, $fil
 				local.authorized = true;
 				ds.setCurrentUser(r.user);
 				local.currentUser = ds.getCurrentUser();
-				local.notify("Authorizated!",1);
+				local.notify("Authorizated!");
 				local.hideLoading();
 			}
 			else{ // else perform
@@ -85,7 +85,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope, $fil
 					console.log("login data not found, manual authorization is required");
 				}
 				//local.authorize();
-				local.notify("Not authorized!", 2);
+				local.notify("Not authorized!");
 				local.hideLoading();
 			}
 		}, local.errorHandler);
@@ -111,14 +111,14 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope, $fil
 				local.currentUser = ds.getCurrentUser();
 				console.log("local.currentUser:", local.currentUser);
 
-				local.notify(r.msg, 0);
+				local.notify(r.msg);
 				$state.go("app.home"); // go to the main page
 
 				local.hideLoading();
 			}
 			else {
 				local.hideLoading();
-				local.notify(r.msg, 2);
+				local.notify(r.msg);
 			}
 		}, local.errorHandler);
 		console.log("~authorize()");
@@ -134,14 +134,14 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope, $fil
 
 		ds.register(local.regData).then(function(r){
 			if( r.status ){
-				local.notify("Registration is successfull",0);
+				local.notify("Registration is successfull!");
 				var token = r.token;
 				console.log("token recieved:",token);
 				ds.setToken(token);
 				ds.setLoginData(local.regData);
 				local.regData={};
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 			
 			local.hideLoading();
 			local.closeRegistrationModal();
@@ -155,7 +155,7 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope, $fil
 		console.log(local.regData);
 
 		if( local.regData.pass !== local.regData.passConf.value){
-			local.notify("Password confirmation missmatch!",2);
+			local.notify("Password confirmation missmatch!");
 			local.regData.passConf.valid=false;
 		}else
 			local.regData.passConf.valid = true;
@@ -232,19 +232,19 @@ function menuController($scope, $ionicModal, ds, $ionicLoading, $rootScope, $fil
 		});
 	}
 
-	local.notify = function(text,id){
+	local.notify = function(text){
 		//console.log("controller::notify()");
 		console.log(text);
 
-		//local.notification.text = text;
-		//$("#notification").html(text);
-		//var nType = local.alerts[id]; // notification type
+		$("#notification").html(text);
 
-		//local.alertType = nType;
+		$("#notification").slideDown(600);
 
-		//$("#notification").slideDown(800);
-		//$("#notification").slideUp(1200);
+		$timeout(function(){
+			$("#notification").slideUp(600);
+		},1500);
 		
+
 		//console.log("~controller::notify()");
 	}
 
