@@ -148,13 +148,13 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		console.log("~saveTransaction()");
 	}
 
-	local.initTransactions = function(){
+	/*local.initTransactions = function(){
 		console.log("initTransactions()");
 		local.transactions = [];
 		local.getBudgets();
 
 		console.log("~initTransactions()");
-	}
+	}*/
 
 	local.getTransactions = function(b){
 		// function loads transactions info from database

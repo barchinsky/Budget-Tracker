@@ -8,7 +8,7 @@
 </div>
 <div class="dynamic-page pt50"
 	ng-if="authorized">
-	<ion-content ng-init="initTransactions()">
+	<ion-content ng-init="getBudgets()">
 		<ion-refresher
 			pulling-text="Pull to refresh..."
 			on-refresh="doRefresh('t')">
