@@ -12,10 +12,11 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 	local.authorized = ds.getAuthorization(); // used to manage app resources access
 	local.menuItems = [config.homePage, config.addPage, config.transactionsPage, config.categoriesPage, config.budgetsPage, config.settingsPage]; // keep page titles with path
 	local.loginData = {}; // login and pass info
-	local.alerts= config.alerts; // alerts style
+	//local.alerts= config.alerts; // alerts style
 	local.barHeaderTitle = config.homePage.title; // header title
 	local.currentUser={name:"unknown", surname:"unknown"}; // current user name and surname
 	local.regData = {name:"", surname:"", login:"", passConf:{value:"", valid:false}}; // registration data
+	local.defaultUser = {name:"Authorization", surname:"required"};
 
 	/*
 	* Broadcast authorization status change event
@@ -108,7 +109,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 				ds.setCurrentUser(r.user); // save recieved user info
 				ds.setToken(r.token); // save recieved token
 				ds.setLoginData(local.loginData); // save login data for futher use
-				local.currentUser = ds.getCurrentUser();
+				local.currentUser = r.user;
 				console.log("local.currentUser:", local.currentUser);
 
 				local.notify(r.msg);
@@ -193,6 +194,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 			ds.logout().then(function(r){
 				if(+r.status){
 					local.authorized = false;
+					local.currentUser = local.defaultUser;
 					console.log("Logged out.");
 				}
 			}, local.errorHandler);

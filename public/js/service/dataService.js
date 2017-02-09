@@ -11,7 +11,6 @@ function DataService($http, $localStorage){
 	appData.currentUser = {};
 	
 	var $storage = $localStorage.$default({
-		tranCounter:0,
 		token:null,
 		loginData:{login:null, pass:null},
 	});
@@ -42,9 +41,9 @@ function DataService($http, $localStorage){
 		setCurrentUser: setCurrentUser,
 		getCurrentUser: getCurrentUser,
 		getLoginData: getLoginData,
+		setLoginData: setLoginData,
 		setToken: setToken,
 		getToken: getToken,
-		setLoginData: setLoginData,
 	};
 
 	return services;
