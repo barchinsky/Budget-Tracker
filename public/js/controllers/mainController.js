@@ -22,7 +22,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	local.tranCat = null;
 	
 	local.colors = config.colors;
-	local.alerts= config.alerts;//["success","info","warning","danger"];
+	//local.alerts= config.alerts;//["success","info","warning","danger"];
 	
 	local.bodyHeaderTitle = null;
 	local.userImageIcon = "media/incognito.jpg";
@@ -33,7 +33,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 	// form vars
 	local.readOnly = true;
-	local.notification = {};
+	//local.notification = {};
 	local.canv={name:'', note:''};
 	local.budgetName = '';
 	local.tDate = new Date(2015, 0, 01);
@@ -139,7 +139,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//return;
 
 		ds.saveTransaction(local.transaction).then(function(r){
-			if(+r.status) local.notify("Transaction added", 0);
+			if(+r.status) local.notify("Transaction added!");
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
 
@@ -160,6 +160,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		// function loads transactions info from database
 		console.log("getTransactions()");
 		local.showLoading();
+		local.budgetName = b;
 
 		ds.getTransactions(b).then(function(r){
 			//local.transactions = r.data;
@@ -210,11 +211,11 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		ds.deleteTransaction(id).then(function(r){
 			if(+r.status){
-				local.notify("Transaction deleted", 0);
+				local.notify("Transaction deleted!");
 				local.getTransactions(local.budgetName);
 				//local.goBack();
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		}, local.errorHandler);
 	}
 
@@ -248,7 +249,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("local.transaction", local.transaction);
 
 		ds.updateTransaction(local.transaction).then(function(r){
-			if(+r.status) local.notify("Updated!", 0);
+			if(+r.status) local.notify("Updated!");
 		}, local.errorHandler);
 
 		console.log("~updateTransaction()");
@@ -307,7 +308,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.budgetCategories = Category.parseArray(r.data);
 				console.log("local.budgetCategories:", local.budgetCategories);
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		}, local.errorHandler);
 
 		//console.log("~loadBudgetCategories()");
@@ -319,11 +320,11 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			if( +r.status ){
 				//local.getBudgets();
 				local.route(config.budgetsPage);	
-				local.notify("Budget deleted", 0);
+				local.notify("Budget deleted!");
 				local.getBudgets();
 				local.hideLoading();
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		}, local.errorHandler);
 	}
 
@@ -359,12 +360,12 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		ds.saveBudget(local.budget).then(function(r){
 			if(+r.status){
-				local.notify("Budget saved", 0);
+				local.notify("Budget saved");
 				//local.budget = {};
 				local.initAddBudget();
 				local.getBudgets();
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		}, local.errorHandler);
 
 		//console.log("~saveBudget()");
@@ -376,7 +377,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		ds.budgetExists(b.name).then(function(r){
 			if( +r.status && r.data[0].budgets ){
 				b.suchNameAlreadyExists=true;
-				local.notify("Budget with this name already exists", 2);
+				local.notify("Budget with this name already exists");
 			}
 			else b.suchNameAlreadyExists = false;
 		});
@@ -416,7 +417,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.notify("Categories updated!");
 				local.hideLoading();
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		}, local.errorHandler);
 	}
 
@@ -437,11 +438,11 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		ds.saveCategory(local.category).then(function(r){
 			if(+r.status){
-				local.notify("Category added", 0);
+				local.notify("Category added");
 				local.initCategory();
 				local.getCategories();
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		}, local.errorHandler);
 
 		//console.log("~saveCategory()");
@@ -459,7 +460,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.hideLoading();
 				//local.route(config.categoriesPage);
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		}, local.errorHandler);
 	}
 
@@ -474,7 +475,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			console.log(r);
 			if(+r.status && r.data[0].categories) {
 				local.category.invalid=true;
-				local.notify("Category with such name already exists",2);
+				local.notify("Category with such name already exists");
 			}
 		});
 		
@@ -714,7 +715,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	local.errorHandler = function(e){
 		console.log('Error:',e);
 		if( e.status == -1)
-			local.notify("Something went wrong."+e, 3);
+			local.notify("Something went wrong."+e);
 	}
 
 	/*
@@ -769,7 +770,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				//console.log('local.budget', local.budget);
 				canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts], local.currency);
 			}
-			else local.notify(r.msg, 3);
+			else local.notify(r.msg);
 		});
 		
 		// get budget expenses report
@@ -798,12 +799,13 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	local.doRefresh = function(type) {
 		console.log("Doing refresh");
 		console.log("type:", type);
+		console.log("local.budgetName:", local.budgetName);
 
 		if( type=="b" ) local.getBudgets(); // if budget refresh requested
 		else if( type=="c" ) local.getCategories(); // if categries refresh requested
 		else if( type == "t" ) {
-			if( local.budgetName) local.getTransactions(local.budgetName);
-			else local.notify("Please, select the budget", 1);
+			if( local.budgetName ) local.getTransactions(local.budgetName);
+			else local.notify("Please, select the budget");
 		}
 
 		$scope.$broadcast('scroll.refreshComplete');

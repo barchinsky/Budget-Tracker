@@ -1,5 +1,5 @@
 .card-container{
-	margin-bottom: 5px;
+	margin-bottom: 8px;
 }
 
 .card{
@@ -8,7 +8,7 @@
 	margin-left: 5%;
 	color:white;
 	background:rgba(0,0,0,0.5);
-	margin-bottom: 8px;
+	margin-bottom: 5px;
 	border-radius: 3px;
 	box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.5);
 }
