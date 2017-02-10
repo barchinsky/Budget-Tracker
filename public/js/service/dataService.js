@@ -12,7 +12,9 @@ function DataService($http, $localStorage){
 	
 	var $storage = $localStorage.$default({
 		token:null,
-		loginData:{login:null, pass:null},
+		uname: "",
+		usurname: "",
+		//loginData:{login:null, pass:null},
 	});
 
 	var services = {
@@ -36,8 +38,8 @@ function DataService($http, $localStorage){
 		budgetExists: budgetExists,
 		categoryExists: catExists,
 		getTransactionsByCategory: getTranByCat,
-		setAuthorization: setAuthorization,
-		getAuthorization: getAuthorization,
+		/*setAuthorization: setAuthorization,*/
+		authorized: authorized,
 		setCurrentUser: setCurrentUser,
 		getCurrentUser: getCurrentUser,
 		getLoginData: getLoginData,
@@ -148,7 +150,7 @@ function DataService($http, $localStorage){
 	}
 
 	function authorize(loginData){
-		return $http.post(host+"/authorize", {login:loginData.login, pass:loginData.pass, token:getToken()}).
+		return $http.post(host+"/authorize", {login:loginData.login, pass:loginData.pass}).
 			then(end);
 	}
 
@@ -162,24 +164,29 @@ function DataService($http, $localStorage){
 			then(end);
 	}
 
-	function getAuthorization(){
-		console.log("getAuthorization:",appData.authorized);
-		return appData.authorized;
+	function authorized(){
+		console.log("authorized:", $storage.token !== null);
+		return $storage.token !== null;
 	}
 
-	function setAuthorization(authorized){
+	/*function setAuthorization(authorized){
 		console.log("setAuthorization:", authorized);
 		appData.authorized = authorized;
-	}
+	}*/
 
 	function setCurrentUser(u){
 		console.log("setCurrentUser:", u);
-		appData.currentUser = u;
+		//appData.currentUser = u;
+		$storage.uname = u.name;
+		$storage.usurname = u.surname;
 	}
 
 	function getCurrentUser(){
 		console.log("getCurrentUser", appData.currentUser);
-		return appData.currentUser;
+		var user = {};
+		user.name = $storage.uname;
+		user.surname = $storage.usurname;
+		return user;
 	}
 
 	function getLoginData(){
@@ -197,6 +204,7 @@ function DataService($http, $localStorage){
 	}
 
 	function setToken(token){
+		console.log("setToken()");
 		$storage.token = token;
 	}
 

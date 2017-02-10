@@ -116,7 +116,7 @@ angular.module('budgetTrackerApp', ['ionic', 'ngStorage'])
 		views:{
 			'menuContent':{
 				templateUrl: 'templates/login.htm',
-				controller: "menuController"
+				controller: "loginController"
 			}
 		}
 	})

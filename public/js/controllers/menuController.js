@@ -1,28 +1,29 @@
 angular.
-module("budgetTrackerApp").
-controller("menuController", menuController).
-factory("ds", DataService);
+	module("budgetTrackerApp").
+	controller("menuController", menuController).
+	factory("ds", DataService);
 
+DataService.$inject = ["$http", "$localStorage"];
 menuController.$inject = ["$scope", "$timeout","$ionicModal", "ds", "$ionicLoading", "$rootScope", "$filter", "$state"];
 
 function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootScope, $filter, $state){
-	local = $scope;
-	vm = this;
+	var local = $scope;
+	var vm = this;
 
-	local.authorized = ds.getAuthorization(); // used to manage app resources access
+	local.authorized = ds.authorized(); // used to manage app resources access
 	local.menuItems = [config.homePage, config.addPage, config.transactionsPage, config.categoriesPage, config.budgetsPage, config.settingsPage]; // keep page titles with path
-	local.loginData = {}; // login and pass info
+	//local.loginData = {}; // login and pass info
 	//local.alerts= config.alerts; // alerts style
 	local.barHeaderTitle = config.homePage.title; // header title
-	local.currentUser={name:"unknown", surname:"unknown"}; // current user name and surname
-	local.regData = {name:"", surname:"", login:"", passConf:{value:"", valid:false}}; // registration data
+	local.currentUser = {name:"unknown", surname:"unknown"}; // current user name and surname
+	//local.regData = {name:"", surname:"", login:"", passConf:{value:"", valid:false}}; // registration data
 	local.defaultUser = {name:"Authorization", surname:"required"};
 
 	/*
 	* Broadcast authorization status change event
 	*/
 	local.changeAuthEvent = function(event, value){
-		$rootScope.$broadcast("change.auth.event", ds.getAuthorization());
+		$rootScope.$broadcast("change.auth.event", ds.authorized());
 	}
 
 	/*
@@ -30,13 +31,20 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 	* Notify other controlles about authorization status change
 	*/
 	local.$watch("authorized", function(newValue, oldValue){
-		ds.setAuthorization(newValue);
+		//ds.setAuthorization(newValue);
 		local.changeAuthEvent();
 
 	});
 
 	local.$on("change.auth.event", function(event, value){
-		local.authorized = value;
+		console.log("menuController:onchange:", value);
+		$timeout(function(){
+			local.$apply(function(){
+				local.authorized = value;
+				local.currentUser = ds.getCurrentUser();
+				console.log("menuController:applied:",value);
+			})
+		},50);
 	});
 
 	local.prepareModals = function(){
@@ -61,8 +69,25 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 	*/
 	local.isauth = function(){
 		console.log("isauth()");
-		local.showLoading();
+		//local.showLoading();
 
+		//var token = ds.getToken();
+
+		console.log("ds.authorized()", ds.authorized());
+
+		if( !ds.authorized() ){
+			local.barHeaderTitle = "Log in";
+			$state.go("app.login");
+		}
+		else{
+			local.authorized = true;
+			local.barHeaderTitle = "Home";
+			$state.go("app.home");
+			local.changeAuthEvent();
+			local.currentUser = ds.getCurrentUser();
+		}
+
+		/*
 		ds.isAuthorized().then(function(r){
 			console.log("isAuthorized response recieved");
 			if(+r.status){ // if user already authorized
@@ -90,13 +115,14 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 				local.hideLoading();
 			}
 		}, local.errorHandler);
+		*/
 
 		console.log("~isauth()");
 	}
 
 	/* 
 	* Authorize user
-	*/
+	*
 	local.authorize = function(){
 		console.log("authorize()");
 		//local.closeLoginModal();
@@ -105,14 +131,23 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 		ds.authorize(local.loginData).then(function(r){
 			console.log("r.status:"+r.status);
 			if(+r.status){
+
+				//$timeout(function(){
+				//	$scope.$apply(function(){
 				local.authorized = true; // update authorization status
-				ds.setCurrentUser(r.user); // save recieved user info
+				ds.setCurrentUser(r.user);
+				local.currentUser = ds.getCurrentUser();
+						//$sc.$apply();
+				//	})
+				//}, 50);
+				
+				//ds.setCurrentUser(r.user); // save recieved user info
 				ds.setToken(r.token); // save recieved token
-				ds.setLoginData(local.loginData); // save login data for futher use
-				local.currentUser = r.user;
+				//ds.setLoginData(local.loginData); // save login data for futher use
 				console.log("local.currentUser:", local.currentUser);
 
 				local.notify(r.msg);
+				local.barHeaderTitle = "Home";
 				$state.go("app.home"); // go to the main page
 
 				local.hideLoading();
@@ -123,7 +158,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 			}
 		}, local.errorHandler);
 		console.log("~authorize()");
-	}
+	} */
 
 	local.register = function(){
 		console.log("register()");
@@ -139,13 +174,17 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 				var token = r.token;
 				console.log("token recieved:",token);
 				ds.setToken(token);
-				ds.setLoginData(local.regData);
+				ds.setCurrentUser(local.regData);
+				local.isauth();
 				local.regData={};
+
+				local.closeRegistrationModal();
+				local.hideLoading();
 			}
-			else local.notify(r.msg);
-			
-			local.hideLoading();
-			local.closeRegistrationModal();
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 
 		console.log("~register()");
@@ -194,7 +233,10 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 			ds.logout().then(function(r){
 				if(+r.status){
 					local.authorized = false;
-					local.currentUser = local.defaultUser;
+					//local.currentUser = local.defaultUser;
+					ds.setCurrentUser(local.defaultUser);
+					ds.setToken(null);
+					local.changeAuthEvent();
 					console.log("Logged out.");
 				}
 			}, local.errorHandler);
@@ -256,5 +298,6 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 
 	local.prepareModals();
 	local.isauth();
+	console.log("!!!!!!!!!!!!!!! menuController init !!!!!!!!!!!")
 
 }

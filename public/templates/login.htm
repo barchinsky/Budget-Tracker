@@ -1,13 +1,7 @@
 <div class="dynamic-page">
     <ion-modal-view>
-        <!--<ion-header-bar class="bar bar-header bar-positive">
-            <h1 class="title">Login</h1>
-            <div class="buttons">
-                <button class="button button-assertive" ng-click="closeLoginModal()">Close</button>
-            </div>
-        </ion-header-bar>-->
         <ion-content>
-            <form ng-submit="authorize()">
+            <form>
                 <div class="list">
                     <label class="item item-input">
                         <span class="input-label">Login</span>
@@ -18,7 +12,7 @@
                         <input type="password" ng-model="loginData.pass"/>
                     </label>
                     <label class="item">
-                        <button class="button button-block button-positive" type="submit">Log in</button>
+                        <input class="button button-block button-positive" type="button" ng-click="authorize()" value="Log in"/>
                     </label>
                     <label class="item">
                         <input type="button" class="button button-clear button-positive" ng-click="showRegistrationModal()">Sign up!</input>

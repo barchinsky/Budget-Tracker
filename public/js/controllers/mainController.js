@@ -4,8 +4,8 @@ angular.
 	factory("ds", DataService). // dataService manages all comunications with server
 	factory("canvas", CanvasService);
 
-mainController.$inject = ["$scope", "$timeout", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope", "$localStorage"]; 
 DataService.$inject = ["$http", "$localStorage"];
+mainController.$inject = ["$scope", "$timeout", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope", "$localStorage"]; 
 
 function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $window, $filter, $ionicLoading, $rootScope){
 	//console.log("mainController controller loaded.");
@@ -23,6 +23,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	
 	local.colors = config.colors;
 	//local.alerts= config.alerts;//["success","info","warning","danger"];
+	//ds.setToken(null);
 	
 	local.bodyHeaderTitle = null;
 	local.userImageIcon = "media/incognito.jpg";
@@ -41,13 +42,18 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	//local.loginData = {};
 	//local.regData = {passConf:{value:"", valid:true}}; // registration data
 	local.currentUser={name:"unknown", surname:"unknown"};
-	//local.authorized = false;
+	local.authorized = ds.authorized();
 
 	local.$on("change.auth.event", function(event, value){
-		console.log("auth event handled", value);
-		local.authorized = ds.getAuthorization();
-		//console.log("change.auth.event:", local.authorized);
-		local.currentUser.name = ds.getCurrentUser();
+		console.log("mainController: auth event handled", value);
+		
+		$timeout(function(){
+			local.$apply(function(){
+				local.authorized = value;
+				console.log("mainController:applied:",value);
+			})
+		}, 50);
+		//local.currentUser = ds.getCurrentUser();
 	});
 
 	/*local.$watch("authorized", function(newValue, oldValue){
@@ -271,8 +277,8 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		local.showLoading();
 		
 		ds.getBudgets().then(function(r){
-			console.log(r.data.length);
-			if( r.data.length ){
+			if( r.status ){
+				//console.log(r.data.length);
 				local.budgets = Budget.parseArray(r.data);
 				console.log("budgets:", local.budgets);
 				local.notify("Budgets updated!");
@@ -813,5 +819,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		console.log("Refresh done.");
 	}
 
-	local.initApp();	
+	local.initApp();
+
+	console.log("????????????????? mainController init ?????????????????????");
 }
