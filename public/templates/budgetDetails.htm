@@ -35,7 +35,7 @@
 									<span class="sl centered white"> {{cat.name[1]}}</span>
 								</div>
 							</div>
-							<div class="list-item-name">
+							<div class="list-item-name mt5">
 								<span class="centered">{{cat.name}}</span>
 							</div>
 							<div class="list-item-info">
@@ -43,6 +43,7 @@
 								<span> Spent:{{cat.spent?cat.spent:0}}</span>
 							</div>
 							<div class="list-item-progress">
+							<div class="pt32">
 								<div class="progress">
 									<div class="progress-bar progress-bar-{{ getProgressType(cat.spentPerc) }} centered semi-square" 
 										role="progressbar" 
@@ -53,6 +54,7 @@
 									{{cat.spentPerc?cat.spentPerc:0}}%
 									</div>
 								</div>
+							</div>
 							</div>
 					</div>
 				</div>

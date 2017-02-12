@@ -12,8 +12,6 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 
 	local.authorized = ds.authorized(); // used to manage app resources access
 	local.menuItems = [config.homePage, config.addPage, config.transactionsPage, config.categoriesPage, config.budgetsPage, config.settingsPage]; // keep page titles with path
-	//local.loginData = {}; // login and pass info
-	//local.alerts= config.alerts; // alerts style
 	local.barHeaderTitle = config.homePage.title; // header title
 	local.currentUser = {name:"unknown", surname:"unknown"}; // current user name and surname
 	//local.regData = {name:"", surname:"", login:"", passConf:{value:"", valid:false}}; // registration data

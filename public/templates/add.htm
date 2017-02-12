@@ -4,11 +4,11 @@
 		<input type="button" class="btn btn-default btn-lg btn-block bkgr-light-blue white" ng-value="item.title" ng-repeat="item in addItems track by $index" ng-click='route(item, false)'/>
 	</div>
 	-->
-	<div class="list card">
-			<a href="{{item.path}}" class="item item-icon-left"
+	<div class="list">
+			<a href="{{item.path}}" class="item text-center"
 				ng-value="item.title" 
 				ng-repeat="item in addItems track by $index">
-					<i class="icon ion-home"></i>
+					<i class="icon"></i>
 					{{item.title}} 
 			</a>
 	</div>

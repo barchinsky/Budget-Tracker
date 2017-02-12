@@ -27,37 +27,28 @@ function loginController($scope, $rootScope, ds, $timeout, $state){
 		local.showLoading();
 
 		ds.authorize(local.loginData).then(function(r){
-			//console.log("r.status:"+r.status);
+			// if authorization success
 			if(+r.status){
-
-				//$timeout(function(){
-				//	$scope.$apply(function(){
-				//local.authorized = true; // update authorization status
 				ds.setCurrentUser(r.user);
-				//local.currentUser = ds.getCurrentUser();
-						//$sc.$apply();
-				//	})
-				//}, 50);
-				
-				//ds.setCurrentUser(r.user); // save recieved user info
 				ds.setToken(r.token); // save recieved token
-				//ds.setLoginData(local.loginData); // save login data for futher use
-				console.log("local.currentUser:", $scope.currentUser);
+				//console.log("local.currentUser:", $scope.currentUser);
 
 				local.notify("Welcome "+r.user.name+"!");
 				local.barHeaderTitle = "Home";
 
+				// notify other about authorization status changed
 				$timeout(function(){
 					$scope.changeAuthEvent();
 					local.hideLoading();
 					$state.go("app.home"); // go to the main page
 				}, 1000);
 			}
-			else {
+			else { // if notification failed
 				local.hideLoading();
 				local.notify(r.msg);
 			}
 		}, local.errorHandler);
+
 		console.log("~authorize()");
 	}
 
@@ -66,7 +57,6 @@ function loginController($scope, $rootScope, ds, $timeout, $state){
 		console.log(text);
 
 		$("#notification").html(text);
-
 		$("#notification").slideDown(600);
 
 		$timeout(function(){

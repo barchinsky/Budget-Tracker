@@ -1,6 +1,6 @@
 <div class="dynamic-page" ng-if="!authorized">
-	<div class="card">
-		<div class="card-title">Authorization required {{authorized}}</div>
+	<div class="card mt50p">
+		<div class="card-title">Authorization required!</div>
 		<p class="card-note">Sorry, you have to authorize first</p>
 		<input type="button" class="button button-block button-positive button-sm" ng-click="showLoginModal()" value="Login"/>
 	</div>
@@ -26,13 +26,14 @@
 					<ion-item class="list-container"
 						ng-repeat="budget in budgets track by $index" ng-click="showBudgetDetailsModal(budget)">
 							<div class="progress-top">
+							{{budget.spentPerc}}%
 								<div class="progress-bar progress-bar-{{ getProgressType(budget.spentPerc) }} centered semi-square"
 									role="progressbar" 
 									aria-valuenow="{{ cat.spentPerc }}" 
 									aria-valuemin="0" 
 									aria-valuemax="100" 
 									ng-style="{width : ( (budget.spentPerc > 100?100:budget.spentPerc) + '%' ) }">
-									{{budget.spentPerc}}%
+									
 								</div>
 							</div>
 							<div class="list-logo-container-with-progress">

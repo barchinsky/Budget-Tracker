@@ -126,6 +126,22 @@
 	padding-top: 50px;
 }
 
+.pt32{
+	padding-top:32px;
+}
+
+.mt5{
+	margin-top: 5px;
+}
+
+.mt50p{
+	margin-top: 50%;
+}
+
+.mt30p{
+	margin-top: 30%;
+}
+
 .app-info{
 	position: fixed;
 	top:95%;
