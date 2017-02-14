@@ -256,8 +256,50 @@ app.post("/budgetExists", function(request, response){
 
 });
 
+app.post("/getExpencesByCategoriesForBudget", function(request, response){
+	logger.info("getExpencesByCategoriesForBudget()");
 
-/************************* Common API ***************************************************/
+	var bId = request.body.budgetId;
+	var user = request.body.user;
+
+	db.getExpencesByCategoriesForBudget(user, bId, response, sendResponse);
+
+	logger.info("~getExpencesByCategoriesForBudget()");
+});
+
+app.post("/getExpencesByCategories", function(request, response){
+	logger.info("getExpencesByCategories()");
+
+	var user = request.body.user;
+
+
+	db.getExpencesByCategories(user, response, sendResponse);
+
+	logger.info("~getExpencesByCategories()")
+});
+
+app.post("/getTotalExpences", function(request, response){
+	logger.info("getTotalExpences()");
+
+	var user = request.body.user;
+
+	db.getTotalExpences(user, response, sendResponse);
+
+	logger.info("~getTotalExpences()");
+});
+
+
+app.post("/getTotalIncomes", function(request, response){
+	logger.info("getTotalIncomes()");
+
+	var user = request.body.user;
+
+	db.getTotalIncomes(user, response, sendResponse);
+
+	logger.info("~getTotalIncomes()");
+});
+
+/************************* Auth API ***************************************************/
 
 app.post("/authorize", function(request, response){
 	logger.info("authorize()");
@@ -286,29 +328,6 @@ app.post("/authorize", function(request, response){
 		logger.warn("User credentials not in request.");
 		sendResponse(response, {status:0, msg:"User credentials not found!"});
 	}
-
-	
-	//sendResponse( response, {status:1, user:request.body.user} );
-
-	//logger.info(request.body.login, request.body.pass);
-	//logger.info("session.authorized:"+request.session.authorized);
-
-	/*if( !session.authorized ){
-		db.authorize(request.body.login, request.body.pass, response, function(r){
-			if(r.status){
-				request.session.authorized = true;
-				user=request.body.login;
-				sendResponse( response, r );
-			}
-			else{
-				sendResponse(response, r);
-				logger.warn("Authorization attempt failed:",request.body.login, request.body.pass);
-			}
-		});
-	}
-	else{
-		logger.info("Already authorized.");
-	}*/
 
 	logger.info("~authorize()");
 });

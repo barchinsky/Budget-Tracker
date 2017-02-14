@@ -10,6 +10,8 @@ function loginController($scope, $rootScope, ds, $timeout, $state){
 	var local = $scope;
 	var vm = this;
 
+	local.version = config.version;
+
 	local.loginData = {}; // store login data
 	local.regData = {name:"", surname:"", login:"", passConf:{value:"", valid:false}}; // registration data
 	//local.currentUser = {name:"unknown", surname:"unknown"}; // current user name and surname

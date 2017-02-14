@@ -18,7 +18,7 @@ var config = {
 	regPage: {title:"New account", path:"#app/registration"},
 	settingsPage: {title:"Settings", path:"#app/settings"},
 	currency: "UAH",
-	devHost:"http://192.168.0.109:8080", //"http://localhost:8080"
+	devHost:"http://localhost:8080", //"http://192.168.0.109:8080"
 	host:"http://mybudget-mykolaiv.rhcloud.com",
 	version: "0.1.1",
 }

@@ -411,6 +411,7 @@
 
 	var deleteBudget = function(u, b, response, callback){
 		logger.info("deleteBudget()");
+		logger.warn("Need to review logic.");
 
 		var deleteBudgetCategoriesSQL = "delete from BudgetCategories where budgetName=? and user=?;";
 		var deleteBudgetSQL = "delete from Budget where name=? and user=?;";
@@ -428,6 +429,80 @@
 
 		logger.info("~deleteBudget()");
 	}
+
+	// ************** Analitics **************//
+
+	var getExpencesByCategoriesForBudget = function(u, bId, response, callback){
+
+		var sql = " select \
+						sum(t.cost) sum, \
+						b.name budget, \
+						c.name category, \
+						c.style catStyle \
+					from \
+						Transaction t,\
+						Budget b,\
+						Category c \
+					where \
+						t.t_date between b.start_date and b.end_date \
+						and b.id = ? \
+						and t.category = c.id \
+						and c.type = 1 \
+						and t.user = ? \
+						and c.user = t.user \
+						and b.user = t.user \
+					group by category \
+					order by sum desc;";
+	}
+
+	// get expences for all the time
+	var getExpencesByCategories = function(u, response, callback){
+
+		var sql = " select \
+						sum(t.cost) sum, \
+						b.name budget, \
+						c.name category,\
+						c.id id \
+						c.style catStyle \
+					from \
+						Transaction t,\
+						Budget b,\
+						Category c \
+					where \
+						t.category = c.id \
+						and c.type = 1 \
+						and t.user = ?\
+						and c.user = t.user\
+						and b.user = t.user\
+					group by category\
+					order by sum desc;";
+
+		executeSql(sql, [u], response, callback);
+	}
+
+	var getTotalExpences = function(user, response, callback){
+		var sql = " select sum(t.cost) costs \
+					from Transaction t, Category c \
+					where \
+						t.category = c.id \
+						and c.type = 1 \
+						and t.user = ?;"
+
+		executeSql(sql, [u], response, callback);
+	}
+
+	var getTotalIncomes = function(user, response, callback){
+		var sql = " select sum(t.cost) costs \
+					from Transaction t, Category c \
+					where \
+						t.category = c.id \
+						and c.type = 0 \
+						and t.user = ?;"
+
+		executeSql(sql, [u], response, callback);
+	}
+
+
 
 	// ************* Auth ******************//
 
@@ -511,4 +586,9 @@
 	exports.categoryExists = categoryExists;
 	exports.userExist = userExist;
 	exports.getUserInfo = getUserInfo;
+
+	exports.getTotalIncomes = getTotalIncomes;
+	exports.getTotalExpences = getTotalExpences;
+	exports.getExpencesByCategoriesForBudget = getExpencesByCategoriesForBudget;
+	exports.getExpencesByCategories = getExpencesByCategories;
 })();
