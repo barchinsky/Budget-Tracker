@@ -66,7 +66,7 @@ app.use("/", isAuthorized(openUrls) );
 app.post("/transactions", function(request,response){
 	logger.info("transactions()");
 
-	logger.info('budget:',typeof request.body.budget !== 'undefined');
+	//logger.info('budget:',typeof request.body.budget !== 'undefined');
 
 	//if( isAuthorized(request, response)  &&  typeof request.body.budget !== 'undefined'){
 		// logger.info("request.body",request.body.season, request.body);
@@ -348,10 +348,11 @@ app.post("/logout", function(request, response){
 app.post("/isauth", function(request, response){
 	logger.info("isauth()");
 
-	//logger.info(request.body);
+	logger.info("user:"+request.body.user);
 	//if( isAuthorized(request, response) ){
-	db.getUserInfo(request.body.user, function(r){
-		sendResponse(response, {status:1, user:r});
+	db.userExist(request.body.user, function(res){
+		logger.info("res:"+res);
+		sendResponse(response, {status:1, authorized:res});
 	});
 	//}
 	logger.info("~isauth()");
@@ -417,7 +418,7 @@ function isAuthorized(openUrls){
 		}
 
 		var token = request.body.token;
-		//logger.info("token:%s,",token);
+		logger.info("token:%s,",token);
 
 		// if token found
 		if(token !== undefined && token !== null && token.length){
@@ -441,6 +442,7 @@ function isAuthorized(openUrls){
 					else{
 						logger.warn("Suspicious activity detected. User log in attempt with unknow login.");
 						sendResponse(response, {status:0, msg:"Auth failed. Code:1488."});
+						return;
 					}
 				});
 			});

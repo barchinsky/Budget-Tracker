@@ -33,7 +33,7 @@ function loginController($scope, $rootScope, ds, $timeout, $state){
 			if(+r.status){
 				ds.setCurrentUser(r.user);
 				ds.setToken(r.token); // save recieved token
-				//console.log("local.currentUser:", $scope.currentUser);
+				console.log(r.token);
 
 				local.notify("Welcome "+r.user.name+"!");
 				local.barHeaderTitle = "Home";

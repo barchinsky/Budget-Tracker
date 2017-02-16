@@ -6,9 +6,9 @@ function DataService($http, $localStorage){
 
 	//var isDev = true;
 	var host = config.isDev?config.devHost:config.host;
-	var appData = {};
-	appData.authorized = false;
-	appData.currentUser = {};
+	//var appData = {};
+	//appData.authorized = false;
+	//appData.currentUser = {};
 	
 	var $storage = $localStorage.$default({
 		token:null,
@@ -159,9 +159,9 @@ function DataService($http, $localStorage){
 			then(end);
 	}
 
-	function isAuth(){
+	function isAuth(callback){
 		return $http.post(host+"/isauth", {token:getToken()}).
-			then(end);
+			then(callback);
 	}
 
 	function authorized(){
@@ -182,7 +182,7 @@ function DataService($http, $localStorage){
 	}
 
 	function getCurrentUser(){
-		console.log("getCurrentUser", appData.currentUser);
+		console.log("getCurrentUser");
 		var user = {};
 		user.name = $storage.uname;
 		user.surname = $storage.usurname;

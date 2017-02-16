@@ -118,6 +118,8 @@
 	var loadTransactions = function(u, b, response, callback){
 		logger.info("loadTransactions()");
 
+		logger.info("u:%s, b:%s",u,b);
+
 		// Query data from dataabase
 		var sql = 
 			"select \
@@ -132,9 +134,9 @@
 			from Transaction t, Category c, Budget b \
 			where \
 				t.user=? and \
+				(t.t_date between b.start_date and b.end_date) and\
 				b.name=? and \
-				t.category=c.id and \
-				(t.t_date between b.start_date and b.end_date) \
+				c.id=t.category \
 			order by t_date desc;";
 
 		//logger.info(u,b);
@@ -190,15 +192,15 @@
 		from Transaction t, Category c, Budget b \
 		where \
 			t.user=? and \
-			b.user=? and \
-			c.user=? and \
+			b.user=t.user and \
+			c.user=t.user and \
 			t.category=? and\
 			b.id=? and \
-			c.id=? and \
+			c.id = t.category and \
 			(t.t_date between b.start_date and b.end_date) \
-		order by t_date desc;";
+		order by date desc;";
 
-		executeSql(sql, [u, u, u, cId, bId, cId], response, callback);
+		executeSql(sql, [u, cId, bId], response, callback);
 
 		logger.info("~loadTransactionsByCat()");
 	}
@@ -264,7 +266,8 @@
 			( floor( (select spentCosts)/(select totalCosts) * 100 ) ) spentPerc\
 		from \
 			Budget b\
-			where user=?;";
+			where user=?\
+			order by end_date desc;";
 
 		executeSql(sql, [u], response, callback);
 
@@ -545,6 +548,8 @@
 
 	var userExist = function(login, callback){
 		logger.info("userExist()");
+
+		logger.info("login:"+login);
 
 		var sql = "select count(*) userCount from User where login=?;";
 		querySql(sql, [login], function(r){

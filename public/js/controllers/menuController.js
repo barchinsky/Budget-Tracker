@@ -67,13 +67,33 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 	*/
 	local.isauth = function(){
 		console.log("isauth()");
-		//local.showLoading();
+		local.showLoading();
 
 		//var token = ds.getToken();
 
-		console.log("ds.authorized()", ds.authorized());
+		//console.log("ds.authorized()", ds.authorized());
 
-		if( !ds.authorized() ){
+		ds.isAuthorized(function(r){
+			console.log("------r",r);
+			if( r.data.authorized ){
+				console.log("Authorizated");
+				local.authorized = true;
+				local.barHeaderTitle = "Home";
+				$state.go("app.home");
+				local.changeAuthEvent();
+				local.currentUser = ds.getCurrentUser();
+				local.hideLoading();
+			}else{
+				console.log("non-Authorized");
+				local.barHeaderTitle = "Log in";
+				$state.go("app.login");
+				local.authorized = false;
+				ds.setToken(null);
+				local.hideLoading();
+			}
+		});
+
+		/*if( !ds.authorized() ){
 			local.barHeaderTitle = "Log in";
 			$state.go("app.login");
 		}
@@ -83,7 +103,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 			$state.go("app.home");
 			local.changeAuthEvent();
 			local.currentUser = ds.getCurrentUser();
-		}
+		}*/
 
 		/*
 		ds.isAuthorized().then(function(r){

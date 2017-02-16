@@ -14,10 +14,12 @@ class Transaction {
 				this.categoryName = obj.categoryName;
 				this.categoryId = obj.categoryId;
 			}
-			this.date = new Date();
+			else{
+				this.date = new Date();
+				this.rawDate = new Date();
+			}
 			this.nameLen = 30;
 			this.commentLen = 100;
-			this.rawDate = new Date();
 	}
 
 	static parseArray(arr){
