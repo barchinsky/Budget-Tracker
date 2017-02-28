@@ -14,7 +14,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 	local.menuItems = [config.homePage, config.addPage, config.transactionsPage, config.categoriesPage, config.budgetsPage, config.settingsPage]; // keep page titles with path
 	local.barHeaderTitle = config.homePage.title; // header title
 	local.currentUser = {name:"unknown", surname:"unknown"}; // current user name and surname
-	//local.regData = {name:"", surname:"", login:"", passConf:{value:"", valid:false}}; // registration data
+	local.regData = {name:"", surname:"", login:"", passConf:{value:"", valid:false}}; // registration data
 	local.defaultUser = {name:"Authorization", surname:"required"};
 
 	/*
@@ -47,12 +47,6 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 
 	local.prepareModals = function(){
 		// Create the login modal
-		/*$ionicModal.fromTemplateUrl('templates/login.html', {
-			scope: local
-		}).then(function(modal) {
-			local.loginModal = modal;
-		});
-		*/
 
 		$ionicModal.fromTemplateUrl('templates/registration.htm', {
 			scope: local
@@ -63,13 +57,10 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 
 	/*
 	* Perform user authorization verification
-	* If user data stored, authorize in silent mode
 	*/
 	local.isauth = function(){
 		console.log("isauth()");
 		local.showLoading();
-
-		//var token = ds.getToken();
 
 		//console.log("ds.authorized()", ds.authorized());
 

@@ -2,11 +2,11 @@
 	ng-if="!authorized">
 		<div class="card mt50p">
 			<div class="card-title">Authorization required!</div>
-			<p class="card-note">Sorry, you have to authorize first</p>
+			<p class="card-note">Sorry, you have to authorize first!</p>
 			<a type="button" class="button button-block button-positive button-sm" href="#app/login">Log in</a>
 		</div>
 </div>
-<div class="dynamic-page pt50"
+<div class="dynamic-page"
 	ng-if="authorized">
 	<ion-content ng-init="getBudgets()">
 		<ion-refresher
@@ -18,8 +18,8 @@
 				<span class="input-label">
 					Budget
 				</span>
-				<select ng-change="getTransactions(budgetName)" ng-model="budgetName">
-					<option ng-repeat="b in budgets" ng-value="b.name">{{b.name}}</option>
+				<select ng-change="getTransactions(bId)" ng-model="bId">
+					<option ng-repeat="b in budgets" ng-value="b.id">{{b.name}}</option>
 				</select>
 			</label>
 		</div>
@@ -33,10 +33,10 @@
 				<ion-item class="list-container no-ledf-padding"
 					ng-repeat="tran in transactions" 
 					ng-click="openTransaction(tran)">
-						<div class="list-logo-container-complex" style="background-color:{{tran.category.style}}">
+						<div class="list-logo-container-complex" style="background-color:{{tran.categoryStyle}}">
 							<div class="list-logo-box-complex white">
-								<span class="fl centered"> {{tran.category.name[0]}}</span>
-								<span class="sl centered"> {{tran.category.name[1]}}</span>
+								<span class="fl centered"> {{tran.categoryName[0]}}</span>
+								<span class="sl centered"> {{tran.categoryName[1]}}</span>
 							</div>
 						</div>
 						<div class="list-item-name-complex white">{{tran.name}}</div>

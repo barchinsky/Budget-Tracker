@@ -41,7 +41,7 @@
 		conn.query(sql, params, function(err, result){
 			if(!err){
 				conn.commit();
-				callback({status:1, msg:"Delete successfull"});
+				callback({status:1, msg:"Delete successfull!"});
 			}
 			else{
 				logger.error(err.errno);
@@ -63,7 +63,7 @@
 		conn.query(sql, params, function(err, rows, fields){	
 			if(!err){
 				conn.commit();
-				logger.info("Query result:", rows[0]);
+				//logger.info("Query result:", rows[0]);
 				callback({status:1, data:rows});
 			}
 			else{
@@ -80,10 +80,10 @@
 	var executeSql = function(sql, params, response, callback){
 		// Perform sql query and send result to the client
 		logger.info("executeSql()");
-		logger.info("sql:%s", sql);
+		//logger.info("sql:%s", sql);
 
 		var conn = connection();
-		logger.info(params);
+		//logger.info(params);
 
 		conn.query(sql, params, function(err, rows, fields){
 			if(!err){
@@ -109,16 +109,16 @@
 			case 1062:
 				return "Record already exists";
 			case 1451:
-				return "Can not perform deletion. This item is referenced to another one. Please, delete parent and try to delete again"
+				return "Can not perform deletion. This item is referenced to another one. Please, delete parent first and try again."
 			default:
 				return "Ooops:( Give the number to your admin:"+errno;
 		}
 	}
 
-	var loadTransactions = function(u, b, response, callback){
+	var loadTransactions = function(u, bId, response, callback){
 		logger.info("loadTransactions()");
 
-		logger.info("u:%s, b:%s",u,b);
+		logger.info("u:%s, bId:%d",u,bId);
 
 		// Query data from dataabase
 		var sql = 
@@ -129,19 +129,19 @@
 				t.comment, \
 				t.cost, \
 				t.category, \
-				c.name catName, \
-				c.style catStyle\
+				c.name categoryName, \
+				c.style categoryStyle\
 			from Transaction t, Category c, Budget b \
 			where \
 				t.user=? and \
 				(t.t_date between b.start_date and b.end_date) and\
-				b.name=? and \
+				b.id=? and \
 				c.id=t.category \
 			order by t_date desc;";
 
 		//logger.info(u,b);
 		//logger.info("database::loadTransactions::sql "+sql);
-		executeSql(sql, [u,b], response, callback);
+		executeSql(sql, [u,bId], response, callback);
 
 		logger.info("~loadTransactions()");
 	}

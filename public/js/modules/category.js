@@ -15,6 +15,16 @@ class Category{
 			this.spent = obj.spent?obj.spent:0;
 			this.booked = obj.booked?obj.booked:0;
 		}
+		else{
+			this.id = null;
+			this.name = null;
+			this.style = null;
+			this.type = null;
+			this.budgetId = null;
+			this.spentPerc = 0;
+			this.spent = 0;
+			this.booked = 0;	
+		}
 		this.nameLen = 30;
 	}
 
@@ -36,5 +46,20 @@ Category.prototype.toString = function(){
 	return JSON.stringify(this);
 };
 
+Category.prototype.getObject = function(){
+	return JSON.parse( this.toString() );
+}
+
+
+// Export node module.
+console.log("Trying to export module...")
+if ( typeof module !== 'undefined' && module.hasOwnProperty('exports') )
+{
+    module.exports = Category;
+    console.log("Exporting succeed!");
+}
+else{
+	console.log("Exporting failed.")
+}
 
 console.log("Category loaded.");

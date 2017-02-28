@@ -7,9 +7,9 @@ class Transaction {
 				this.name = obj.name;
 				this.date = new Date(obj.date);
 				this.cost = +obj.cost;
-				this.category = {name:obj.catName, style:obj.catStyle};
+				//this.category = {name:obj.catName, style:obj.catStyle};
 				this.comment = obj.comment;
-				this.catStyle = obj.catStyle;
+				this.categoryStyle = obj.categoryStyle;
 				this.rawDate = obj.rawDate;
 				this.categoryName = obj.categoryName;
 				this.categoryId = obj.categoryId;

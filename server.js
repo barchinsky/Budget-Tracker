@@ -54,28 +54,39 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var openUrls = [
 	{pattern:"^/register"},
-	{pattern:"^/authorize"}
+	{pattern:"^/authorize"},
+	{pattern:"^/api"}
 ];
 
 app.use("/", isAuthorized(openUrls) );
 
 //******************* API *****************************\\
 
+// returns the list of services
+app.get("/api", function(request, response){
+	logger.info("api/");
+	var apiList = [
+		{uri:"/transactions", args:"user - string, budgetName - string", description:"Returns all tranasctions for user"}
+	];
+
+	sendResponse(response, {status:1, data:apiList});
+});
 
 /********************* Transactions *******************************/
 app.post("/transactions", function(request,response){
 	logger.info("transactions()");
 
-	//logger.info('budget:',typeof request.body.budget !== 'undefined');
-
-	//if( isAuthorized(request, response)  &&  typeof request.body.budget !== 'undefined'){
-		// logger.info("request.body",request.body.season, request.body);
 	var user = request.body.user;
-	db.loadTransactions(user, request.body.budget ,response, sendResponse);
-	//}
-	//else{
-	//	sendResponse(response, {status:1});
-	//}
+	var budget = request.body.budget;
+
+	logger.warn(budget, typeof budget);
+
+	if( budget !== null && budget !== undefined && budget.length > 0){
+		db.loadTransactions(user, budget, response, sendResponse);
+	}
+	else{
+		sendResponse(response, {status:0, data:[], msg:"No budget found!"});
+	}
 
 	logger.info("~transactions()");
 });
@@ -147,15 +158,23 @@ app.post("/categories", function(request, response){
 });
 
 app.post("/addCategory", function(request, response){
-	logger.info(".addCategory");
+	logger.info("/addCategory");
 
 	////if( isAuthorized(request, response) ){
 	var user = request.body.user;
 	var cat = request.body.category;
-	db.addCategory(user, cat, response, sendResponse);
-	//}
+	logger.warn("category:", cat, cat!==null, cat!==undefined, typeof cat,typeof cat === "object");
 
-	logger.info("~addCategory()");
+	if( cat !== null && cat !== undefined && typeof cat === "object"){
+		//logger.warn("------------------------------------");
+		db.addCategory(user, cat, response, sendResponse);
+	}
+	else{
+		//logger.warn("+++++++++++++++++++++++++++++");
+		sendResponse(response, {status:0, data:[], msg:"No category found!"});
+	}
+
+	logger.info("~addCategory");
 });
 
 app.post("/deleteCategory", function(request, response){
@@ -454,7 +473,10 @@ function isAuthorized(openUrls){
 	return check;
 }
 
-/******************************** END Utils ******************************************************/
 
 app.listen(port,host);
 logger.info("Server started at host:"+host+":"+port);
+
+exports.shutDown = function(){
+	app.close();
+}

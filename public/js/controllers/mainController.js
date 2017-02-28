@@ -162,13 +162,13 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		console.log("~initTransactions()");
 	}*/
 
-	local.getTransactions = function(b){
-		// function loads transactions info from database
+	local.getTransactions = function(bId){
+		// function loads transactions info from database for budget
 		console.log("getTransactions()");
 		local.showLoading();
-		local.budgetName = b;
+		//local.budgetName = b;
 
-		ds.getTransactions(b).then(function(r){
+		ds.getTransactions(bId).then(function(r){
 			//local.transactions = r.data;
 			//console.log("r.data:",r.data)
 			local.transactions = Transaction.parseArray(r.data);
@@ -229,7 +229,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("openTransaction()");
 
 		local.transaction = tran;
-		local.tCat = tran.category;
+		//local.tCat = tran.category;
 		local.showTransactionModal();
 
 		//console.log("~openTransaction()");
@@ -769,21 +769,26 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 	local.drawCanvas = function(bId){
 		console.log("drawCanvas()::bId:",bId);
+		
+		if( bId === null || bId === "") {  
+			local.budget = new Budget(); 
+			return; 
+		}
 
 		ds.getBudget(bId).then(function(r){
 			if( r.status ) {
 				local.budget = r.data[0];
-				//console.log('local.budget', local.budget);
 				canvas.drawIncomeOutcome("incomeOutcomeChart", [local.budget.incomeCosts, local.budget.spentCosts], local.currency);
 			}
 			else local.notify(r.msg);
 		});
-		
+				
 		// get budget expenses report
 		ds.getBudgetSpentCosts(bId).then(function(r){
 			console.log("getSpentCosts:r.data",r.data);
 			canvas.drawExpensesPie("expensesPieChart", r.data, local.currency);
 		});
+
 	}
 
 	local.showLoading = function() {
@@ -802,12 +807,20 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		});
 	}
 
-	local.doRefresh = function(type) {
+	local.doRefresh = function(type, id) {
 		console.log("Doing refresh");
 		console.log("type:", type);
-		console.log("local.budgetName:", local.budgetName);
+		console.log("id:", id);
+		//local.b = null;
 
-		if( type=="b" ) local.getBudgets(); // if budget refresh requested
+		if( type=="b" ) {
+			if(id){ // if id set
+				local.drawCanvas(id); // draw budget visual info canvas
+			}
+			else{ // if not
+				local.getBudgets(); // update all budgets info
+			}
+		}
 		else if( type=="c" ) local.getCategories(); // if categries refresh requested
 		else if( type == "t" ) {
 			if( local.budgetName ) local.getTransactions(local.budgetName);
@@ -817,6 +830,10 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		$scope.$broadcast('scroll.refreshComplete');
 		
 		console.log("Refresh done.");
+	}
+
+	local.test = function(){
+		console.log("--------------------------test -----------------------------");
 	}
 
 	local.initApp();
