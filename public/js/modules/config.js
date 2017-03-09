@@ -20,5 +20,5 @@ var config = {
 	currency: "UAH",
 	devHost:"http://localhost:8080", //"http://192.168.0.109:8080"
 	host:"http://mybudget-mykolaiv.rhcloud.com",
-	version: "0.1.1",
+	version: "0.1.106",
 }

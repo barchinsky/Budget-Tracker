@@ -26,7 +26,7 @@
 					<ion-item class="list-container"
 						ng-repeat="budget in budgets track by $index" ng-click="showBudgetDetailsModal(budget)">
 							<div class="progress-top">
-							{{budget.spentPerc}}%
+								{{budget.spentPerc}}%
 								<div class="progress-bar progress-bar-{{ getProgressType(budget.spentPerc) }} centered semi-square"
 									role="progressbar" 
 									aria-valuenow="{{ cat.spentPerc }}" 
@@ -43,8 +43,8 @@
 								</div>
 							</div>
 							<div class="list-item-name-complex">{{ budget.name }}</div>
-							<div class="list-item-description">{{ budget.startDate }} - {{ budget.endDate }}</div>
-							<div class="budget-cost text15 white">{{ budget.spentCosts?budget.spentCosts : 0 }}/{{budget.totalCosts }}</div>
+							<div class="list-item-description">{{ budget.startDate }} / {{ budget.endDate }}</div>
+							<div class="budget-cost white">{{ budget.spentCosts?budget.spentCosts : 0 }}/{{budget.totalCosts }}</div>
 							<ion-option-button class="button button-assertive"
 								ng-click="deleteBudget(budget.name)">
 									Delete

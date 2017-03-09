@@ -41,8 +41,8 @@
 						<span class="fl centered"> {{cat.name[1]}}</span>
 					</div>
 				</div>
-				<div class="list-item-name text15" ng-init="initBudgetCategory($index,cat)">{{cat.name}}</div>
-				<div class="category-cost text15 white">
+				<div class="list-item-name" ng-init="initBudgetCategory($index,cat)">{{cat.name}}</div>
+				<div class="category-cost white">
 					<input type="number" min="0" class="width60"
 						ng-model-options="{updateOn: 'blur'}" 
 						ng-change="getBudgetSum()" 
@@ -50,7 +50,9 @@
 						ng-init="budget.categories[$index].amount=0"/>
 				</div>
 			</div>
-			<input type="submit" class="button button-positive button-block" value="Add budget"/> 
+			<div>
+				<input type="submit" class="button button-positive button-block" value="Add budget"/> 
+			</div>
 		</div>
 		
 	</form>

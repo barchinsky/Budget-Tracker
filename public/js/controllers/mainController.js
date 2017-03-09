@@ -119,12 +119,6 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			local.transactionsByCategoryModal = modal;
 		});
 
-		/*$ionicModal.fromTemplateUrl('templates/registration.htm', {
-			scope: local
-		}).then(function(modal) {
-			local.registrationModal = modal;
-		});*/
-
 	}
 
 	///////////////////// Transaction //////////////////////////////////
@@ -138,29 +132,21 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		local.transaction.rawDate.setMinutes( new Date().getMinutes() );
 
 		// format date
-		local.transaction.date = $filter("date")(local.transaction.rawDate, "yyyy-MM-dd HH:mm");
+		local.transaction.d = $filter("date")(local.transaction.rawDate, "yyyy-MM-dd HH:mm");
 		console.log("local.category", local.transaction.category);
 		console.log("transaction to add:", local.transaction);
 
-		//return;
-
 		ds.saveTransaction(local.transaction).then(function(r){
-			if(+r.status) local.notify("Transaction added!");
+			if(r.status) {
+				local.notify("Transaction added!");
+				// reset current transaction
+				local.transaction.reset();
+			}
 			else local.notify(r.msg, 3);
 		}, local.errorHandler);
 
-		// recreate current transaction
-		local.transaction = new Transaction();
 		console.log("~saveTransaction()");
 	}
-
-	/*local.initTransactions = function(){
-		console.log("initTransactions()");
-		local.transactions = [];
-		local.getBudgets();
-
-		console.log("~initTransactions()");
-	}*/
 
 	local.getTransactions = function(bId){
 		// function loads transactions info from database for budget

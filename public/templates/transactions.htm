@@ -30,7 +30,7 @@
 		</div>
 		<ion-list 
 			can-swipe="true">
-				<ion-item class="list-container no-ledf-padding"
+				<ion-item class="list-container no-left-padding"
 					ng-repeat="tran in transactions" 
 					ng-click="openTransaction(tran)">
 						<div class="list-logo-container-complex" style="background-color:{{tran.categoryStyle}}">
@@ -53,18 +53,5 @@
 						</ion-option-button>
 				</ion-item>
 		</ion-list>
-		<!--
-		<div class="list-container" ng-repeat="tran in transactions" ng-click="openTransaction(tran)">
-			<div class="list-logo-container" style="background-color:{{tran.category.style}}">
-				<div class="list-logo-box white">
-					<span class="fl centered"> {{tran.category.name[0]}}</span>
-					<span class="sl centered"> {{tran.category.name[1]}}</span>
-				</div>
-			</div>
-			<div class="list-item-name white">{{tran.name}}</div>
-			<div class="list-item-info white">{{tran.date | date: 'yyyy-MM-dd HH:mm'}}</div>
-			<div class="list-item-description white">{{tran.comment}}</div>
-			<div class="transaction-cost white">{{tran.cost}}</div>
-		</div>-->
 	</ion-content>
 </div>

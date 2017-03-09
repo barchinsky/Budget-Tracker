@@ -6,6 +6,7 @@ class Transaction {
 				this.id = +obj.id;
 				this.name = obj.name;
 				this.date = new Date(obj.date);
+				this.d = "";
 				this.cost = +obj.cost;
 				//this.category = {name:obj.catName, style:obj.catStyle};
 				this.comment = obj.comment;
@@ -16,6 +17,7 @@ class Transaction {
 			}
 			else{
 				this.date = new Date();
+				this.d = "";
 				this.rawDate = new Date();
 			}
 			this.nameLen = 30;
@@ -35,5 +37,12 @@ class Transaction {
 
 	static parseObj(obj){
 		return new Transaction(obj);
+	}
+
+	reset(){
+		this.date = null;
+		this.rawDate = new Date();
+		this.cost = 0;
+		this.comment = "";
 	}
 }

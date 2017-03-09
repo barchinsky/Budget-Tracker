@@ -260,7 +260,7 @@ describe("Budget Tracker server", function(){
 	});
 
 	/*
-	* Test /transactions service
+	* Test Transactions services
 	* input args:
 	* 	1. token
 	* 	2. budgetName

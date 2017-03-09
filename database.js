@@ -8,6 +8,7 @@
 	logger.info("Module database.js loaded.");
 
 	var mysql = require("mysql");
+	var version = "1.1";
 
 	var connection = function(){
 
@@ -26,7 +27,7 @@
 				user     : process.env.OPENSHIFT_MYSQL_DB_USERNAME,
 				password : process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
 				port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
-				database : process.env.OPENSHIFT_APP_NAME
+				database : process.env.OPENSHIFT_APP_NAME + version
 			});
 		}
 
@@ -151,7 +152,7 @@
 		logger.info("transaction:",t);
 
 		var sql = "insert into Transaction (name, t_date, comment, cost, style, user, category) values(?,?,?,?,?,?,?);";
-		executeSql(sql, [t.name, t.date, t.comment, t.cost, t.category.style, u, t.category.id],response, callback);
+		executeSql(sql, [t.name, t.d, t.comment, t.cost, t.category.style, u, t.category.id],response, callback);
 
 		logger.info("~addTransaction()");
 	}
