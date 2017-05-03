@@ -43,13 +43,10 @@
 }
 
 .list-item-name{
-	width:50%;
 	padding-left: 10px;
-	padding-top: 28px;
-	float: left;
-	font-size: 16px;
 	color:white;
-	/*margin-top:-5px;*/
+	width:60%;
+	float: left;
 }
 
 .list-item-info{
@@ -67,7 +64,7 @@
 .list-item-description{
 	height: 10%;
 	min-height: 18px;
-	width:60%;
+	width:58%;
 	float:left;
 	margin-left: 10px;
 	font-size: 10px;
@@ -101,8 +98,12 @@
 }
 
 .list-item-name-complex{
-	width:60%;
 	padding-left: 10px;
+	color:white;
+	width:60%;
+	float: left;
+	margin-top:-10px;
+	/*padding-left: 10px;
 	padding-top: 6px;
 	float: left;
 	font-size: 16px;

@@ -1,6 +1,5 @@
 var config = {
 	isDev: true,
-	//alerts: ["success","info","warning","danger"],
 	colors: [{name:"Red", value:"#F44336"}, {name:"Pink", value:"#E91E63"}, {name:"Purple", value:"#9C27B0"}, {name:"Deep Purple", value:"#673AB7"}, {name:"Indigo", value:"#3F51B5"}, {name:"Blue", value:"#2196F3"}, {name:"Cyan", value:"#00BCD4"}, {name:"Teal", value:"#009688"}, {name:"Green", value:"#4CAF50"}, {name:"Light Green", value:"#8BC34A"}, {name:"Lime", value:"#CDDC39"}, {name:"Amber", value:"#FFC107"}, {name:"Deep Orange", value:"#FF5722"}],
 	authPage: {title:"Log in", path:"#app/authorization"},
 	homePage: {title:'Home', path:'#app/home'},

@@ -29,26 +29,10 @@ if (typeof host === "undefined") {
 
 app = express();
 
-/*
-var options = {
-	key  : fs.readFileSync('security/server.key'),
-	cert : fs.readFileSync('security/server.crt')
-};
-*/
-
 app.set("jwtsecret","btjwt102402022017");
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use( urlencodedParser ); // Parse request body into request.body.
-//app.use( cookieParser() );
-
-/*app.use( session({ 
-	secret: 'fskljlsdkfkljsdf',
-	resave:false,
-	saveUninitialized:true,
-	maxAge:null,
-} ) );
-*/
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -473,9 +457,13 @@ function isAuthorized(openUrls){
 	return check;
 }
 
-
-app.listen(port,host);
-logger.info("Server started at host:"+host+":"+port);
+if( host != undefined){
+	app.listen(port,host);
+	logger.info("Server started at host:"+host+":"+port);
+}
+else{
+	logger.warn("Host undefined. Server forced shutted down.")
+}
 
 exports.shutDown = function(){
 	app.close();

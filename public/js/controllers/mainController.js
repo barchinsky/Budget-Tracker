@@ -133,8 +133,8 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		// format date
 		local.transaction.d = $filter("date")(local.transaction.rawDate, "yyyy-MM-dd HH:mm");
-		console.log("local.category", local.transaction.category);
-		console.log("transaction to add:", local.transaction);
+		//console.log("local.category", local.transaction.category);
+		//console.log("transaction to add:", local.transaction);
 
 		ds.saveTransaction(local.transaction).then(function(r){
 			if(r.status) {
@@ -142,7 +142,10 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				// reset current transaction
 				local.transaction.reset();
 			}
-			else local.notify(r.msg, 3);
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 
 		console.log("~saveTransaction()");
@@ -157,9 +160,15 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		ds.getTransactions(bId).then(function(r){
 			//local.transactions = r.data;
 			//console.log("r.data:",r.data)
-			local.transactions = Transaction.parseArray(r.data);
-			console.log("local.transactions:", local.transactions);
-			local.notify("Transactions updated!");
+			if( r.status ){
+				local.transactions = Transaction.parseArray(r.data);
+				console.log("local.transactions:", local.transactions);
+				local.notify("Transactions updated!");
+			}
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 
 		local.hideLoading();
@@ -200,14 +209,18 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	local.deleteTransaction = function(id){
 		//console.log("tran:", local.transaction.id);
 		//console.log("Delete confirmed");
+		local.showLoading();
 
 		ds.deleteTransaction(id).then(function(r){
 			if(+r.status){
 				local.notify("Transaction deleted!");
 				local.getTransactions(local.budgetName);
-				//local.goBack();
+				local.hideLoading()
 			}
-			else local.notify(r.msg);
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 	}
 
@@ -215,6 +228,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("openTransaction()");
 
 		local.transaction = tran;
+		console.log('tran:',local.transaction);
 		//local.tCat = tran.category;
 		local.showTransactionModal();
 
@@ -267,9 +281,13 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				//console.log(r.data.length);
 				local.budgets = Budget.parseArray(r.data);
 				console.log("budgets:", local.budgets);
-				local.notify("Budgets updated!");
+				//local.notify("Budgets updated!");
+				local.hideLoading();
 			}
-			local.hideLoading();
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 
 		//console.log("~getBudgets()")
@@ -300,7 +318,10 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.budgetCategories = Category.parseArray(r.data);
 				console.log("local.budgetCategories:", local.budgetCategories);
 			}
-			else local.notify(r.msg);
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 
 		//console.log("~loadBudgetCategories()");
@@ -316,7 +337,10 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.getBudgets();
 				local.hideLoading();
 			}
-			else local.notify(r.msg);
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 	}
 
@@ -357,7 +381,10 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.initAddBudget();
 				local.getBudgets();
 			}
-			else local.notify(r.msg);
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 
 		//console.log("~saveBudget()");
@@ -409,7 +436,10 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.notify("Categories updated!");
 				local.hideLoading();
 			}
-			else local.notify(r.msg);
+			else {
+				local.hideLoading();
+				local.notify(r.msg);
+			}
 		}, local.errorHandler);
 	}
 
@@ -503,21 +533,6 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("~route()");
 	}
 
-	/*
-	local.toogleMenu = function(){
-		if( !local.authorized ) return; // menu does not available for not authorized users
-
-		$window.scrollTo(0,0);
-		//console.log("Menu toogled.")
-		$("#nav-content").toggle( "slide" );
-		//var currentViewState = $("#currentView").css("z-index");
-		//currentViewState = (currentViewState > 0 || currentViewState=="auto") ? -1 : 1;
-		//console.log("currentViewState:"+currentViewState+" "+Boolean(currentViewState));
-		
-		//$("#currentView").css("z-index", currentViewState); // set z-index
-	}
-	*/
-
 	local.updateAllData = function(){
 		//console.log("updateAllData()");
 
@@ -594,111 +609,6 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		local.transactionsByCategoryModal.hide();
 	}
 
-	/*local.showRegistrationModal = function(){
-		local.registrationModal.show();
-	}
-
-	local.closeRegistrationModal = function(){
-		local.registrationModal.hide();
-	}
-
-	local.register = function(){
-		//console.log("register()");
-
-		/*if( local.regData.pass !== local.regData.passConf){
-			local.notify("Password confirmation missmatch!",2);
-			local.regData.passConf.invalid=true;
-			return;
-		}*/
-		/*
-		local.showLoading();
-
-		ds.register(local.regData).then(function(r){
-			if( +r.status )	local.notify("Registration is successfull",0);
-			else local.notify(r.msg, 3);
-			local.hideLoading();
-			local.closeRegistrationModal();
-		}, local.errorHandler);
-
-		//console.log("~register()");
-	}
-
-	local.validatePass = function(){
-		console.log(local.regData);
-		if( local.regData.pass !== local.regData.passConf.value){
-			local.notify("Password confirmation missmatch!",2);
-			local.regData.passConf.valid=false;
-		}else{ local.regData.passConf.valid = true; }
-	}
-	*/
-
-	/*
-	local.authorize = function(){
-		console.log("authorize()");
-		local.closeLoginModal();
-		local.showLoading();
-
-		ds.authorize(local.loginData).then(function(r){
-			console.log("r.status:"+r.status);
-			if(+r.status){
-				ds.setAuthorization(true);
-				local.currentUserName = r.user;
-				local.notify(r.msg, 0);
-				local.hideLoading();
-			}
-			else {
-				local.hideLoading();
-				local.notify(r.msg, 2);
-			}
-		}, local.errorHandler);
-		console.log("~authorize()");
-	}
-
-	local.logout = function(){
-		ds.logout().then(function(r){
-			if(+r.status){
-				local.notify(r.msg, 0);	
-				local.initApp();
-				//ds.setAuthorization(false);
-
-				console.log("Logged out.");
-			}
-			else local.notify(r.msg, 3);
-		}, local.errorHandler);
-	}*/
-
-	/*local.isauth = function(){
-		// check if user is athorized
-		console.log("isauth()");
-		local.showLoading();
-
-		ds.isAuthorized().then(function(r){
-			if(+r.status){
-				local.notify("authorized");
-				ds.setAuthorization(true);
-				local.currentUserName = r.user;
-				local.hideLoading();
-			}
-			else{
-				console.log('not authorized');
-				local.loginData = local.getLoginData();
-				local.authorize();
-				local.loginData = {};
-			}
-		}, local.errorHandler);
-
-		console.log("~isauth()");
-	}
-
-	local.getLoginData = function(){
-		// TODO: define method for retrieving stored login data
-
-		// mock implementation
-		var loginData = {login:"max", pass:"asd"};
-
-		return loginData;
-	}
-	*/
 
 	local.saveLoginData = function(){
 		// TODO: define mothod to store login data
@@ -710,38 +620,6 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			local.notify("Something went wrong."+e);
 	}
 
-	/*
-	local.initDatePicker = function(){
-		//console.log("initDatePicker()");
-		$('#datetimepicker1').datetimepicker({format:"YYYY-MM-DD HH:mm", defaultDate:new Date()});
-		$('#datetimepicker2').datetimepicker({format:"YYYY-MM-DD HH:mm", defaultDate:new Date()});
-		$('#datetimepicker3').datetimepicker({format:"YYYY-MM-DD HH:mm", defaultDate:new Date()});
-		//console.log("dtvalue:"+$('#datetimepicker1').val());		
-		//console.log("~initDatePicker()");
-	}
-	
-	local.goBack = function(){
-		console.log("goBack()");
-
-		if(local.history.length > 0){
-			console.log(local.history);
-			var target = local.history.pop();
-			//console.log("Target:"+target.path + target.title +" history length:"+local.history.length);
-			local.route(target, true);
-		}
-
-		console.log("~goBack()");
-	}
-
-	local.reset = function(){
-		//console.log("reset()");
-
-		local.category = new Category();
-		local.transaction = new Transaction();
-
-		//console.log("~reset()");	
-	}
-*/
 	local.getProgressType = function(perc){
 		var progressType = "success";
 		

@@ -189,7 +189,7 @@
 			t.cost, \
 			c.name categoryName, \
 			c.id categoryId, \
-			c.style catStyle\
+			c.style categoryStyle\
 		from Transaction t, Category c, Budget b \
 		where \
 			t.user=? and \
