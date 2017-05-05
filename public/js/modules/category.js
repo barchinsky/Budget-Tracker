@@ -61,5 +61,3 @@ if ( typeof module !== 'undefined' && module.hasOwnProperty('exports') )
 else{
 	console.log("Exporting failed.")
 }
-
-console.log("Category loaded.");

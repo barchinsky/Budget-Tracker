@@ -35,12 +35,12 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 	});
 
 	local.$on("change.auth.event", function(event, value){
-		console.log("menuController:onchange:", value);
+		//console.log("menuController:onchange:", value);
 		$timeout(function(){
 			local.$apply(function(){
 				local.authorized = value;
 				local.currentUser = ds.getCurrentUser();
-				console.log("menuController:applied:",value);
+				//console.log("menuController:applied:",value);
 			})
 		},50);
 	});
@@ -59,118 +59,38 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 	* Perform user authorization verification
 	*/
 	local.isauth = function(){
-		console.log("isauth()");
+		//console.log("isauth()");
 		local.showLoading();
 
 		//console.log("ds.authorized()", ds.authorized());
 
 		ds.isAuthorized(function(r){
-			console.log("------r",r);
+			//console.log("------r",r);
 			if( r.data.authorized ){
-				console.log("Authorizated");
+				//console.log("Authorizated");
 				local.authorized = true;
 				local.barHeaderTitle = "Home";
 				$state.go("app.home");
 				local.changeAuthEvent();
 				local.currentUser = ds.getCurrentUser();
 				local.hideLoading();
+				local.notify("Welcome!")
 			}else{
-				console.log("non-Authorized");
+				//console.log("non-Authorized");
 				local.barHeaderTitle = "Log in";
 				$state.go("app.login");
 				local.authorized = false;
 				ds.setToken(null);
 				local.hideLoading();
+				local.notify("Authorization required!")
 			}
 		});
 
-		/*if( !ds.authorized() ){
-			local.barHeaderTitle = "Log in";
-			$state.go("app.login");
-		}
-		else{
-			local.authorized = true;
-			local.barHeaderTitle = "Home";
-			$state.go("app.home");
-			local.changeAuthEvent();
-			local.currentUser = ds.getCurrentUser();
-		}*/
-
-		/*
-		ds.isAuthorized().then(function(r){
-			console.log("isAuthorized response recieved");
-			if(+r.status){ // if user already authorized
-				// update app data
-				local.authorized = true;
-				ds.setCurrentUser(r.user);
-				local.currentUser = ds.getCurrentUser();
-				local.notify("Authorizated!");
-				local.hideLoading();
-			}
-			else{ // else perform
-				// perform authorization using stored data
-				//console.log('not authorized');
-				local.loginData = ds.getLoginData();
-
-				if( local.loginData.login && local.loginData.pass ){
-					console.log("login data found, try to authorize in silent mode:", local.loginData);
-					local.authorize();
-				}
-				else{
-					console.log("login data not found, manual authorization is required");
-				}
-				//local.authorize();
-				local.notify("Not authorized!");
-				local.hideLoading();
-			}
-		}, local.errorHandler);
-		*/
-
-		console.log("~isauth()");
+		//console.log("~isauth()");
 	}
 
-	/* 
-	* Authorize user
-	*
-	local.authorize = function(){
-		console.log("authorize()");
-		//local.closeLoginModal();
-		local.showLoading();
-
-		ds.authorize(local.loginData).then(function(r){
-			console.log("r.status:"+r.status);
-			if(+r.status){
-
-				//$timeout(function(){
-				//	$scope.$apply(function(){
-				local.authorized = true; // update authorization status
-				ds.setCurrentUser(r.user);
-				local.currentUser = ds.getCurrentUser();
-						//$sc.$apply();
-				//	})
-				//}, 50);
-				
-				//ds.setCurrentUser(r.user); // save recieved user info
-				ds.setToken(r.token); // save recieved token
-				//ds.setLoginData(local.loginData); // save login data for futher use
-				console.log("local.currentUser:", local.currentUser);
-
-				local.notify(r.msg);
-				local.barHeaderTitle = "Home";
-				$state.go("app.home"); // go to the main page
-
-				local.hideLoading();
-			}
-			else {
-				local.hideLoading();
-				local.notify(r.msg);
-			}
-		}, local.errorHandler);
-		console.log("~authorize()");
-	} */
-
 	local.register = function(){
-		console.log("register()");
+		//console.log("register()");
 		//return;
 
 		local.showLoading();
@@ -181,7 +101,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 			if( r.status ){
 				local.notify("Registration is successfull!");
 				var token = r.token;
-				console.log("token recieved:",token);
+				//console.log("token recieved:",token);
 				ds.setToken(token);
 				ds.setCurrentUser(local.regData);
 				local.isauth();
@@ -196,12 +116,12 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 			}
 		}, local.errorHandler);
 
-		console.log("~register()");
+		//console.log("~register()");
 	}
 
 	local.validatePass = function(){
-		console.log("validatePass()");
-		console.log(local.regData);
+		//console.log("validatePass()");
+		//console.log(local.regData);
 
 		if( local.regData.pass !== local.regData.passConf.value){
 			local.notify("Password confirmation missmatch!");
@@ -209,11 +129,11 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 		}else
 			local.regData.passConf.valid = true;
 
-		console.log("validatePass()");
+		//console.log("validatePass()");
 	}
 
 	local.formatRegData = function(el){
-		console.log("validateRegData()");
+		//console.log("validateRegData()");
 
 		//var name = data.name;
 		//var surname = data.surname;
@@ -232,9 +152,6 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 		//local.regData.surname = $filter("titleCase")(local.regData.surname);
 		//console.log("new surname:",local.regData.surname);
 
-
-
-
 		//console.log(name, surname, login);
 	}
 
@@ -246,7 +163,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 					ds.setCurrentUser(local.defaultUser);
 					ds.setToken(null);
 					local.changeAuthEvent();
-					console.log("Logged out.");
+					//console.log("Logged out.");
 				}
 			}, local.errorHandler);
 		}
@@ -287,7 +204,7 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 
 	local.notify = function(text){
 		//console.log("controller::notify()");
-		console.log(text);
+		//console.log(text);
 
 		$("#notification").html(text);
 
@@ -307,6 +224,6 @@ function menuController($scope, $timeout, $ionicModal, ds, $ionicLoading, $rootS
 
 	local.prepareModals();
 	local.isauth();
-	console.log("!!!!!!!!!!!!!!! menuController init !!!!!!!!!!!")
+	//console.log("!!!!!!!!!!!!!!! menuController init !!!!!!!!!!!")
 
 }

@@ -8,7 +8,7 @@ DataService.$inject = ["$http", "$localStorage"];
 mainController.$inject = ["$scope", "$timeout", "$ionicModal", "$http", "ds", "canvas", "$window", "$filter", "$ionicLoading", "$rootScope", "$localStorage"]; 
 
 function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $window, $filter, $ionicLoading, $rootScope){
-	//console.log("mainController controller loaded.");
+	////console.log("mainController controller loaded.");
 
 	////////////// App init //////////////////
 	//var isDev = true;
@@ -45,24 +45,24 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	local.authorized = ds.authorized();
 
 	local.$on("change.auth.event", function(event, value){
-		console.log("mainController: auth event handled", value);
+		//console.log("mainController: auth event handled", value);
 		
 		$timeout(function(){
 			local.$apply(function(){
 				local.authorized = value;
-				console.log("mainController:applied:",value);
+				//console.log("mainController:applied:",value);
 			})
 		}, 50);
 		//local.currentUser = ds.getCurrentUser();
 	});
 
 	/*local.$watch("authorized", function(newValue, oldValue){
-		console.log("mainController.authorized:", newValue, oldValue);
+		//console.log("mainController.authorized:", newValue, oldValue);
 	});*/
 
 
 	local.initApp = function(){
-		//console.log("initApp()");
+		////console.log("initApp()");
 
 		local.history = [];
 		local.category = new Category();
@@ -84,7 +84,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//ds.setLoginData({login:null, pass:null});
 		//local.isauth();
 
-		//console.log("~initApp()");
+		////console.log("~initApp()");
 	}
 
 	local.prepareModals = function(){
@@ -124,8 +124,8 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	///////////////////// Transaction //////////////////////////////////
 
 	local.saveTransaction = function(){
-		console.log("saveTransaction()");
-		//console.log(local.transaction);
+		//console.log("saveTransaction()");
+		////console.log(local.transaction);
 		
 		// set time to current time
 		local.transaction.rawDate.setHours( new Date().getHours() );
@@ -133,8 +133,8 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		// format date
 		local.transaction.d = $filter("date")(local.transaction.rawDate, "yyyy-MM-dd HH:mm");
-		//console.log("local.category", local.transaction.category);
-		//console.log("transaction to add:", local.transaction);
+		////console.log("local.category", local.transaction.category);
+		////console.log("transaction to add:", local.transaction);
 
 		ds.saveTransaction(local.transaction).then(function(r){
 			if(r.status) {
@@ -148,21 +148,21 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			}
 		}, local.errorHandler);
 
-		console.log("~saveTransaction()");
+		//console.log("~saveTransaction()");
 	}
 
 	local.getTransactions = function(bId){
 		// function loads transactions info from database for budget
-		console.log("getTransactions()");
+		//console.log("getTransactions()");
 		local.showLoading();
 		//local.budgetName = b;
 
 		ds.getTransactions(bId).then(function(r){
 			//local.transactions = r.data;
-			//console.log("r.data:",r.data)
+			////console.log("r.data:",r.data)
 			if( r.status ){
 				local.transactions = Transaction.parseArray(r.data);
-				console.log("local.transactions:", local.transactions);
+				//console.log("local.transactions:", local.transactions);
 				local.notify("Transactions updated!");
 			}
 			else {
@@ -173,42 +173,42 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		local.hideLoading();
 
-		console.log("~getTransactions()");
+		//console.log("~getTransactions()");
 	}
 
 	local.getTransactionsByCategory = function(c,b){
-		console.log("getTransactionsByCategory()");
+		//console.log("getTransactionsByCategory()");
 
-		console.log(c, b);
+		//console.log(c, b);
 		//return;
 		ds.getTransactionsByCategory(c.id, b.id).then(function(r){
 			if( +r.status ) {
 				local.transactions = Transaction.parseArray(r.data);
-				console.log("local.transactions:",local.transactions);
+				//console.log("local.transactions:",local.transactions);
 			}
 		}, local.errorHandler);
 
-		console.log("~getTransactionsByCategory()");
+		//console.log("~getTransactionsByCategory()");
 	}
 
 	local.deleteTransactionConfirm = function(){
-		console.log("deleteTransaction()");
+		//console.log("deleteTransaction()");
 		$('#deleteTransactionModal').modal('toggle');
 	}
 
 	local.initAddTransaction = function(){
-		console.log("initAddTransaction()");
+		//console.log("initAddTransaction()");
 		//local.initDatePicker();
 		local.transaction = new Transaction();
 		local.transaction.rawDate = new Date();
 		//local.category = new Category();
 		local.getCategories();
-		console.log("~initAddTransaction()");
+		//console.log("~initAddTransaction()");
 	}
 
 	local.deleteTransaction = function(id){
-		//console.log("tran:", local.transaction.id);
-		//console.log("Delete confirmed");
+		////console.log("tran:", local.transaction.id);
+		////console.log("Delete confirmed");
 		local.showLoading();
 
 		ds.deleteTransaction(id).then(function(r){
@@ -225,62 +225,63 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.openTransaction = function(tran){
-		//console.log("openTransaction()");
+		////console.log("openTransaction()");
 
 		local.transaction = tran;
-		console.log('tran:',local.transaction);
+		//console.log('tran:',local.transaction);
 		//local.tCat = tran.category;
 		local.showTransactionModal();
 
-		//console.log("~openTransaction()");
+		////console.log("~openTransaction()");
 	}
 
 	local.allowToEditTransaction = function(){
 		// edit current transaction
-		//console.log("editTransaction()");
+		////console.log("editTransaction()");
 		
 		local.readOnly = false;
 		//local.initDatePicker();
 
-		//console.log("~editTransaction()");
+		////console.log("~editTransaction()");
 	}
 
 
 	local.updateTransaction = function(tran){
 		// update transaction by id after editing
-		console.log("updateTransaction()");
+		//console.log("updateTransaction()");
 
 		local.readOnly = true;
 		//local.transaction.category = JSON.parse(local.transaction.category);
-		//console.log("local.transaction", local.transaction);
+		////console.log("local.transaction", local.transaction);
 
 		ds.updateTransaction(local.transaction).then(function(r){
 			if(+r.status) local.notify("Updated!");
 		}, local.errorHandler);
 
-		console.log("~updateTransaction()");
+		//console.log("~updateTransaction()");
 		
 	}
 
 	/////////////////////////// Budget ////////////////////////////////
 
 	local.initAddBudget = function(){
-		//console.log("initAddBudget()");
+		////console.log("initAddBudget()");
 		local.budget = new Budget();//{categories:[]};
 		//local.initDatePicker();
 		local.getCategories();
-		//console.log("~initAddBudget()");
+		////console.log("~initAddBudget()");
 	}
 
 	local.getBudgets = function(){
-		console.log("getBudgets()");
+		//console.log("getBudgets()");
 		local.showLoading();
 		
 		ds.getBudgets().then(function(r){
+			//console.log("---------", r);
 			if( r.status ){
-				//console.log(r.data.length);
+				////console.log(r.data.length);
 				local.budgets = Budget.parseArray(r.data);
-				console.log("budgets:", local.budgets);
+				//console.log("budgets:", local.budgets);
 				//local.notify("Budgets updated!");
 				local.hideLoading();
 			}
@@ -290,33 +291,33 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			}
 		}, local.errorHandler);
 
-		//console.log("~getBudgets()")
+		////console.log("~getBudgets()")
 	}
 
 	local.loadBudget = function(b){
-		//console.log("loadBudget()");
+		////console.log("loadBudget()");
 		local.budget = b;
 		//local.route(config.budgetDetailsPage, false);
-		//console.log("~loadBudget()");
+		////console.log("~loadBudget()");
 	}
 
 	/*local.budgetDetailsInit = function(){
-		console.log("budgetDetailsInit()");
+		//console.log("budgetDetailsInit()");
 
 		//$("#bs-date").val(local.budget.startDate);
 		//$("#be-date").val(local.budget.endDate);
 		
 		local.loadBudgetCategories(local.budget);
-		console.log("~budgetDetailsInit()");
+		//console.log("~budgetDetailsInit()");
 	}*/
 
 	local.loadBudgetCategories = function(b){
-		//console.log("loadBudgetCategories()");
+		////console.log("loadBudgetCategories()");
 
 		ds.loadBudgetCategories(b).then(function(r){
 			if( +r.status ) {
 				local.budgetCategories = Category.parseArray(r.data);
-				console.log("local.budgetCategories:", local.budgetCategories);
+				//console.log("local.budgetCategories:", local.budgetCategories);
 			}
 			else {
 				local.hideLoading();
@@ -324,7 +325,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			}
 		}, local.errorHandler);
 
-		//console.log("~loadBudgetCategories()");
+		////console.log("~loadBudgetCategories()");
 	}
 
 	local.deleteBudget = function(name){
@@ -345,33 +346,33 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.deleteBudgetConfirm = function(){
-		//console.log("deleteBudget()");
-		//console.log(local.budget.name);
+		////console.log("deleteBudget()");
+		////console.log(local.budget.name);
 		$('#deleteBudgetModal').modal('toggle'); // hide modal
 	}
 
 	local.getBudgetSum = function(){
-		console.log("getBudgetSum()");
+		//console.log("getBudgetSum()");
 		var sum = 0;
 		for(var i=0; i<local.budget.categories.length; i++ ){
-			//console.log("add:",local.budget.categories[i]);
+			////console.log("add:",local.budget.categories[i]);
 			if( local.budget.categories[i].type ) // if current property is expense
 				sum += +(local.budget.categories[i].amount);
 		}
-		//console.log("sum:", sum);
+		////console.log("sum:", sum);
 		local.budget.totalCosts = sum;
-		//console.log("local.budget.totalCosts:",local.budget.totalCosts);
+		////console.log("local.budget.totalCosts:",local.budget.totalCosts);
 
-		console.log("~getBudgetSum()");
+		//console.log("~getBudgetSum()");
 	}
 
 	local.saveBudget = function(){
-		//console.log("saveBudget()");
-		console.log("before:",local.budget);
+		////console.log("saveBudget()");
+		//console.log("before:",local.budget);
 		local.budget.startDate = $filter("date")(local.budget.startRawDate, "yyyy-MM-dd HH:mm");
 		local.budget.endDate = $filter("date")(local.budget.endRawDate, "yyyy-MM-dd HH:mm");
 
-		console.log(local.budget);
+		//console.log(local.budget);
 		//return;
 
 		ds.saveBudget(local.budget).then(function(r){
@@ -387,11 +388,11 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			}
 		}, local.errorHandler);
 
-		//console.log("~saveBudget()");
+		////console.log("~saveBudget()");
 	}
 
 	local.validateBudgetName = function(b){
-		console.log("validateBudgetName()");
+		//console.log("validateBudgetName()");
 
 		ds.budgetExists(b.name).then(function(r){
 			if( +r.status && r.data[0].budgets ){
@@ -403,22 +404,22 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.initBudgetCategory = function(id, cat){
-		//console.log("initBudgetCategory()");
+		////console.log("initBudgetCategory()");
 		
 		local.budget.categories.push(cat);
-		//console.log(local.budget.categories);
+		////console.log(local.budget.categories);
 		//local.budget.categories[id].name=cat.name;
 		//local.budget.categories[id].type=cat.type;
 		//local.budget.categories[id].id=cat.id;
 
-		//console.log("~initBudgetCategory()");
+		////console.log("~initBudgetCategory()");
 	}
 
 
 	//////////////////////// Category ////////////////////////////
 
 	local.getCategories = function(){
-		//console.log("getCategories()");
+		////console.log("getCategories()");
 		// code to load data from server
 		local.showLoading();
 
@@ -426,14 +427,14 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		ds.getCategories().then(function(r){
 			if(r.status){
-				//console.log("Success.")
+				////console.log("Success.")
 				for(var i=0; i < r.data.length; i++){
 					var c = new Category(r.data[i]);
 					local.categories.push(c);
 				}
 
-				//console.log("categories:", local.categories);
-				local.notify("Categories updated!");
+				////console.log("categories:", local.categories);
+				//local.notify("Categories updated!");
 				local.hideLoading();
 			}
 			else {
@@ -444,17 +445,17 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.loadCategory = function(c){
-		//console.log("loadCategory()");
+		////console.log("loadCategory()");
 
 		local.category = c;
 		local.route(config.categoryDetailesPage);
 
-		//console.log("~loadCategory()");
+		////console.log("~loadCategory()");
 	}
 
 	local.saveCategory = function(){
-		//console.log("saveCategory()");
-		//console.log("inputType:"+$("#radioExpense").is(":checked"));
+		////console.log("saveCategory()");
+		////console.log("inputType:"+$("#radioExpense").is(":checked"));
 		//local.category.type = $("#radioExpense").is(":checked") ? 1:0;
 		local.category.type = local.category.type?1:0; // 1 is expense, 0 is income
 
@@ -467,11 +468,11 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			else local.notify(r.msg);
 		}, local.errorHandler);
 
-		//console.log("~saveCategory()");
+		////console.log("~saveCategory()");
 	}
 
 	local.deleteCategory = function(c){
-		console.log("deleteCategory()");
+		//console.log("deleteCategory()");
 
 		local.showLoading();
 
@@ -491,10 +492,10 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.validateCategoryName = function(c){
-		console.log('validateCategoryName()');
+		//console.log('validateCategoryName()');
 
 		ds.categoryExists(c).then(function(r){
-			console.log(r);
+			//console.log(r);
 			if(+r.status && r.data[0].categories) {
 				local.category.invalid=true;
 				local.notify("Category with such name already exists");
@@ -504,17 +505,17 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.selectedCategory = function(tCat, setName){ // triggered by selection category at addTransaction.htm
-		console.log("selectedCategory()");
+		//console.log("selectedCategory()");
 		
-		console.log("selectedCategory():transaction:before:", local.transaction);
-		console.log("tCat:", tCat);
+		//console.log("selectedCategory():transaction:before:", local.transaction);
+		//console.log("tCat:", tCat);
 		local.transaction.category = JSON.parse(tCat);
-		console.log("selectedCategory():transaction:after:", local.transaction);
+		//console.log("selectedCategory():transaction:after:", local.transaction);
 
 		// need to set transaction name 
 		if(setName) local.transaction.name = local.transaction.category.name.trim();
 		
-		//console.log("~selectedCategory()");
+		////console.log("~selectedCategory()");
 	}
 
 	local.initCategory = function(){
@@ -524,28 +525,28 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	//////////////////////// Utils ///////////////////////////////////
 
 	local.route = function(page, isGoBack){
-		//console.log("route()");
+		////console.log("route()");
 
 		if (typeof isGoBack === 'undefined' || !isGoBack) local.history.push(local.currentView); // add current view to the history
 		local.currentView = page; // set current view
 		local.bodyHeaderTitle = page.title; // set page title
 
-		//console.log("~route()");
+		////console.log("~route()");
 	}
 
 	local.updateAllData = function(){
-		//console.log("updateAllData()");
+		////console.log("updateAllData()");
 
 		//local.getTransactions();
 		local.getCategories();
 		local.getBudgets();
 
-		//console.log("~updateAllData()");
+		////console.log("~updateAllData()");
 	}
 	
 	local.notify = function(text){
-		//console.log("controller::notify()");
-		console.log(text);
+		////console.log("controller::notify()");
+		//console.log(text);
 
 		$("#notification").html(text);
 
@@ -556,7 +557,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		},1500);
 		
 
-		//console.log("~controller::notify()");
+		////console.log("~controller::notify()");
 	}
 
 	local.showTransactionModal = function(){
@@ -564,19 +565,19 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.closeTransactionModal = function(){
-		console.log("closeTrasactionModal");
+		//console.log("closeTrasactionModal");
 		local.transactionDetailsModal.hide();
 	}
 
 	/*
 	local.showLoginModal = function(){
-		console.log("showLoginModal");
+		//console.log("showLoginModal");
 		local.loginModal.show();
 	}
 
 	local.closeLoginModal = function(){
 		local.loginModal.hide();
-		console.log("closeLoginModal");
+		//console.log("closeLoginModal");
 	}*/
 
 	local.showBudgetDetailsModal = function(b){
@@ -609,15 +610,15 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		local.transactionsByCategoryModal.hide();
 	}
 
-
 	local.saveLoginData = function(){
 		// TODO: define mothod to store login data
 	}
 
 	local.errorHandler = function(e){
-		console.log('Error:',e);
-		if( e.status == -1)
-			local.notify("Something went wrong."+e);
+		//console.log('Error:',e);
+		if( e.status == -1){
+			local.notify("Something went wrong. Try again later.");
+		}
 	}
 
 	local.getProgressType = function(perc){
@@ -632,7 +633,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	//////////////////// Canvas ////////////////////////
 
 	local.drawCanvas = function(bId){
-		console.log("drawCanvas()::bId:",bId);
+		//console.log("drawCanvas()::bId:",bId);
 		
 		if( bId === null || bId === "") {  
 			local.budget = new Budget(); 
@@ -649,7 +650,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				
 		// get budget expenses report
 		ds.getBudgetSpentCosts(bId).then(function(r){
-			console.log("getSpentCosts:r.data",r.data);
+			//console.log("getSpentCosts:r.data",r.data);
 			canvas.drawExpensesPie("expensesPieChart", r.data, local.currency);
 		});
 
@@ -661,20 +662,20 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 			duration: 5000,
 			scope: local
 		}).then(function(){
-			//console.log("The loading indicator is now displayed");
+			////console.log("The loading indicator is now displayed");
 		});
 	  }
 
 	local.hideLoading = function(){
 		$ionicLoading.hide().then(function(){
-			//console.log("The loading indicator is now hidden");
+			////console.log("The loading indicator is now hidden");
 		});
 	}
 
 	local.doRefresh = function(type, id) {
-		console.log("Doing refresh");
-		console.log("type:", type);
-		console.log("id:", id);
+		//console.log("Doing refresh");
+		//console.log("type:", type);
+		//console.log("id:", id);
 		//local.b = null;
 
 		if( type=="b" ) {
@@ -693,14 +694,14 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		$scope.$broadcast('scroll.refreshComplete');
 		
-		console.log("Refresh done.");
+		//console.log("Refresh done.");
 	}
 
 	local.test = function(){
-		console.log("--------------------------test -----------------------------");
+		//console.log("--------------------------test -----------------------------");
 	}
 
 	local.initApp();
 
-	console.log("????????????????? mainController init ?????????????????????");
+	//console.log("????????????????? mainController init ?????????????????????");
 }

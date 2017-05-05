@@ -7,15 +7,16 @@
 	margin-bottom: 8px;
 	margin-left:10px;
 	margin-right: 10px;
-	border-radius: 6px;
+	/*border-radius: 6px;*/
 	box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.5);
 }
 
 .list-logo-container{
-	width: 30%;
+	width: 35%;
 	height: 80px;
 	float:left;
 	text-align: center;
+	border-radius: 6px;
 }
 
 .list-logo-container-with-progress{
@@ -24,6 +25,7 @@
 	float:left;
 	text-align: center;
 	color:black;
+	border-radius: 6px;
 }
 
 .list-logo-container:before{
@@ -44,27 +46,29 @@
 
 .list-item-name{
 	padding-left: 10px;
+	padding-top: 6px;
 	color:white;
-	width:60%;
+	font-size: 19px;
+	width:55%;
 	float: left;
 }
 
 .list-item-info{
 	float:left;
 	padding-left: 10px;
-	width: 60%;
+	width: 55%;
 	font-size: 10px;
 	color:white;
 }
 
 .list-item-info p{
-	color:white;
+	color:gray;
 }
 
 .list-item-description{
 	height: 10%;
 	min-height: 18px;
-	width:58%;
+	width:55%;
 	float:left;
 	margin-left: 10px;
 	font-size: 10px;
@@ -72,7 +76,7 @@
 }
 
 .list-item-progress{
-	width:70%;
+	width:64%;
 	float:left;
 	padding-left: 10px;
 }
@@ -80,12 +84,13 @@
 /* COMPLEX LIST ITEMS */
 
 .list-logo-container-complex{
-	width: 30%;
+	width: 35%;
 	height: 80px;
 	float:left;
 	text-align: center;
 	margin-top:-16px;
 	margin-left:-16px;
+	border-radius: 6px;
 }
 
 .list-logo-box-complex{
@@ -100,9 +105,9 @@
 .list-item-name-complex{
 	padding-left: 10px;
 	color:white;
-	width:60%;
+	width:55%;
 	float: left;
-	margin-top:-10px;
+	margin-top:-5px;
 
 }
 
@@ -115,5 +120,6 @@
 		text-align: center;
 		margin-top:-16px;
 		margin-left:-16px;
+		border-radius: 6px;
 	}
 }

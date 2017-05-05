@@ -52,8 +52,8 @@ function DataService($http, $localStorage){
 
 	function getTransactions(b){
 		/* Loads transactions for budget */
-		console.log('dataService.js:getTransactions()');
-		console.log("Prev tranCounter=", $storage.tranCounter);
+		//console.log('dataService.js:getTransactions()');
+		//console.log("Prev tranCounter=", $storage.tranCounter);
 		$storage.tranCounter += 1;
 
 		return $http.post(host+"/transactions", {budget:b, token:getToken()}).
@@ -132,7 +132,7 @@ function DataService($http, $localStorage){
 	}
 
 	function deleteCategory(c){
-		console.log("deleteCategory:c",c);
+		//console.log("deleteCategory:c",c);
 		return $http.post(host+"/deleteCategory", {category:c, token:getToken()}).
 			then(end);
 	}
@@ -165,24 +165,19 @@ function DataService($http, $localStorage){
 	}
 
 	function authorized(){
-		console.log("authorized:", $storage.token !== null);
+		//console.log("authorized:", $storage.token !== null);
 		return $storage.token !== null;
 	}
 
-	/*function setAuthorization(authorized){
-		console.log("setAuthorization:", authorized);
-		appData.authorized = authorized;
-	}*/
-
 	function setCurrentUser(u){
-		console.log("setCurrentUser:", u);
+		//console.log("setCurrentUser:", u);
 		//appData.currentUser = u;
 		$storage.uname = u.name;
 		$storage.usurname = u.surname;
 	}
 
 	function getCurrentUser(){
-		console.log("getCurrentUser");
+		//console.log("getCurrentUser");
 		var user = {};
 		user.name = $storage.uname;
 		user.surname = $storage.usurname;
@@ -199,24 +194,25 @@ function DataService($http, $localStorage){
 	}
 
 	function setLoginData(loginData){
-		console.log("setLoginData:", loginData);
+		//console.log("setLoginData:", loginData);
 		$storage.loginData = loginData;
 	}
 
 	function setToken(token){
-		console.log("setToken()");
+		//console.log("setToken()");
 		$storage.token = token;
 	}
 
 	function getToken(){
-		console.log("$storage.token:", $storage.token);
+		//console.log("$storage.token:", $storage.token);
 		return $storage.token;
 	}
 
 	// local utilities
 	function end(r){
-		// returns response data
-		// console.log('r.data:', r.data);
+		//returns response data
+		//console.log('r.data:', r.data);
+		//console.log('result:',r);
 		return r.data;
 	}
 }
