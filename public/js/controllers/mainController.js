@@ -153,12 +153,9 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 	local.getTransactions = function(bid){
 		// function loads transactions info from database for budget
-		console.log("getTransactions()");
+		//console.log("getTransactions()");
 		local.showLoading();
-		console.log(bid);
-		//local.budgetName = b;
-		//bud = JSON.parse(b);
-		//console.log(bud);
+
 
 		ds.getTransactions(bid).then(function(r){
 			//local.transactions = r.data;
@@ -209,7 +206,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("~initAddTransaction()");
 	}
 
-	local.deleteTransaction = function(id){
+	local.deleteTransaction = function(id,b){
 		////console.log("tran:", local.transaction.id);
 		////console.log("Delete confirmed");
 		local.showLoading();
@@ -217,7 +214,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		ds.deleteTransaction(id).then(function(r){
 			if(+r.status){
 				local.notify("Transaction deleted!");
-				local.getTransactions(local.budgetName);
+				local.getTransactions(b);
 				local.hideLoading()
 			}
 			else {
