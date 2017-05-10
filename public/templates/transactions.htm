@@ -11,14 +11,14 @@
 	<ion-content ng-init="getBudgets()">
 		<ion-refresher
 			pulling-text="Pull to refresh..."
-			on-refresh="doRefresh('t')">
+			on-refresh="doRefresh('t',b)">
 		</ion-refresher>
 		<div class="list pt50">
 			<label class="item item-input item-select">
 				<span class="input-label">
 					Budget
 				</span>
-				<select ng-change="getTransactions(bId)" ng-model="bId">
+				<select ng-change="getTransactions(b)" ng-model="b">
 					<option ng-repeat="b in budgets" ng-value="b.id">{{b.name}}</option>
 				</select>
 			</label>

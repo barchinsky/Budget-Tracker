@@ -21,6 +21,18 @@ angular.module('budgetTrackerApp', ['ionic', 'ngStorage'])
 	});
 })
 
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+
+    // Hide splash screen
+    setTimeout(function() {
+        navigator.splashscreen.hide();
+    }, 100);
+
+    // some other things
+  });
+})
+
 .config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider
 

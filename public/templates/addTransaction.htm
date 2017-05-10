@@ -34,11 +34,11 @@
 				</label>
 				<label class="item item-input item-stacked-label">
 					<span class="input-label">Comment</span>
-					<textarea class="styled-input" maxlength="{{transaction.commentLen}}" rows="2" id="comment" 
+					<input type="text" class="styled-input" maxlength="{{transaction.commentLen}}" id="comment" 
 						ng-model="transaction.comment"></textarea>
 				</label>
 				<button class="button button-block button-positive" type="submit">
-					Add transaction
+					Save
 				</button>
 			</div>
 		</form>

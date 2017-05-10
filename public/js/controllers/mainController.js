@@ -151,13 +151,16 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("~saveTransaction()");
 	}
 
-	local.getTransactions = function(bId){
+	local.getTransactions = function(bid){
 		// function loads transactions info from database for budget
-		//console.log("getTransactions()");
+		console.log("getTransactions()");
 		local.showLoading();
+		console.log(bid);
 		//local.budgetName = b;
+		//bud = JSON.parse(b);
+		//console.log(bud);
 
-		ds.getTransactions(bId).then(function(r){
+		ds.getTransactions(bid).then(function(r){
 			//local.transactions = r.data;
 			////console.log("r.data:",r.data)
 			if( r.status ){
@@ -273,7 +276,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.getBudgets = function(){
-		//console.log("getBudgets()");
+		console.log("getBudgets()");
 		local.showLoading();
 		
 		ds.getBudgets().then(function(r){
@@ -500,7 +503,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 				local.category.invalid=true;
 				local.notify("Category with such name already exists");
 			}
-		});
+		}, local.errorHandler);
 		
 	}
 
@@ -544,9 +547,9 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		////console.log("~updateAllData()");
 	}
 	
-	local.notify = function(text){
-		////console.log("controller::notify()");
-		//console.log(text);
+	local.notify = function(text, to=1500){
+		console.log("controller::notify()");
+		console.log(text);
 
 		$("#notification").html(text);
 
@@ -554,7 +557,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		$timeout(function(){
 			$("#notification").slideUp(600);
-		},1500);
+		},to);
 		
 
 		////console.log("~controller::notify()");
@@ -615,9 +618,13 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.errorHandler = function(e){
-		//console.log('Error:',e);
+		console.log('Error:',e);
+		local.hideLoading();
 		if( e.status == -1){
-			local.notify("Something went wrong. Try again later.");
+			local.notify("Ooops. Server is down. Try again in few minutes.", 6000);
+		}
+		else if( e.status == 404 ){
+			local.notify("Sorry, devs did something wrong. Will fix it ASAP", 6000);
 		}
 	}
 
@@ -672,7 +679,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		});
 	}
 
-	local.doRefresh = function(type, id) {
+	local.doRefresh = function(type, bid) {
 		//console.log("Doing refresh");
 		//console.log("type:", type);
 		//console.log("id:", id);
@@ -680,7 +687,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 		if( type=="b" ) {
 			if(id){ // if id set
-				local.drawCanvas(id); // draw budget visual info canvas
+				local.drawCanvas(bid); // draw budget visual info canvas
 			}
 			else{ // if not
 				local.getBudgets(); // update all budgets info
@@ -688,7 +695,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		}
 		else if( type=="c" ) local.getCategories(); // if categries refresh requested
 		else if( type == "t" ) {
-			if( local.budgetName ) local.getTransactions(local.budgetName);
+			if( bid ) local.getTransactions(bid);
 			else local.notify("Please, select the budget");
 		}
 
