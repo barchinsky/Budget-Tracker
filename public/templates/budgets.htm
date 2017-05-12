@@ -33,7 +33,6 @@
 									aria-valuemin="0" 
 									aria-valuemax="100" 
 									ng-style="{width : ( (budget.spentPerc > 100?100:budget.spentPerc) + '%' ) }">
-									
 								</div>
 							</div>
 							<div class="list-logo-container-with-progress">
@@ -44,7 +43,7 @@
 							</div>
 							<div class="list-item-name-complex">{{ budget.name }}</div>
 							<div class="list-item-description">{{ budget.startDate }} / {{ budget.endDate }}</div>
-							<div class="budget-cost white">{{ budget.spentCosts?budget.spentCosts : 0 }}/{{budget.totalCosts }}</div>
+							<div class="budget-cost white">{{ budget.spentCosts?budget.spentCosts : 0 }}/{{ budget.totalCosts }}</div>
 							<ion-option-button class="button button-assertive"
 								ng-click="deleteBudget(budget.name)">
 									Delete

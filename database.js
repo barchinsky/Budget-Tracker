@@ -320,7 +320,7 @@
 					( t.t_date between ? and ?) and t.category = bc.category) spent, \
 				(select c.style from Category c where id=category) style,	\
 				(select c.type from Category c where id=category) type, \
-				( (select spent)/(select booked)*100 ) spentPerc\
+				round( (select spent)/(select booked)*100, 2 ) spentPerc\
 			from \
 				BudgetCategories bc, \
 				Category c \
