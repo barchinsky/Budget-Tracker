@@ -41,7 +41,7 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 
 	//local.loginData = {};
 	//local.regData = {passConf:{value:"", valid:true}}; // registration data
-	local.currentUser={name:"unknown", surname:"unknown"};
+	local.currentUser=ds.getCurrentUser()//{name:"unknown", surname:"unknown"};
 	local.authorized = ds.authorized();
 
 	local.$on("change.auth.event", function(event, value){
