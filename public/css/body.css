@@ -64,26 +64,6 @@
 	width: 25px;
 }
 
-/*
-.add-button-container{
-	position:absolute;
-	float: right;
-	bottom:20px;
-	right: 1190px;
-}
-
-.add-button-container img{
-	height: 50px;
-	width: 50px;
-}
-
-/*
-.full-width{
-	width: 98%;
-	margin-left: 1%;
-}
-*/
-
 .text10{
 	font-size: 10px;
 }
@@ -103,16 +83,6 @@
 .width60{
 	width: 60px;
 }
-/*
-.text20{
-	font-size: 20px;
-}
-*/
-/*
-.text36{
-	font-size: 36px;
-}
-*/
 
 .white{
 	color:white;
@@ -149,10 +119,9 @@
 .app-info{
 	position: fixed;
 	bottom: 10%;
-	width: 50px;
+	width: 100%;
 	height: 20px;
 	text-align: center;
-	margin-left: 40%;
 }
 
 .version{
