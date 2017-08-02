@@ -677,13 +677,9 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 	}
 
 	local.doRefresh = function(type, bid) {
-		//console.log("Doing refresh");
-		//console.log("type:", type);
-		//console.log("id:", id);
-		//local.b = null;
 
 		if( type=="b" ) {
-			if(id){ // if id set
+			if(bid){ // if budget id set
 				local.drawCanvas(bid); // draw budget visual info canvas
 			}
 			else{ // if not
