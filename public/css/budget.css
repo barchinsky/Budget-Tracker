@@ -1,6 +1,7 @@
 .budget-cost{
-	float:right;
-	text-align: left;
-	margin-top:-35px;
+    float:right;
+	text-align: right;
 	margin-right: -30px;
+	margin-top:-35px;
+	width: 37%;
 }
