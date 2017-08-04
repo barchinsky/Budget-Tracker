@@ -18,7 +18,7 @@
 				<span class="input-label">Category</span>
 				<input type="text" class="styled-input" style="background-color:{{transaction.categoryStyle}}"
 					ng-model="transaction.categoryName" 
-					ng-disabled="readOnly" required/>
+					ng-disabled="true" required/>
 			</label>
 			<label class="item item-input item-stacked-label">
 				<span class="input-label">Date</span>
@@ -39,8 +39,7 @@
 					ng-model="transaction.comment"
 					ng-disabled="readOnly"></textarea>
 			</label>
-			<input type="button" class="button button-positive button-block" ng-click="allowToEditTransaction()" ng-disabled="!readOnly" value="Edit"/>
-			<input type="submit" class="button button-balanced button-block" value="Update"/>
+			<input type="submit" class="button button-balanced button-block" value="Update" ng-show="!readOnly"/>
 		</ion-list>
 		</form>
 	</ion-content>

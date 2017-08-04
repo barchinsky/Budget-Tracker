@@ -228,11 +228,15 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		////console.log("openTransaction()");
 
 		local.transaction = tran;
-		//console.log('tran:',local.transaction);
-		//local.tCat = tran.category;
 		local.showTransactionModal();
 
 		////console.log("~openTransaction()");
+	}
+
+	local.editTransaction = function(tran){
+		local.transaction = tran;
+		local.readOnly = false;
+		local.showTransactionModal();		
 	}
 
 	local.allowToEditTransaction = function(){
@@ -251,11 +255,15 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("updateTransaction()");
 
 		local.readOnly = true;
+		local.transaction.d = formatDate(local.transaction.date)
 		//local.transaction.category = JSON.parse(local.transaction.category);
 		////console.log("local.transaction", local.transaction);
 
 		ds.updateTransaction(local.transaction).then(function(r){
-			if(+r.status) local.notify("Updated!");
+			if(+r.status) {
+				local.notify("Updated!");
+				local.closeTransactionModal()
+			}
 		}, local.errorHandler);
 
 		//console.log("~updateTransaction()");
@@ -697,11 +705,5 @@ function mainController($scope, $timeout, $ionicModal, $http, ds, canvas, $windo
 		//console.log("Refresh done.");
 	}
 
-	local.test = function(){
-		//console.log("--------------------------test -----------------------------");
-	}
-
 	local.initApp();
-
-	//console.log("????????????????? mainController init ?????????????????????");
 }
