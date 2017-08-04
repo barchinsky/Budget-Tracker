@@ -8,10 +8,6 @@ var formatDate = function(d){
 	return r;
 }
 
-var utils = {
-	validatePath = validatePath;
-}
-
 var validatePass = function(p1, p2){
 	console.log("validatePath");
 	return p1 === p2 ?true:false;

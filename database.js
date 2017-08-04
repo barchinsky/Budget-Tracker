@@ -168,9 +168,10 @@
 
 	var updateTransaction = function(u, t, response, callback){
 		logger.info("updateTransaction()");
+		logger.info(t);
 
-		var sql = "update Transaction set name=?, t_date=?, comment=?, cost=?, style=?, category=? where id=? and user=?;";
-		executeSql(sql, [t.name, t.date, t.comment, t.cost, t.category.style, t.category.name, t.id, u], response, callback);
+		var sql = "update Transaction set name=?, t_date=?, comment=?, cost=? where id=? and user=?;";
+		executeSql(sql, [t.name, t.d, t.comment, t.cost, t.id, u], response, callback);
 
 		logger.info("~updateTransaction()");
 	}
